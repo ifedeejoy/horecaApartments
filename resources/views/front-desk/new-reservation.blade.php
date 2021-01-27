@@ -2,18 +2,18 @@
 
 @section('vendor-css')
 @parent
-<link rel="stylesheet" href="{{ asset ('app-assets/vendors/css/forms/wizard/bs-stepper.min.css') }}">
-<link rel="stylesheet" href="{{ asset ('app-assets/vendors/css/forms/select/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset ('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
-<link rel="stylesheet" href="{{ asset ('app-assets/vendors/css/file-uploaders/dropzone.min.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/forms/wizard/bs-stepper.min.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/forms/select/select2.min.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/file-uploaders/dropzone.min.css') }}">
 @endsection
 
 @section('page-css')
 @parent
-<link rel="stylesheet" href="{{ asset ('app-assets/css/plugins/forms/form-validation.css') }}">
-<link rel="stylesheet" href="{{ asset ('app-assets/css/plugins/forms/form-wizard.css') }}">
-<link rel="stylesheet" href="{{ asset ('app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
-<link rel="stylesheet" href="{{ asset ('app-assets/css/plugins/forms/form-file-uploader.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/css/plugins/forms/form-validation.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/css/plugins/forms/form-wizard.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/css/plugins/forms/form-file-uploader.css') }}">
 @endsection
 
 @section('content-header')
@@ -398,19 +398,19 @@
 
 @section('vendor-js')
     @parent
-    <script src="{{ asset ('app-assets/vendors/js/forms/wizard/bs-stepper.min.js') }}" defer></script>
-    <script src="{{ asset ('app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
-    <script src="{{ asset ('app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}" defer></script>
-    <script src="{{ asset ('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}" defer></script>
-    <script src="{{ asset ('app-assets/vendors/js/extensions/dropzone.min.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/vendors/js/forms/wizard/bs-stepper.min.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/vendors/js/extensions/dropzone.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
     @parent
-    <script src="{{ asset ('app-assets/js/scripts/forms/form-wizard.js') }}" defer></script>
-    <script src="{{ asset ('app-assets/js/scripts/forms/form-number-input.js') }}" defer></script>
-    <script src="{{ asset ('app-assets/js/scripts/forms/form-file-uploader.js') }}" defer></script>
-    <script src="{{ asset ('js/core.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/js/scripts/forms/form-wizard.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/js/scripts/forms/form-number-input.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/js/scripts/forms/form-file-uploader.js') }}" defer></script>
+    <script src="{{ secure_asset ('js/core.js') }}" defer></script>
     <script type="module" defer>
         $("#rates").select2({
             placeholder: "Select Rates"
