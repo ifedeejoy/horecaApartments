@@ -1,0 +1,48 @@
+{
+    "data": [{
+            "responsive_id": null,
+            "reservation_id": 4477,
+            "reserved_on": "04/23/2021",
+            "client_name": "Roxy Floodgate",
+            "email": "roxyfloodgate@email.com",
+            "room_type": "Executive Room",
+            "checkin": "12/13/2019 1:30 PM",
+            "checkout": "12/13/2020 1:30 PM",
+            "service": "Software Development",
+            "total": 3428,
+            "avatar": "",
+            "payment_status": "Paid",
+            "balance": "$724"
+        },
+        {
+            "responsive_id": null,
+            "reservation_id": 4478,
+            "reserved_on": "12/20/2021",
+            "client_name": "Jay Crownover",
+            "email": "jaycee@email.com",
+            "room_type": "Standard Room",
+            "checkin": "12/13/2019 1:30 PM",
+            "checkout": "12/13/2020 1:30 PM",
+            "service": "Software Development",
+            "total": 3428,
+            "avatar": "",
+            "payment_status": "Partial Payment",
+            "balance": "$724"
+        },
+        {
+            "responsive_id": null,
+            "reservation_id": 4479,
+            "reserved_on": "12/21/2021",
+            "client_name": "Marshall Mathers",
+            "email": "eminem@email.com",
+            "room_type": "Presidential Room",
+            "checkin": "12/13/2019 1:30 PM",
+            "checkout": "12/13/2020 1:30 PM",
+            "service": "Software Development",
+            "total": 3428,
+            "avatar": "",
+            "payment_status": "Past Due",
+            "balance": "$724"
+        }
+    ]
+}

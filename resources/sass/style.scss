@@ -1,0 +1,39 @@
+.logo-img {
+    height: 60px;
+}
+
+.peach-bg {
+    background-color: #FFDAB9 !important;
+    border: none !important;
+}
+
+.peach-color {
+    color: #FFDAB9 !important;
+}
+
+.border-peach {
+    border-color: #FFDAB9 !important;
+}
+
+.text-primary {
+    color: #7367F0 !important;
+}
+
+.dropzone {
+    .guest-id-text {
+        font-size: 1rem !important;
+        &::before {
+            font-size: 18px !important;
+            height: 25px;
+            width: 25px;
+            top: 4rem !important;
+        }
+    }
+}
+
+.guest-id-field {
+    height: 100px !important;
+    min-height: 0px !important;
+}
+
+@media only screen and(max-width: 768px) {}
