@@ -2,13 +2,13 @@
 
 @section('vendor-css')
 @parent
-<link rel="stylesheet" href="{{ asset ('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
 @endsection
 
 @section('page-css')
 @parent
-<link rel="stylesheet" href="{{ asset ('app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
-<link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/app-invoice.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
+<link rel="stylesheet" href="{{ secure_asset ('/app-assets/css/pages/app-invoice.css') }}">
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
                         <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                             <div>
                                 <div class="logo-wrapper">
-                                    <img src="{{asset('app-assets/images/logo/logo.png')}}" class="img-fluid logo-img" alt="Horeca Apartments">
+                                    <img src="{{secure_asset('app-assets/images/logo/logo.png')}}" class="img-fluid logo-img" alt="Horeca Apartments">
                                     <h3 class="text-primary invoice-logo">Kimberly's Apartments</h3>
                                 </div>
                                 <p class="card-text mb-25">{{$reservations[0]->apartments->address}}</p>
@@ -192,11 +192,11 @@
 
 @section('vendor-js')
     @parent
-    <script src="{{ asset ('app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}" defer></script>
-    <script src="{{ asset ('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
     @parent
-    <script src="{{ asset ('app-assets/js/scripts/pages/app-invoice.js') }}" defer></script>
+    <script src="{{ secure_asset ('app-assets/js/scripts/pages/app-invoice.js') }}" defer></script>
 @endsection

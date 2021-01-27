@@ -1,22 +1,22 @@
 @extends('layouts.app')
 
 @section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset ('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset ('app-assets/css/plugins/forms/form-validation.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset ('app-assets/css/pages/page-auth.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ secure_asset ('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ secure_asset ('app-assets/css/plugins/forms/form-validation.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ secure_asset ('app-assets/css/pages/page-auth.css') }}">
 @endsection
 
 @section('content')
     <div class="auth-wrapper auth-v2">
         <div class="auth-inner row m-0">
             <!-- Brand logo--><a class="brand-logo" href="javascript:void(0);">
-               <img src="{{ asset ('app-assets/images/logo/logo.png')}}" class="logo-img" alt="Horeca Apartments">
+               <img src="{{ secure_asset ('app-assets/images/logo/logo.png')}}" class="logo-img" alt="Horeca Apartments">
                 <h2 class="brand-text text-primary ml-1">Kimberly's Apartments</h2>
             </a>
             <!-- /Brand logo-->
             <!-- Left Text-->
             <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
-                <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid" src="{{ asset ('app-assets/images/pages/login-v2.svg' )}}" alt="Login V2" /></div>
+                <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid" src="{{ secure_asset ('app-assets/images/pages/login-v2.svg' )}}" alt="Login V2" /></div>
             </div>
             <!-- /Left Text-->
             <!-- Login-->
@@ -60,10 +60,10 @@
 
 @section('scripts')
     <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset ('app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ secure_asset ('app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="{{ asset ('app-assets/js/scripts/pages/page-auth-login.js') }}"></script>
+    <script src="{{ secure_asset ('app-assets/js/scripts/pages/page-auth-login.js') }}"></script>
     <!-- END: Page JS-->
 @endsection
