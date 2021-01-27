@@ -127,7 +127,7 @@ $(function() {
                             '<span class="d-none">' +
                             moment($expectedArrival).format('YYYYMMDD') +
                             '</span>' +
-                            moment($expectedArrival).format('DD MMM YYYY hh:mm');
+                            moment($expectedArrival).format('DD MMM YYYY');
                         $expectedArrival;
                         return $expectOutput;
                     }
@@ -143,7 +143,7 @@ $(function() {
                             '<span class="d-none">' +
                             moment($expectedArrival).format('YYYYMMDD') +
                             '</span>' +
-                            moment($expectedArrival).format('DD MMM YYYY hh:mm');
+                            moment($expectedArrival).format('DD MMM YYYY');
                         $expectedArrival;
                         return $expectOutput;
                     }

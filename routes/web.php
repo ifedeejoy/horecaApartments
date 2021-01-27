@@ -33,8 +33,8 @@ Route::view('front-desk/home', 'front-desk.home');
 Route::view('front-desk/invoice', 'front-desk.invoice');
 Route::view('front-desk/inhouse', 'front-desk.inhouse');
 // PUT Requests
-Route::put('checkin-guest/{reservation}', [ReservationController::class, 'update'])->name('api-checkin');
-Route::put('front-desk/checkin-guest/{reservation}', [ReservationController::class, 'update'])->name('checkin-guest');
+Route::put('checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->name('api-checkin');
+Route::put('front-desk/checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->name('checkin-guest');
 
 // Admin
 Route::get('admin/apartments', [ApartmentsController::class, 'index'])->name('apartments');

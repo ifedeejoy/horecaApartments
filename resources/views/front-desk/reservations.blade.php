@@ -50,6 +50,7 @@
 
 @section('page-js')
     @parent
-    <script src="{{ asset('js/core.js') }}" defer></script>
     <script src="{{ asset('app-assets/js/scripts/pages/app-reservations-list.js')}}" defer></script>
+    <script src="{{ asset('js/core.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
 @endsection

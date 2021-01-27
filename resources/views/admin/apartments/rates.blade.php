@@ -101,6 +101,7 @@
     <script src="{{ asset('app-assets/js/scripts/pages/app-rates-list.js') }}" defer></script>
     <script src="{{ asset('app-assets/js/scripts/pages/page-knowledge-base.js')}}" defer></script>
     <script src="{{ asset('js/core.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
     <script type="module" defer>
         $("#apartment").select2({
             placeholder: 'Select Apartment'
