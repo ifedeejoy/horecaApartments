@@ -1,17 +1,17 @@
 @extends('layouts.app')
 @section('vendor-css')
 @parent
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/vendors/css/charts/apexcharts.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/vendors/css/extensions/toastr.min.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/vendors/css/tables/datatable/datatables.min.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css') }} ">
+    <link rel="stylesheet" href="{{ asset('/app-assets/vendors/css/charts/apexcharts.css') }} ">
+    <link rel="stylesheet" href="{{ asset('/app-assets/vendors/css/extensions/toastr.min.css') }} ">
+    <link rel="stylesheet" href="{{ asset('/app-assets/vendors/css/tables/datatable/datatables.min.css') }} ">
+    <link rel="stylesheet" href="{{ asset('/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css') }} ">
 @endsection
 
 @section('page-css')
 @parent
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/plugins/charts/chart-apex.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/plugins/extensions/ext-component-toastr.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/pages/app-invoice-list.css') }} ">
+    <link rel="stylesheet" href="{{ asset('/app-assets/css/plugins/charts/chart-apex.css') }} ">
+    <link rel="stylesheet" href="{{ asset('/app-assets/css/plugins/extensions/ext-component-toastr.css') }} ">
+    <link rel="stylesheet" href="{{ asset('/app-assets/css/pages/app-invoice-list.css') }} ">
 @endsection
 
 @section('content')
@@ -379,20 +379,20 @@
 @endsection
 @section('vendor-js')
     @parent
-    <script src="{{ secure_asset('app-assets/vendors/js/charts/apexcharts.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/extensions/toastr.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/extensions/moment.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/vendors/js/charts/apexcharts.min.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/vendors/js/extensions/toastr.min.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/vendors/js/extensions/moment.min.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/vendors/js/tables/datatable/datatables.min.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
     @parent
-    <script src="{{ secure_asset('app-assets/js/scripts/pages/dashboard-analytics.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/js/scripts/pages/app-invoice-list.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/js/scripts/pages/dashboard-analytics.js') }}" defer></script>
+    <script src="{{ asset('/app-assets/js/scripts/pages/app-invoice-list.js') }}" defer></script>
 @endsection
 
     

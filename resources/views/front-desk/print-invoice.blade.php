@@ -6,8 +6,8 @@
 
 @section('page-css')
 @parent
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/css/pages/app-invoice-print.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/app-invoice-print.css') }}">
 @endsection
 
 
@@ -19,7 +19,7 @@
             <div>
                 <div class="d-flex mb-1">
                     <div class="logo-wrapper">
-                        <img src="{{secure_asset('app-assets/images/logo/logo.png')}}" class="img-fluid logo-img" alt="Horeca Apartments">
+                        <img src="{{asset ('/app-assets/images/logo/logo.png')}}" class="img-fluid logo-img" alt="Horeca Apartments">
                         <h3 class="text-primary invoice-logo">Kimberly's Apartments</h3>
                     </div>
                 </div>
@@ -153,5 +153,5 @@
 
 @section('page-js')
     @parent
-    <script src="{{ secure_asset ('app-assets/js/scripts/pages/app-invoice-print.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/pages/app-invoice-print.js') }}" defer></script>
 @endsection

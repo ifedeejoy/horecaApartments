@@ -2,17 +2,17 @@
 
 @section('vendor-css')
 @parent
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/forms/select/select2.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/forms/select/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
 @endsection
 
 @section('page-css')
 @parent
-<link rel="stylesheet" href="{{ secure_asset ('/app-assets/css/pages/app-invoice-list.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('/app-assets/css/pages/app-user.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/app-invoice-list.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/app-user.css') }}">
 @endsection
 
 @section('content')
@@ -27,7 +27,7 @@
                             <div class="col-xl-6 col-lg-12 d-flex flex-column justify-content-between border-container-lg">
                                 <div class="user-avatar-section">
                                     <div class="d-flex justify-content-start">
-                                        <img class="img-fluid rounded" src="{{ secure_asset('images/apartments.svg') }}" style="height: 124px; width: 104px" alt="User avatar" />
+                                        <img class="img-fluid rounded" src="{{ asset('/images/apartments.svg') }}" style="height: 124px; width: 104px" alt="User avatar" />
                                         <div class="d-flex flex-column ml-1">
                                             <div class="user-info mb-1">
                                                 <h4 class="mb-0">{{$apartment->name}}</h4>
@@ -295,19 +295,19 @@
            
 @section('vendor-js')
     @parent
-    <script src="{{ secure_asset ('app-assets/vendors/js/extensions/moment.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/extensions/moment.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
     @parent
-    <script src="{{ secure_asset ('app-assets/js/scripts/pages/app-apartment-view.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/pages/app-apartment-view.js') }}" defer></script>
     <script type="module" defer>
         $('.touchspin').TouchSpin({
             buttondown_class: 'btn btn-primary',

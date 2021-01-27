@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('vendor-css')
-    <link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/vendors.min.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/calendars/fullcalendar.min.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/forms/select/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/vendors.min.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/calendars/fullcalendar.min.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/forms/select/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
 @endsection
 
 @section('page-css')
-    <link rel="stylesheet" href="{{ secure_asset ('app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset ('app-assets/css/pages/app-calendar.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset ('app-assets/css/plugins/forms/form-validation.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/app-calendar.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/forms/form-validation.css') }}">
 @endsection
 
 @section('content')
@@ -154,15 +154,15 @@
 @endsection
 @section('vendor-js')
     @parent
-    <script src="{{ secure_asset ('app-assets/vendors/js/calendar/fullcalendar.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/extensions/moment.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/calendar/fullcalendar.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/extensions/moment.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
     @parent
-    <script src="{{ secure_asset ('app-assets/js/scripts/pages/app-calendar-events.js') }}" defer></script>
-    <script src="{{ secure_asset ('app-assets/js/scripts/pages/app-calendar.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/pages/app-calendar-events.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/pages/app-calendar.js') }}" defer></script>
 @endsection
