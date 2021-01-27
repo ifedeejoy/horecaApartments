@@ -11,8 +11,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     {{-- Icons --}}
-    <link rel="apple-touch-icon" href="{{ secure_asset('app-assets/images/ico/apple-icon-120.png') }} ">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ secure_asset('app-assets/images/logo/favicon.ico') }} ">
+    <link rel="apple-touch-icon" href="{{ asset ('/app-assets/images/ico/apple-icon-120.png') }} ">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset ('/app-assets/images/logo/favicon.ico') }} ">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,28 +22,28 @@
 
     <!-- BEGIN: Vendor CSS-->
     @section('vendor-css')
-    <link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/vendors.min.css') }}"> 
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/vendors/css/extensions/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/vendors.min.css') }}"> 
+    <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/extensions/toastr.min.css') }}">
     @show
 
     <!-- BEGIN: Theme CSS-->
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/bootstrap.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/bootstrap-extended.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/colors.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/components.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/themes/dark-layout.css') }} ">
-    <link rel="stylesheet" href="{{ secure_asset('app-assets/css/themes/bordered-layout.css') }} ">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/bootstrap.css') }} ">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/bootstrap-extended.css') }} ">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/colors.css') }} ">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/components.css') }} ">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/themes/dark-layout.css') }} ">
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/themes/bordered-layout.css') }} ">
 
     <!-- BEGIN: Page CSS-->
    
     @section('page-css')
-        <link rel="stylesheet" href="{{ secure_asset ('app-assets/css/core/menu/menu-types/vertical-menu.css') }} ">
-        <link rel="stylesheet" href="{{ secure_asset ('app-assets/css/plugins/extensions/ext-component-toastr.css')}}">
+        <link rel="stylesheet" href="{{ asset ('/app-assets/css/core/menu/menu-types/vertical-menu.css') }} ">
+        <link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/extensions/ext-component-toastr.css')}}">
     @show
     
 
     <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" href="{{ secure_asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset ('/css/app.css') }}">
     <!-- END: Custom CSS-->
 </head>
 <!-- END: Head-->
@@ -76,15 +76,15 @@
 @endif
 @section('vendor-js')
     <!-- BEGIN: Vendor JS-->
-    <script src="{{ secure_asset('app-assets/vendors/js/vendors.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/extensions/toastr.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/vendors.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/extensions/toastr.min.js') }}" defer></script>
     <!-- BEGIN Vendor JS-->
 @show
 
 
 <!-- BEGIN: Theme JS-->
-    <script src="{{ secure_asset('app-assets/js/core/app-menu.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/js/core/app.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/core/app-menu.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/core/app.js') }}" defer></script>
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->

@@ -2,15 +2,15 @@
 
 @section('vendor-css')
 @parent
-<link rel="stylesheet" href="{{ secure_asset('app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset('app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset('app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
 @endsection
 
 @section('page-css')
 @parent
-<link rel="stylesheet" href="{{ secure_asset ('/app-assets/css/plugins/forms/form-validation.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('/app-assets/css/pages/app-user.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/forms/form-validation.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/app-user.css') }}">
 @endsection
 
 @section('content')
@@ -99,16 +99,16 @@
 
 @section('vendor-js')
     @parent
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
-    <script src="{{ secure_asset('app-assets/js/scripts/pages/app-user-list.js') }}" defer></script>
-    <script src="{{ secure_asset('app-assets/js/scripts/pages/page-knowledge-base.js')}}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/pages/app-user-list.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/pages/page-knowledge-base.js')}}" defer></script>
 @endsection

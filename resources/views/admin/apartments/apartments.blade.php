@@ -2,16 +2,16 @@
 
 @section('vendor-css')
 @parent
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/forms/select/select2.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ secure_asset ('app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/forms/select/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
 @endsection
 
 @section('page-css')
 @parent
-<link rel="stylesheet" href="{{ secure_asset ('/app-assets/css/pages/page-knowledge-base.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/page-knowledge-base.css') }}">
 @endsection
 
 @section('content-header')
@@ -42,7 +42,7 @@
     <section id="knowledge-base-search">
         <div class="row">
             <div class="col-12">
-                <div class="card knowledge-base-bg text-center" style="background-image: url('{{ secure_asset('app-assets/images/banner/banner.png')}}">
+                <div class="card knowledge-base-bg text-center" style="background-image: url('{{ asset ('/app-assets/images/banner/banner.png')}}">
                     <div class="card-body">
                         <h2 class="text-primary">All Apartments</h2>
                         <form class="kb-search-input mt-2">
@@ -69,7 +69,7 @@
             <div class="col-md-4 col-sm-6 col-12 kb-search-content">
                 <div class="card">
                     <a href="/admin/apartment/{{$apartment->id}}">
-                        <img src="{{ secure_asset('images/apartments.svg') }}" class="card-img-top" alt="knowledge-base-image" />
+                        <img src="{{ asset('/images/apartments.svg') }}" class="card-img-top" alt="knowledge-base-image" />
 
                         <div class="card-body text-center">
                             <h4>{{$apartment->name}}</h4>
@@ -165,11 +165,11 @@
 
 @section('vendor-js')
     @parent
-    <script src="{{ secure_asset ('app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
-    <script src="{{ secure_asset('app-assets/js/scripts/pages/page-knowledge-base.js')}}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/pages/page-knowledge-base.js')}}" defer></script>
     <script type="module" defer>
         $("#apartment-type").select2({
             placeholder: 'Select apartment type'
