@@ -48,8 +48,8 @@
             <li class="{{ setActive(['front-desk/new-checkin']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/new-checkin"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Checkin">New Checkin</span></a>
             </li>
-            <li class="{{ setActive(['front-desk/inhouse']) }} nav-item">
-                <a class="d-flex align-items-center" href="/front-desk/inhouse"><i class="lni lni-chef-hat"></i><span class="menu-title text-truncate" data-i18n="Inhouse Guests">Inhouse Guests</span></a>
+            <li class="{{ setActive(['front-desk/inhouse-guests']) }} nav-item">
+                <a class="d-flex align-items-center" href="/front-desk/inhouse-guests"><i class="lni lni-chef-hat"></i><span class="menu-title text-truncate" data-i18n="Inhouse Guests">Inhouse Guests</span></a>
             </li>
             
             {{-- Property Managament --}}

@@ -6,7 +6,90 @@ window.getElByThis = function(arg) {
     return idParams
 }
 
+window.getUrl = function(url) {
+    var parser = document.createElement('a')
+    parser.href = url
+    return parser.pathname
+}
 
+window.deleteRate = function(rate) {
+    let formData = { rate: rate, _method: 'DELETE' }
+    $.ajax({
+        url: '/admin/rates/' + rate,
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: formData,
+        dataType: 'json',
+        success: function(data) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: data.message,
+                timer: 300,
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            }).then(function() {
+                window.location.reload()
+            })
+        },
+        error: function(data) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: data.message,
+                customClass: {
+                    confirmButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            }).then(function() {
+                window.location.reload()
+            })
+        }
+    })
+}
+
+window.checkinGuest = function(reservation) {
+    let formData = { reservation: reservation, _method: "PUT" }
+    $.ajax({
+        url: '/checkin-guest/' + reservation,
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: formData,
+        dataType: 'json',
+        success: function(data) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: data.message,
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            }).then(function() {
+                window.location.reload()
+            })
+        },
+        error: function(data) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: data.message,
+                customClass: {
+                    confirmButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            }).then(function() {
+                window.location.reload()
+            })
+        }
+    })
+}
 
 window.guestInfo = function(id) {
     $.ajax({
@@ -77,6 +160,8 @@ window.apartmentInfo = function(apartment, elId) {
 let elId = 1
 window.addRooms = function() {
     elId++
+    let currentUrl = getUrl(window.location.href)
+    let resStatus = currentUrl == "/front-desk/new-reservation" ? "reserved" : 'checkedin'
     $("#rooms-section").append(
         '<div class="rooms" id="extra-room' + elId + '">' +
         '<hr class="my-1">' +
@@ -98,7 +183,7 @@ window.addRooms = function() {
         '</div>' +
         '<input type="hidden" name="rate-price[]" id="rate-price' + elId + '">' +
         '<input type="hidden" class="prices" name="apartment-cost[]" id="apartment-cost' + elId + '">' +
-        '<input type="hidden" name="status[]" value="reserved">' +
+        '<input type="hidden" name="status[]" value="' + resStatus + '">' +
         '</div>' +
         '<div class="row mb-2">' +
         '<div class="form-group col-md-6">' +

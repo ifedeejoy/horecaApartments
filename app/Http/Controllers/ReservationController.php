@@ -36,12 +36,8 @@ class ReservationController extends Controller
     public function create(Request $request)
     {
         $guests = Guest::all();
-        $apartments = Apartments::all();
-        if($request->is('front-desk/new-reservation')):
-            return view('front-desk.new-reservation')->with(['guests' =>$guests, 'apartments' => $apartments]);
-        else:
-            return view('front-desk.new-checkin')->with('guests', $guests);
-        endif;
+        $apartments = Apartments::where('status', 'available')->get();
+        return view('front-desk.new-reservation')->with(['guests' =>$guests, 'apartments' => $apartments]);
     }
 
     /**
@@ -103,20 +99,29 @@ class ReservationController extends Controller
         }
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function checkinGuest(Request $request)
     {
         try {
             $reservation = Reservation::find($request->input('reservation'));
             $reservation->status = 'checkedin';
             $reservation->save();
+            $apartment = Apartments::find($reservation->apartments_id);
+            $apartment->status = 'occupied';
+            $apartment->save();
             if($request->is('checkin-guest/*')):
-                return response()->json(['success' => 'Guest checked in succesfully']);
+                return response()->json(['status' => 'success', 'message' => 'Guest checked in succesfully']);
             else:
                 return redirect('front-desk/inhouse-guests')->with('success', 'Guest checked in succesfully');
             endif;
         } catch (QueryException $e) {
             if($request->is('checkin-guest/*')):
-                return response()->json(['error' => $e->errorInfo[2]]);
+                return response()->json(['status' => 'error', 'message' => $e->errorInfo[2]]);
             else:
                 return redirect('front-desk/inhouse-guests')->with('error', $e->errorInfo[2]);
             endif;
@@ -136,12 +141,8 @@ class ReservationController extends Controller
             $view = $request->is('print-invoice/*') ? 'front-desk.print-invoice' : 'front-desk.invoice';
             return view($view)->with('reservations', $reservation);
         else:
-            $reservation = Reservation::where('id', $request->id)->with('apartments', 'rate', 'reservationPayments', 'guest')->get();
-            if($request->is('front-desk/reservation')):
-                return view('front-desk.reservation')->with('reservations', $reservation);
-            elseif($request->is('front-desk/inhouse/*')):
-                return view('front-desk.inhouse')->with('reservations', $reservation);
-            endif;
+            $reservation = Reservation::where('id', $request->id)->with('apartments', 'rate', 'reservationPayments', 'guest')->first();
+            return view('front-desk.reservation')->with('reservation', $reservation);
         endif;
     }
 

@@ -11,10 +11,10 @@
 $(function() {
     'use strict';
 
-    var dtInvoiceTable = $('.invoice-list-table'),
+    var dtInvoiceTable = $('.inhouse-guest-table'),
         assetPath = '../../../app-assets/',
-        invoicePreview = '/front-desk/reservation/',
-        invoiceAdd = '/front-desk/new-reservation',
+        invoicePreview = '/front-desk/folio/',
+        invoiceAdd = '/front-desk/new-checin',
         invoiceDownload = '/print-invoice/';
 
     if ($('body').attr('data-framework') === 'laravel') {
@@ -27,7 +27,7 @@ $(function() {
     // datatable
     if (dtInvoiceTable.length) {
         var dtInvoice = dtInvoiceTable.DataTable({
-            ajax: '/api/reservations', // JSON file to add data
+            ajax: '/api/inhouse-guests', // JSON file to add data
             autoWidth: false,
             columns: [
                 // columns according to JSON

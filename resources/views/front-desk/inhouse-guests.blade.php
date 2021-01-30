@@ -16,7 +16,7 @@
 <section class="invoice-list-wrapper">
     <div class="card">
         <div class="card-datatable table-responsive">
-            <table class="invoice-list-table table">
+            <table class="inhouse-guest-table table">
                 <thead>
                     <tr>
                         <th></th>
@@ -50,5 +50,6 @@
 
 @section('page-js')
     @parent
-    <script src="{{ asset('app-assets/js/scripts/pages/app-reservations-list.js')}}" defer></script>
+    <script src="{{ asset('app-assets/js/scripts/pages/app-inhouse-list.js')}}" defer></script>
+    @include('partials.form-response')
 @endsection
