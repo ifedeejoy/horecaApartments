@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApartmentsController;
+use App\Http\Controllers\InhouseController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
@@ -9,11 +10,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\App;
 
-if (App::environment('production')) {
-    URL::forceScheme('https');
-}
+// if (App::environment('production')) {
+//     URL::forceScheme('https');
+// }
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,15 +34,17 @@ Route::get('front-desk/new-reservation', [ReservationController::class, 'create'
 Route::get('front-desk/new-checkin', [ReservationController::class, 'create'])->name('create-checkin');
 Route::get('front-desk/invoice/{reference}', [ReservationController::class, 'show'])->name('reservation-receipt');
 Route::get('print-invoice/{reference}', [ReservationController::class, 'show'])->name('print-receipt');
+Route::get('front-desk/reservation/{id}', [ReservationController::class, 'show'])->name('reservation');
+Route::get('front-desk/inhouse-guests', [InhouseController::class, 'index'])->name('inhouse-guests');
 // Post Requests
 Route::post('front-desk/make-reservation', [ReservationController::class, 'store'])->name('make-reservation');
 Route::view('front-desk/calendar', 'front-desk.calendar');
 Route::view('front-desk/home', 'front-desk.home');
 Route::view('front-desk/invoice', 'front-desk.invoice');
-Route::view('front-desk/inhouse', 'front-desk.inhouse');
+
 // PUT Requests
 Route::put('checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->name('api-checkin');
-Route::put('front-desk/checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->name('checkin-guest');
+Route::post('front-desk/checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->name('checkin-guest');
 
 // Admin
 Route::get('admin/apartments', [ApartmentsController::class, 'index'])->name('apartments');

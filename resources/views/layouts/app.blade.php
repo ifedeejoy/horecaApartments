@@ -39,6 +39,7 @@
     @section('page-css')
         <link rel="stylesheet" href="{{ asset ('/app-assets/css/core/menu/menu-types/vertical-menu.css') }} ">
         <link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/extensions/ext-component-toastr.css')}}">
+        <link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/extensions/ext-component-sweet-alerts.css')}}">
     @show
     
 
@@ -78,6 +79,7 @@
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset ('/app-assets/vendors/js/vendors.min.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/vendors/js/extensions/toastr.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}" defer></script>
     <!-- BEGIN Vendor JS-->
 @show
 
