@@ -47,7 +47,7 @@ class ApartmentsController extends Controller
             ]);
             return redirect('admin/apartments')->with('success', 'Apartment created successfully');
         } catch (QueryException $e) {
-            return redirect('admin/apartments')->with(['error'=>$e->errorInfo]);
+            return redirect('admin/apartments')->with(['error'=>$e->errorInfo[2]]);
         }
         
     }
