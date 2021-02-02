@@ -31,7 +31,7 @@
             <li class=" navigation-header">
                 <span data-i18n="Reservations">Reservation Management</span><i data-feather="more-horizontal"></i>
             </li>
-            <li class="{{ setActive(['front-desk/new-reservation',]) }} nav-item">
+            <li class="{{ setActive(['front-desk/new-reservation']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/new-reservation"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Reservation">New Reservation</span></a>
             </li>
             <li class="{{ setActive(['front-desk/reservations', 'front-desk/invoice/*']) }} nav-item">
@@ -48,7 +48,7 @@
             <li class="{{ setActive(['front-desk/new-checkin']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/new-checkin"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Checkin">New Checkin</span></a>
             </li>
-            <li class="{{ setActive(['front-desk/inhouse-guests']) }} nav-item">
+            <li class="{{ setActive(['front-desk/inhouse-guests', 'front-desk/folio/*']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/inhouse-guests"><i class="lni lni-chef-hat"></i><span class="menu-title text-truncate" data-i18n="Inhouse Guests">Inhouse Guests</span></a>
             </li>
             

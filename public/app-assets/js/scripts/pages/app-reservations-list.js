@@ -37,9 +37,9 @@ $(function() {
                 { data: 'apartments.name' },
                 { data: 'checkin' },
                 { data: 'checkout' },
-                { data: 'reservation_payments.0.total' },
-                { data: 'reservation_payments.0.balance' },
-                { data: 'reservation_payments.0.payment_status' },
+                { data: 'reservation_payments.total' },
+                { data: 'reservation_payments.balance' },
+                { data: 'reservation_payments.[0].payment_status' },
                 { data: '' }
 
             ],
@@ -153,7 +153,8 @@ $(function() {
                     targets: 6,
                     width: '73px',
                     render: function(data, type, full, meta) {
-                        var $total = new Intl.NumberFormat().format(full['reservation_payments'][0]['total']);
+                        let payments = full.reservation_payments
+                        var $total = new Intl.NumberFormat().format(payments[0].total);
                         return '<span class="d-none">' + $total + '</span>₦' + $total;
                     }
                 },
@@ -162,7 +163,8 @@ $(function() {
                     targets: 7,
                     width: '98px',
                     render: function(data, type, full, meta) {
-                        var $balance = full['reservation_payments'][0]['balance'];
+                        let payments = full.reservation_payments
+                        var $balance = payments[0].balance;
                         if ($balance === 0) {
                             var $badge_class = 'badge-light-success';
                             return '<span class="badge badge-pill ' + $badge_class + '" text-capitalized> Paid </span>';
@@ -176,7 +178,8 @@ $(function() {
                     targets: 8,
                     visible: false,
                     render: function(data, type, full, meta) {
-                        var $status = full['reservation_payments'][0]['payment_status']
+                        let payments = full.reservation_payments
+                        var $status = payments[0].payment_status
                         return $status
                     }
                 },

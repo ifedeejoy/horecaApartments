@@ -10,21 +10,21 @@ class GuestPayment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'payment_status',
+        'reservation_id',
+        'guest_id',
+        'type',
+        'description',
         'payment_method',
-        'service_charge',
-        'discount_reason',
-        'discount_amount',
-        'total',
-        'paid',
-        'balance',
-        'refund',
-        'createdBy',
-        'modifiedBy'
+        'amount'
     ];
 
     public function reservation()
     {
         return $this->belongsTo(Reservation::class);
+    }
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
     }
 }

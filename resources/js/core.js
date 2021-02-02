@@ -261,11 +261,43 @@ window.departureDate = function(arg) {
         price = $("#rate-price" + idNo).val(),
         finalPrice = price * nights,
         formatDate = moment(arrival, "YYYY-MM-DD hh:mm"),
-        departureDate = formatDate.add(nights, 'days').format("YYYY-MM-DD hh:mm")
-    console.log(price)
-    console.log(finalPrice)
-    $("#departure" + idNo).val(departureDate)
-    $("#apartment-cost" + idNo).val(finalPrice)
+        departureDate = formatDate.add(nights, 'days').format("YYYY-MM-DD hh:mm"),
+        apartment = $("#apartment" + idNo).val()
+    $.ajax({
+        url: '/api/availability/' + apartment + '/' + arrival + '/' + departureDate,
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            if (jQuery.isEmptyObject(data.data)) {
+                $("#departure" + idNo).val(departureDate)
+                $("#apartment-cost" + idNo).val(finalPrice)
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Please set the checkout date to ' + data.data.available_date + ' , the apartment is not available for ' + nights + ' night(s)',
+                    customClass: {
+                        confirmButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+            }
+        },
+        error: function(data) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: data,
+                customClass: {
+                    confirmButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            }).then(function() {
+                window.location.reload()
+            })
+        }
+    })
+
 }
 
 window.togglePayment = function(val) {
@@ -320,4 +352,14 @@ window.getTotals = function() {
     $("#subtotal").val(total.toLocaleString('en-US'))
     $("#balance").val(balance.toLocaleString('en-US'))
     $("#total").val(prices.toLocaleString('en-US'))
+}
+
+window.billPaymentOptions = function(option) {
+    if (option == 'Instant') {
+        $("#payment-method").attr('required', 'required')
+        $(".payment-div").removeClass('d-none')
+    } else if (option == 'At Checkout') {
+        $("#payment-method").removeAttr('required')
+        $(".payment-div").addClass('d-none')
+    }
 }

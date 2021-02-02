@@ -28,3 +28,31 @@
         endif;
     }
 
+    function multiSum($data, $key)
+    {
+        $sum = 0;
+        if(is_array($data) || is_object($data)):
+            foreach($data as $arr):
+                $sum += $arr[$key];
+            endforeach;
+            return $sum;
+        else:
+            return $sum;
+        endif;
+    }
+
+    function arrayOccurenceCount($data, $key)
+    {
+        $count = 0;
+        foreach ($data as $value):
+            if(is_array($value)):
+                $count += arrayOccurenceCount($value, $key);
+            else:
+                if($value == $key):
+                    $count++;
+                endif;
+            endif;
+        endforeach;
+        return $count;
+    }
+

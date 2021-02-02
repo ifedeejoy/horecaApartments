@@ -29,6 +29,11 @@ class Reservation extends Model
         return $this->belongsTo(Guest::class);
     }
 
+    public function guestBill()
+    {
+        return $this->hasMany(Inhouse::class);
+    }
+
     public function guestPayment()
     {
         return $this->hasMany(GuestPayment::class);
