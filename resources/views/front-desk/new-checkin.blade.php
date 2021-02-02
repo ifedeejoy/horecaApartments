@@ -308,12 +308,13 @@
                             <label class="form-label" for="payment-method">Payment Method</label>
                             <select class="select2 w-100" id="payment-method" name="payment-method">
                                 <option label=" "></option>
-                                <option>Bank Transfer</option>
-                                <option>Cash</option>
-                                <option>Credit</option>
-                                <option>Cryptocurrency</option>
-                                <option>POS</option>
-                                <option>Post Master</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Credit">Credit</option>
+                                <option value="Bitcoin">Bitcoin</option>
+                                <option value="Bitcoin">Bitcoin</option>
+                                <option value="POS">POS</option>
+                                <option value="Post Master">Post Master</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6 mb-2">

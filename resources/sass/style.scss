@@ -19,6 +19,36 @@
     color: #7367F0 !important;
 }
 
+.bg-pink {
+    background-color: #fe89d9 !important;
+    border: none !important;
+}
+
+.bg-outline-pink {
+    background-color: transparent !important;
+    border: 1px solid #fe89d9 !important;
+    color: #fe89d9 !important;
+}
+
+.text-pink {
+    color: #fe89d9 !important;
+}
+
+.text-dark-blue {
+    color: #0009f4 !important;
+}
+
+.bg-dark-blue {
+    background-color: #0009f4 !important;
+    border: none !important;
+}
+
+.bg-outline-dark-blue {
+    background-color: transparent !important;
+    border: 1px solid #0009f4 !important;
+    color: #0009f4 !important;
+}
+
 .dropzone {
     .guest-id-text {
         font-size: 1rem !important;

@@ -6,9 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Guest;
 use App\Models\Apartments;
+use App\Models\GuestPayment;
+use Illuminate\Database\QueryException;
+use App\Models\ReservationPayment;
+use App\Models\Inhouse;
+use App\Http\Traits\ReservationTrait;
+use Carbon\Carbon;
+use App\Models\Rate;
 
 class InhouseController extends Controller
 {
+    use ReservationTrait;
     /**
      * Display a listing of the resource.
      *
@@ -47,6 +55,103 @@ class InhouseController extends Controller
         //
     }
 
+    public function addBill(Request $request, $id)
+    {
+        $request->validate([
+            'service' => 'required',
+            'price' => 'required|integer',
+            'description' => 'required',
+            'payment-time' => 'required'
+        ]);
+        try {
+            $reservation = Reservation::findOrFail($id);
+            $guest = $reservation->guest_id;
+            $status = $request->input('payment-time') == 'Instant' ? 'paid' : 'unpaid';
+            $reservation->guestBill()->create([
+                'guest_id' => $guest,
+                'service' => $request->input('service'),
+                'description' => $request->input('description'),
+                'price' => $request->input('price'),
+                'status' => $status
+            ]);
+            if($status == 'paid'):
+                $payment = new GuestPayment;
+                $payment->reservation_id = $id;
+                $payment->guest_id = $guest;
+                $payment->type = $request->input('service').' Payment';
+                $payment->description = $request->input('description');
+                $payment->payment_method = $request->input('payment-method');
+                $payment->amount = $request->input('price');
+                $payment->save();
+            elseif($status == 'unpaid'):
+                $payments = ReservationPayment::where('reference', $reservation->reference)->firstOrFail();
+                $balance = $payments->balance + $request->input('price');
+                $payments->balance = $balance;
+                $payments->save();
+            endif;
+            return back()->with('success', 'Guest bill updated successfully');
+        } catch (QueryException $e) {
+            return back()->with('error', $e->errorInfo[2]);
+        }
+    }
+
+    public function addPayment(Request $request, $id)
+    {
+        $request->validate([
+            'amount' => 'required|integer',
+            'payment-method' => 'required'
+        ]);
+        try {
+            $reservation = Reservation::findOrFail($id);
+            $guest = $reservation->guest_id;
+            $reservation->guestPayment()->create([
+                'guest_id' => $guest,
+                'payment_method' => $request->input('payment-method'),
+                'type' => 'Additional Payment',
+                'description' => $request->input('description'),
+                'amount' => $request->input('amount')
+            ]);
+            $payments = ReservationPayment::where('reference', $reservation->reference)->firstOrFail();
+            $balance = $payments->balance - $request->input('amount');
+            $paid = $payments->paid + $request->input('amount');
+            $payments->balance = $balance;
+            $payments->paid = $paid;
+            $payments->save();
+            return back()->with('success', 'Guest payment updated successfully');
+        } catch (QueryException $e) {
+            return back()->with('error', $e->errorInfo[2]);
+        }
+    }
+
+    public function extendStay(Request $request, $id)
+    {
+        $oldCheckout = Carbon::parse($request->input('old-checkout'));
+        $newCheckout = Carbon::parse($request->input('new-checkout'));
+        $discount = $request->input('discount');
+        $checkAvailability = $this->checkAvailability($id, $oldCheckout, $newCheckout);
+        $reservation = Reservation::find($id);
+        try {
+            if(empty($checkAvailability)):
+                $oldNights = $reservation->nights;
+                $newNights = $oldCheckout->diffInDays($newCheckout);
+                $rate = Rate::find($reservation->rate_id);
+                $ratePrice = $rate->amount;
+                $amount = $ratePrice * $newNights;
+                $amount -= $discount;
+                $reservation->nights = $oldNights + $newNights;
+                $reservation->checkout = $newCheckout;
+                $reservation->save();
+                // Update price
+                $reference = $reservation->reference;
+                $updatePrice = ReservationPayment::where('reference', $reference)->update(['balance', $amount], ['discount', $discount]);
+            else:
+                return back()->with('error', "Please set the checkout date to". $checkAvailability['availability_date'] ." the apartment is not available for preferred checkout");
+            endif;
+        } catch (QueryException $e) {
+            return back()->withErrors([$e->errorInfo[2]]);
+        }
+    }
+
     /**
      * Display the specified resource.
      *
@@ -55,7 +160,9 @@ class InhouseController extends Controller
      */
     public function show($id)
     {
-        //
+        $reservation = Reservation::where('id', $id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'guestBill')->first();
+        $paidBills = Inhouse::where(['reservation_id' => $id, 'status' => 'paid'])->sum('price');
+        return view('front-desk.folio')->with(['reservation' => $reservation, 'paidBills' => $paidBills]);
     }
 
     /**

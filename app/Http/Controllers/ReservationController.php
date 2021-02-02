@@ -9,10 +9,11 @@ use App\Models\Apartments;
 use App\Http\Traits\GuestTrait;
 use App\Models\ReservationPayment;
 use Illuminate\Database\QueryException;
+use App\Http\Traits\ReservationTrait;
 
 class ReservationController extends Controller
 {
-    use GuestTrait;
+    use GuestTrait, ReservationTrait;
     /**
      * Display a listing of the resource.
      *
@@ -28,6 +29,12 @@ class ReservationController extends Controller
         endif;
     }
 
+    public function availabilityCheck(Request $request)
+    {
+        $availability = $this->checkAvailability($request->apartment, $request->start, $request->end);
+        return response()->json(['data' => $availability]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -36,7 +43,7 @@ class ReservationController extends Controller
     public function create(Request $request)
     {
         $guests = Guest::all();
-        $apartments = Apartments::where('status', 'available')->get();
+        $apartments = Apartments::all();
         return view('front-desk.new-reservation')->with(['guests' =>$guests, 'apartments' => $apartments]);
     }
 
@@ -77,7 +84,14 @@ class ReservationController extends Controller
                 $reservations->source = $request->input('reservation-source');
                 $reservations->guest_id = $guest;
                 $reservations->createdBy = 1;
-                $reservations->save();
+                $checkAvailability = $this->checkAvailability($request->input('apartment')[$i], $request->input($request->input('arrival')[$i]), $request->input('departure')[$i]);
+                if(empty($checkAvailability)):
+                    $reservations->save();
+                else:
+                    $available = $checkAvailability['available_date'];
+                    return back()->with('error', "Reservation failed, please set checkout date to $available");
+                endif;
+                
             endfor;
             // Insert reservation payment
             $payment = new ReservationPayment;

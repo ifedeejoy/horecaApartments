@@ -24,6 +24,7 @@
                         <th>Guest</th>
                         <th>Room Type</th>
                         <th>Expected Arrival</th>
+                        <th>Expected Departure</th>
                         <th>Total</th>
                         <th>Balance</th>
                         <th>Reserved On</th>

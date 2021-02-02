@@ -36,8 +36,13 @@ Route::get('front-desk/invoice/{reference}', [ReservationController::class, 'sho
 Route::get('print-invoice/{reference}', [ReservationController::class, 'show'])->name('print-receipt');
 Route::get('front-desk/reservation/{id}', [ReservationController::class, 'show'])->name('reservation');
 Route::get('front-desk/inhouse-guests', [InhouseController::class, 'index'])->name('inhouse-guests');
+Route::get('front-desk/folio/{id}', [InhouseController::class, 'show'])->name('folio');
 // Post Requests
 Route::post('front-desk/make-reservation', [ReservationController::class, 'store'])->name('make-reservation');
+Route::post('front-desk/add-guest-bill/{id}', [InhouseController::class, 'addBill'])->name('add-guest-bill');
+Route::post('front-desk/add-guest-payment/{id}', [InhouseController::class, 'addPayment'])->name('add-guest-payment');
+Route::post('front-desk/extend-stay/{id}', [InhouseController::class, 'extendStay'])->name('extend-stay');
+
 Route::view('front-desk/calendar', 'front-desk.calendar');
 Route::view('front-desk/home', 'front-desk.home');
 Route::view('front-desk/invoice', 'front-desk.invoice');

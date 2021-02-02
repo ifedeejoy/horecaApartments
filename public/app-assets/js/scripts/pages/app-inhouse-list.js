@@ -39,6 +39,7 @@ $(function() {
                 { data: 'checkout' },
                 { data: 'reservation_payments.0.total' },
                 { data: 'reservation_payments.0.balance' },
+                { data: 'created_at' },
                 { data: 'reservation_payments.0.payment_status' },
                 { data: '' }
 
@@ -173,7 +174,24 @@ $(function() {
                 },
 
                 {
+                    // Reserved on
                     targets: 8,
+                    width: '73px',
+                    render: function(data, type, full, meta) {
+                        var $reservedOn = full['created_at'];
+                        // Creates full output for row
+                        var $expectOutput =
+                            '<span class="d-none">' +
+                            moment($reservedOn).format('YYYYMMDD') +
+                            '</span>' +
+                            moment($reservedOn).format('DD MMM YYYY');
+                        $reservedOn;
+                        return $expectOutput;
+                    }
+                },
+
+                {
+                    targets: 9,
                     visible: false,
                     render: function(data, type, full, meta) {
                         var $status = full['reservation_payments'][0]['payment_status']
