@@ -121,7 +121,7 @@
                         <div class="row invoice-sales-total-wrapper">
                             <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                 <p class="card-text mb-0">
-                                    <span class="font-weight-bold">Reserved By:</span> <span class="ml-75">Alfie Solomons</span>
+                                    <span class="font-weight-bold">Reserved By:</span> <span class="ml-75">{{$reservation->staff->name}}</span>
                                 </p>
                             </div>
                             <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">

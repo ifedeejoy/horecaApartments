@@ -301,18 +301,20 @@ window.departureDate = function(arg) {
 }
 
 window.togglePayment = function(val) {
-    if (val != 'no payment') {
+    if (val != 'none') {
         $("#pm-container").removeClass('d-none')
         $("#dp-container").removeClass('d-none')
         $("#gd-container").removeClass('d-none')
         $("#ip-container > .form-group").removeClass('col-md-6')
         $("#ip-container > .form-group").addClass('col-md-4')
-    } else if (val == 'no payment') {
+    } else if (val == 'none') {
         $("#pm-container").addClass('d-none')
         $("#dp-container").addClass('d-none')
         $("#gd-container").addClass('d-none')
         $("#ip-container > .form-group").addClass('col-md-6')
+
     }
+    getTotals()
 }
 
 window.toggleDiscount = function(val) {
@@ -339,8 +341,8 @@ window.toggleDeposit = function(val) {
 
 window.getTotals = function() {
     let prices = 0,
-        discount = $("#discount").val(),
-        deposit = $("#deposit").val(),
+        discount = isNaN($("#discount").val()) ? 0 : $("#discount").val(),
+        deposit = isNaN($("#deposit").val()) ? 0 : $("#deposit").val(),
         balance,
         total
     $('.prices').each(function() {

@@ -56,7 +56,7 @@ $(function() {
                     render: function(data, type, full, meta) {
                         var $invoiceId = full['reference'];
                         // Creates full output for row
-                        var $rowOutput = '<a class="font-weight-bold" href="' + invoicePreview + '"> #' + $invoiceId + '</a>';
+                        var $rowOutput = '<a class="font-weight-bold" href="' + invoicePreview + full['id'] + '"> #' + $invoiceId + '</a>';
                         return $rowOutput;
                     }
                 },

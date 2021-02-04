@@ -166,7 +166,7 @@
                             <div class="row mb-2">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="apartment">Apartment</label>
-                                    <select class="select2 w-100" id="apartment" name="apartment[]" onchange="apartmentInfo(this.value)">
+                                    <select class="select2 w-100" id="apartment" name="apartment[]" onchange="apartmentInfo(this.value)" required>
                                         <option label=" "></option>
                                         @foreach ($apartments as $apartment)
                                         <option value="{{$apartment->id}}">{{$apartment->name}}</option>
@@ -297,7 +297,7 @@
                     <div class="row" id="ip-container">
                         <div class="form-group col-md-6 mb-2">
                             <label class="form-label" for="payment-status">Payment Status</label>
-                            <select class="select2 w-100" id="payment-status" name="payment-status" onchange="togglePayment(this.value)">
+                            <select class="select2 w-100" id="payment-status" name="payment-status" onchange="togglePayment(this.value)" required>
                                 <option label=" "></option>
                                 <option value="none">No Payment</option>
                                 <option value="partial">Partial Payment</option>
@@ -330,7 +330,7 @@
                     <div class="row mb-2 d-none" id="gd-container">
                         <div class="form-group col-md-4 mb-2">
                             <label class="form-label" for="give-discount">Give Discount</label>
-                            <select class="select2 w-100" id="give-discount" name="give-discount" onchange="toggleDiscount(this.value)" required>
+                            <select class="select2 w-100" id="give-discount" name="give-discount" onchange="toggleDiscount(this.value)">
                                 <option label=" "></option>
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>
@@ -369,7 +369,7 @@
                     <div class="row mb-2">
                         <div class="form-group col-md-4">
                             <label class="form-label" for="subtotal">Subtotal (₦)</label>
-                            <input type="text" id="subtotal" class="form-control" placeholder="100,000" readonly/>
+                            <input type="text" id="subtotal" class="form-control" name="subtotal" placeholder="100,000" readonly/>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="form-label" for="balance">Balance (₦)</label>

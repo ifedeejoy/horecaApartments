@@ -8,6 +8,7 @@ use App\Models\Apartments;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class ApartmentsController extends Controller
 {

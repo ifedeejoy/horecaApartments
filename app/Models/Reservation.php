@@ -48,4 +48,9 @@ class Reservation extends Model
     {
         return $this->belongsTo(Rate::class);
     }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'createdBy');
+    }
 }
