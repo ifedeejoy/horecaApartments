@@ -11,7 +11,7 @@
         <div class="auth-inner row m-0">
             <!-- Brand logo--><a class="brand-logo" href="javascript:void(0);">
                <img src="{{ asset ('/app-assets/images/logo/logo.png')}}" class="logo-img" alt="Horeca Apartments">
-                <h2 class="brand-text text-primary ml-1">Kimberly's Apartments</h2>
+                <h2 class="brand-text text-primary ml-1">{{ config('app.name', 'Laravel') }}</h2>
             </a>
             <!-- /Brand logo-->
             <!-- Left Text-->

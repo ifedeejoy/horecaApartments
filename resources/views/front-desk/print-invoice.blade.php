@@ -20,7 +20,7 @@
                 <div class="d-flex mb-1">
                     <div class="logo-wrapper">
                         <img src="{{asset ('/app-assets/images/logo/logo.png')}}" class="img-fluid logo-img" alt="Horeca Apartments">
-                        <h3 class="text-primary invoice-logo">Kimberly's Apartments</h3>
+                        <h3 class="text-primary invoice-logo">{{ config('app.name', 'Laravel') }}</h3>
                     </div>
                 </div>
                 <p class="mb-25">{{$reservations[0]->apartments->address}}</p>
