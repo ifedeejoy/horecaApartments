@@ -30,7 +30,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <h1 class="mb-1 text-white">Congratulations John,</h1>
+                            <h1 class="mb-1 text-white">Congratulations {{auth()->user()->name}},</h1>
                             <p class="card-text m-auto w-75">
                                 You have done <strong>57.6%</strong> more sales today. Check your new badge in your profile.
                             </p>
@@ -393,6 +393,18 @@
     @parent
     <script src="{{ asset('/app-assets/js/scripts/pages/dashboard-analytics.js') }}" defer></script>
     <script src="{{ asset('/app-assets/js/scripts/pages/app-invoice-list.js') }}" defer></script>
+    <script type="module" defer>
+        setTimeout(function () {
+            toastr['success'](
+            'You have successfully logged in. Now you can start to explore!',
+            '👋 Welcome {{auth()->user()->name}}!',
+            {
+                closeButton: true,
+                tapToDismiss: false
+            }
+            );
+        }, 2000);
+    </script>
 @endsection
 
     

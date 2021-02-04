@@ -20,12 +20,12 @@
 <div class="content-header-left col-md-9 col-12 mb-2">
     <div class="row breadcrumbs-top">
         <div class="col-12">
-            <h2 class="content-header-title float-left mb-0" data-i18n="New Reservation">New Reservation</h2>
+            <h2 class="content-header-title float-left mb-0" data-i18n="New Checkin">New Checkin</h2>
             <div class="breadcrumb-wrapper">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/front-desk/reservations" data-i18n="Reservations">Reservations</a>
+                    <li class="breadcrumb-item"><a href="/front-desk/inhouse-guests" data-i18n="Reservations">Inhouse Guests</a>
                     </li>
-                    <li class="breadcrumb-item active" data-i18n="New Reservation">New Reservation
+                    <li class="breadcrumb-item active" data-i18n="New Checkin">New Checkin
                     </li>
                 </ol>
             </div>
@@ -166,7 +166,7 @@
                             <div class="row mb-2">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="apartment">Apartment</label>
-                                    <select class="select2 w-100" id="apartment" name="apartment[]" onchange="apartmentInfo(this.value)">
+                                    <select class="select2 w-100" id="apartment" name="apartment[]" onchange="apartmentInfo(this.value)" required>
                                         <option label=" "></option>
                                         @foreach ($apartments as $apartment)
                                         <option value="{{$apartment->id}}">{{$apartment->name}}</option>
@@ -186,7 +186,7 @@
                             <div class="row mb-2">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="arrival">Arrival Date/Time</label>
-                                    <input type="text" id="arrival" name="arrival[]" class="form-control" placeholder="13-12-2020 2:00 PM" />
+                                    <input type="text" id="arrival" name="arrival[]" class="form-control datepicker" value="{{date("Y-m-d H:i:s")}}" placeholder="13-12-2020 2:00 PM" />
                                 </div>
                                 <div class="input-group col-md-6">
                                     <label class="form-label" for="nights">Night(s)</label>
@@ -297,7 +297,7 @@
                     <div class="row" id="ip-container">
                         <div class="form-group col-md-6 mb-2">
                             <label class="form-label" for="payment-status">Payment Status</label>
-                            <select class="select2 w-100" id="payment-status" name="payment-status" onchange="togglePayment(this.value)">
+                            <select class="select2 w-100" id="payment-status" name="payment-status" onchange="togglePayment(this.value)" required>
                                 <option label=" "></option>
                                 <option value="none">No Payment</option>
                                 <option value="partial">Partial Payment</option>
@@ -308,13 +308,12 @@
                             <label class="form-label" for="payment-method">Payment Method</label>
                             <select class="select2 w-100" id="payment-method" name="payment-method">
                                 <option label=" "></option>
-                                <option value="Bank Transfer">Bank Transfer</option>
-                                <option value="Cash">Cash</option>
-                                <option value="Credit">Credit</option>
-                                <option value="Bitcoin">Bitcoin</option>
-                                <option value="Bitcoin">Bitcoin</option>
-                                <option value="POS">POS</option>
-                                <option value="Post Master">Post Master</option>
+                                <option>Bank Transfer</option>
+                                <option>Cash</option>
+                                <option>Credit</option>
+                                <option>Cryptocurrency</option>
+                                <option>POS</option>
+                                <option>Post Master</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6 mb-2">
@@ -331,7 +330,7 @@
                     <div class="row mb-2 d-none" id="gd-container">
                         <div class="form-group col-md-4 mb-2">
                             <label class="form-label" for="give-discount">Give Discount</label>
-                            <select class="select2 w-100" id="give-discount" name="give-discount" onchange="toggleDiscount(this.value)" required>
+                            <select class="select2 w-100" id="give-discount" name="give-discount" onchange="toggleDiscount(this.value)">
                                 <option label=" "></option>
                                 <option value="no">No</option>
                                 <option value="yes">Yes</option>

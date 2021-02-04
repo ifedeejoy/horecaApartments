@@ -3,7 +3,7 @@
     <div class="navbar-header">
         <ul class="nav navbar-nav flex-row">
             <li class="nav-item mr-auto">
-                <a class="navbar-brand" href="/front-desk/home">
+                <a class="navbar-brand" href="/dashboard">
                     <span class="brand-logo">
                         <img src="{{asset('app-assets/images/logo/logo.png')}}" class="img-fluid" alt="Horeca Apartments">
                     </span>
@@ -17,10 +17,10 @@
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
             {{-- Analytics --}}
-            <li class=" nav-item"><a class="d-flex align-items-center" href="/front-desk/home"><i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Dashboards</span><span class="badge badge-light-warning badge-pill ml-auto mr-1">1</span></a>
+            <li class=" nav-item"><a class="d-flex align-items-center" href="/dashboard"><i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Dashboards</span><span class="badge badge-light-warning badge-pill ml-auto mr-1">1</span></a>
                 <ul class="menu-content">
-                    <li class="{{ setActive(['front-desk/home']) }}">
-                        <a class="d-flex align-items-center" href="/front-desk/home">
+                    <li class="{{ setActive(['dashboard']) }}">
+                        <a class="d-flex align-items-center" href="/dashboard">
                             <i data-feather="circle"></i><span class="menu-item" data-i18n="Analytics">Analytics</span>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
             <li class="{{ setActive(['front-desk/new-reservation']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/new-reservation"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Reservation">New Reservation</span></a>
             </li>
-            <li class="{{ setActive(['front-desk/reservations', 'front-desk/invoice/*']) }} nav-item">
+            <li class="{{ setActive(['front-desk/reservations', 'front-desk/invoice/*', 'front-desk/reservation/*']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/reservations"><i data-feather="clipboard"></i><span class="menu-title text-truncate" data-i18n="Reservations">Reservations</span></a>
             </li>
             <li class="{{ setActive(['front-desk/calendar']) }} nav-item">

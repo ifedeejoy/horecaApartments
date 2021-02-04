@@ -141,26 +141,30 @@
                         <div class="row invoice-sales-total-wrapper">
                             <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                 <p class="card-text mb-0">
-                                    <span class="font-weight-bold">Reserved By:</span> <span class="ml-75">{{ multiSum($reservation->guestBill, 'price')}}</span>
+                                    <span class="font-weight-bold">Reserved By:</span> <span class="ml-75">{{$reservation->staff->name}}</span>
                                 </p>
                             </div>
                             <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
                                 <div class="invoice-total-wrapper">
                                     <div class="invoice-total-item">
                                         <p class="invoice-total-title">Subtotal:</p>
-                                        <p class="invoice-total-amount">₦{{number_format($reservation->reservationPayments[0]->total + multiSum($reservation->guestBill, 'price'), 2)}}</p>
+                                        <p class="invoice-total-amount">₦{{number_format($reservation->reservationPayments[0]->total, 2)}}</p>
+                                    </div>
+                                    <div class="invoice-total-item">
+                                        <p class="invoice-total-title">Extras:</p>
+                                        <p class="invoice-total-amount">₦{{number_format(multiSum($reservation->guestBill, 'price'), 2) }}</p>
                                     </div>
                                     <div class="invoice-total-item">
                                         <p class="invoice-total-title">Discount:</p>
                                         <p class="invoice-total-amount">₦{{number_format($reservation->reservationPayments[0]->discount_amount, 2)}}</p>
                                     </div>
                                     <div class="invoice-total-item">
-                                        <p class="invoice-total-title">Tax:</p>
-                                        <p class="invoice-total-amount">7.5%</p>
+                                        <p class="invoice-total-title">Total:</p>
+                                        <p class="invoice-total-amount">₦{{number_format($reservation->reservationPayments[0]->total + multiSum($reservation->guestBill, 'price'), 2)}}</p>
                                     </div>
                                     <div class="invoice-total-item">
                                         <p class="invoice-total-title">Paid:</p>
-                                        <p class="invoice-total-amount">₦{{number_format($reservation->reservationPayments[0]->paid + $paidBills, 2)}}</p>
+                                        <p class="invoice-total-amount">₦{{number_format($reservation->reservationPayments[0]->paid, 2)}}</p>
                                     </div>
                                     <hr class="my-50" />
                                     <div class="invoice-total-item">
@@ -211,32 +215,32 @@
                                 Add Payment
                             </button>
                                
-                            <form action="{{route('checkin-guest', $reservation->id)}}" method="post">
+                            <form action="{{route('checkout', $reservation->id)}}" method="post" id="checkout-debt">
                                 @csrf
-                                <input type="hidden" name="reservation" value="{{$reservation->id}}">
-                                <button class="btn btn-danger btn-block" type="submit">
+                                <input type="hidden" name="type" value="debt">
+                                <button class="btn btn-danger btn-block" type="submit" form="checkout-debt">
                                     Checkout With Debt
                                 </button>
                             </form>
                             @elseif($reservation->reservationPayments[0]->balance < 0)
-                            <form action="{{route('checkin-guest', $reservation->id)}}" method="post">
+                            <form action="{{route('checkout', $reservation->id)}}" method="post" id="checkout-postmaster">
                                 @csrf
-                                <input type="hidden" name="reservation" value="{{$reservation->id}}">
-                                <button class="btn bg-outline-dark-blue btn-block mb-1" type="submit">
+                                <input type="hidden" name="type" value="postmaster">
+                                <button class="btn bg-outline-dark-blue btn-block mb-1" type="submit" form="checkout-postmaster">
                                     Add To Postmaster
                                 </button>
                             </form>
-                            <form action="{{route('checkin-guest', $reservation->id)}}" method="post">
+                            <form action="{{route('checkout', $reservation->id)}}" method="post" id="checkout-refund">
                                 @csrf
-                                <input type="hidden" name="reservation" value="{{$reservation->id}}">
-                                <button class="btn btn-success btn-block mb-1" type="submit">
-                                    Refund
+                                <input type="hidden" name="type" value="refund">
+                                <button class="btn btn-success btn-block mb-1" type="submit" form="checkout-refund">
+                                    Refund & Checkout
                                 </button>
                             </form>
                             @else
-                            <form action="{{route('checkin-guest', $reservation->id)}}" method="post">
+                            <form action="{{route('checkout', $reservation->id)}}" method="post" id="checkout">
                                 @csrf
-                                <button class="btn btn-danger btn-block" type="submit">
+                                <button class="btn btn-danger btn-block" type="submit" form="checkout">
                                     Checkout
                                 </button>
                             </form>
@@ -314,7 +318,8 @@
                     </h5>
                 </div>
                 <div class="modal-body flex-grow-1">
-                    <form action="{{route('')}}">
+                    <form action="{{route('extend-stay', $reservation->id)}}" method="POST">
+                        @csrf
                         <div class="form-group">
                             <label class="form-label" for="old-checkout">Old Checkout Date/Time</label>
                             <input type="text" id="old-checkout" name="old-checkout" class="form-control" value="{{$reservation->checkout}}" />
@@ -328,7 +333,7 @@
                             <input id="discount" class="form-control" type="number" inputmode="numeric" name="discount" placeholder="$1000" />
                         </div>
                         <div class="form-group d-flex flex-wrap mt-2">
-                            <button type="button" class="btn btn-primary mr-1" data-dismiss="modal">Send</button>
+                            <button type="submit" class="btn btn-primary mr-1">Send</button>
                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
                         </div>
                     </form>

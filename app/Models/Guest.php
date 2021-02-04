@@ -31,4 +31,9 @@ class Guest extends Model
     {
         return $this->hasMany(GuestPayment::class);
     }
+
+    public function debts()
+    {
+        return $this->hasMany(Debt::class);
+    }
 }

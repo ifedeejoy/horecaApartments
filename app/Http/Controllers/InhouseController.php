@@ -13,6 +13,10 @@ use App\Models\Inhouse;
 use App\Http\Traits\ReservationTrait;
 use Carbon\Carbon;
 use App\Models\Rate;
+use App\Models\Debt;
+use App\Models\Postmaster;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class InhouseController extends Controller
 {
@@ -143,10 +147,82 @@ class InhouseController extends Controller
                 $reservation->save();
                 // Update price
                 $reference = $reservation->reference;
-                $updatePrice = ReservationPayment::where('reference', $reference)->update(['balance', $amount], ['discount', $discount]);
+                $updatePrice = ReservationPayment::where('reference', $reference)->update(['total' => DB::raw("total + $amount"), 'balance' => DB::raw("balance + $amount"), 'discount_amount' => DB::raw("discount_amount + $discount")]);
+                return back()->with('success', "Guest stay extended by $newNights night(s)");
             else:
-                return back()->with('error', "Please set the checkout date to". $checkAvailability['availability_date'] ." the apartment is not available for preferred checkout");
+                return back()->with('error', "Please set the checkout date to". $checkAvailability['available_date'] ." the apartment is not available for preferred checkout");
             endif;
+        } catch (QueryException $e) {
+            return back()->withErrors([$e->errorInfo[2]]);
+        }
+    }
+
+    public function roomMove(Request $request, $id)
+    {
+        $reservation = Reservation::find($id);
+        try{
+            $type = $request->input('type');
+            $updateOld = Apartments::where('id', $reservation->apartments_id)->update(['status' => 'available']);
+            $updateNew = Apartments::where('id', $request->input('new-apartment'))->update(['status' => 'occupied']);
+            if($type == 'upgrade'):
+                $balance = $request->input('balance');
+                $updatePayment = ReservationPayment::where('reference', $reservation->reference)->update(['balance' => DB::raw("balance + $balance"), 'total' => DB::raw("total + $balance")]);
+            elseif($type == 'switch'):
+                $reservation->extras = "<br>". $request->input('reason');
+                $reservation->save();
+            endif;
+            DB::table('apartment_upgrades')->insert(['old_apartment' => $reservation->apartments_id, 'new_apartment' => $request->input('new-apartment'), 'reason' => $request->input('reason'), 'upgradedBy' => Auth::user()->id]);
+            $reservation->apartments_id = $request->input('new-apartment');
+            $reservation->save();
+            return back()->with('success', 'Apartment update successfully');
+        }catch (QueryException $e){
+            return back()->withErrors([$e->errorInfo[2]]);
+        }
+    }
+
+    public function checkout(Request $request, $id)
+    {
+        $reservation = Reservation::find($id);
+        $reference = $reservation->reference;
+        $payments =  ReservationPayment::where('reference', $reference)->first();
+        try {
+            $type = $request->input('type');
+            if($type == 'refund'):
+                $amount = $payments->paid - $payments->total;
+                $updatePayments = $payments->update(['refund' => $amount, 'paid' => DB::raw("paid - $amount")]);
+                DB::table('refunds')->insert([
+                    'guest_id' => $reservation->guest_id,
+                    'reference' => $reference,
+                    'amount' => $amount,
+                    'refundedBy' => Auth::user()->id
+                ]);
+            elseif($type == 'debt'):
+                $amount = $payments->balance;
+                $updateDebt = Debt::create([
+                    'reference' => $reference,
+                    'guest_id' => $reservation->guest_id,
+                    'amount' => $amount,
+                    'balance' => $amount,
+                    'status' => 'active',
+                    'created_by' => Auth::user()->id
+                ]);
+            elseif($type == 'postmaster'):
+                $amount = $payments->paid - $payments->total;
+                $updatePostmaster = Postmaster::updateOrInsert([
+                    ['guest_id' => $reservation->guest_id],
+                    ['balance' => DB::raw("balance + $amount"), 'created_by' => Auth::user()->id]
+                ]);
+            elseif($type == 'checkout'):
+                if($payments->balance > 0):
+                    return response()->json(['status' => 'error', 'message' => "Guest has unpaid bills and cannot be checkedout"]);
+                elseif($payments->paid > $payments->total):
+                    return response()->json(['status' => 'error', 'message' => "Guest cannot be checkedout, please check guest bill for options"]);
+                endif;
+            endif;
+            $updateApartment = Apartments::where('id', $reservation->apartments_id)->update(['status' => 'available']);
+            $reservation->status = 'checkedout';
+            $reservation->save();
+            return redirect('front-desk/receipt/'.$reservation->id)->with('success', 'Guest checked out succesfully');
         } catch (QueryException $e) {
             return back()->withErrors([$e->errorInfo[2]]);
         }
@@ -158,10 +234,13 @@ class InhouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $reservation = Reservation::where('id', $id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'guestBill')->first();
+        $reservation = Reservation::where('id', $id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'guestBill', 'staff')->first();
         $paidBills = Inhouse::where(['reservation_id' => $id, 'status' => 'paid'])->sum('price');
+        if($request->is('front-desk/receipt/*')):
+            return view('front-desk.receipt')->with(['reservation' => $reservation, 'paidBills' => $paidBills]);
+        endif;
         return view('front-desk.folio')->with(['reservation' => $reservation, 'paidBills' => $paidBills]);
     }
 

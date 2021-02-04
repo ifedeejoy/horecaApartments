@@ -10,6 +10,7 @@ use App\Http\Traits\GuestTrait;
 use App\Models\ReservationPayment;
 use Illuminate\Database\QueryException;
 use App\Http\Traits\ReservationTrait;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
@@ -83,18 +84,12 @@ class ReservationController extends Controller
                 $reservations->extras = $request->input('extras')[$i];
                 $reservations->source = $request->input('reservation-source');
                 $reservations->guest_id = $guest;
-                $reservations->createdBy = 1;
-                $checkAvailability = $this->checkAvailability($request->input('apartment')[$i], $request->input($request->input('arrival')[$i]), $request->input('departure')[$i]);
-                if(empty($checkAvailability)):
-                    $reservations->save();
-                else:
-                    $available = $checkAvailability['available_date'];
-                    return back()->with('error', "Reservation failed, please set checkout date to $available");
-                endif;
-                
+                $reservations->createdBy = Auth::user()->id;
+                $reservations->save();
             endfor;
             // Insert reservation payment
             $payment = new ReservationPayment;
+            $deposit = empty($request->input('deposit')) ? 0 : $request->input('deposit');
             $payment->reference = $reference;
             $payment->guest_id = $guest;
             $payment->payment_status = $request->input('payment-status');
@@ -103,9 +98,9 @@ class ReservationController extends Controller
             $payment->discount_reason = $request->input('discount-reason');
             $payment->discount_amount = $request->input('discount');
             $payment->total = removeCommas($request->input('total'));
-            $payment->paid = removeCommas($request->input('deposit'));
+            $payment->paid = removeCommas($deposit);
             $payment->balance = removeCommas($request->input('balance'));
-            $payment->createdBy = 1;
+            $payment->createdBy = Auth::user()->id;
             $payment->save();
             return redirect('front-desk/invoice/'.$reservations->reference)->with('success', 'Reservation made successfully');
         } catch (QueryException $e) {
@@ -151,11 +146,11 @@ class ReservationController extends Controller
     public function show(Reservation $reservation, Request $request)
     {
         if($request->is('front-desk/invoice/*') || $request->is('print-invoice/*')):
-            $reservation = Reservation::where('reference', $request->reference)->with('apartments', 'rate', 'reservationPayments', 'guest')->get();
+            $reservation = Reservation::where('reference', $request->reference)->with('apartments', 'rate', 'reservationPayments', 'guest', 'staff')->get();
             $view = $request->is('print-invoice/*') ? 'front-desk.print-invoice' : 'front-desk.invoice';
             return view($view)->with('reservations', $reservation);
         else:
-            $reservation = Reservation::where('id', $request->id)->with('apartments', 'rate', 'reservationPayments', 'guest')->first();
+            $reservation = Reservation::where('id', $request->id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'staff')->first();
             return view('front-desk.reservation')->with('reservation', $reservation);
         endif;
     }

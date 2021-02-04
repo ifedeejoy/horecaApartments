@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusToUser extends Migration
+class RoomUpgrades extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,13 @@ class AddStatusToUser extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('status')->default('offline');
+        Schema::create('apartment_upgrades', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('old_apartment');
+            $table->integer('new_apartment');
+            $table->text('reason');
+            $table->integer('upgradedBy');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +30,6 @@ class AddStatusToUser extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }
