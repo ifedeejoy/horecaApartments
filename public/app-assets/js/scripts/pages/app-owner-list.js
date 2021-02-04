@@ -14,9 +14,9 @@ $(function() {
         newUserSidebar = $('.new-user-modal'),
         newUserForm = $('.add-new-user'),
         statusObj = {
-            0: { title: 'Pending', class: 'badge-light-warning' },
-            2: { title: 'Active', class: 'badge-light-success' },
-            1: { title: 'Offline', class: 'badge-light-secondary' }
+            'pending': { title: 'Pending', class: 'badge-light-warning' },
+            'online': { title: 'Active', class: 'badge-light-success' },
+            'offline': { title: 'Offline', class: 'badge-light-secondary' }
         };
 
     var assetPath = '../../../app-assets/',
