@@ -61,6 +61,20 @@
     }
 }
 
+.hover-pink {
+    color: white !important;
+    &:hover {
+        box-shadow: 0 8px 25px -8px #fe89d9 !important;
+    }
+}
+
+.hover-dark-blue {
+    color: white !important;
+    &:hover {
+        box-shadow: 0 8px 25px -8px #0009f4 !important;
+    }
+}
+
 .guest-id-field {
     height: 100px !important;
     min-height: 0px !important;

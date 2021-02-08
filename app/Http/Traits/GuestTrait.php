@@ -35,7 +35,6 @@ trait GuestTrait
     {
         $validated = Validator::make($data, [
             'name' => 'required',
-            'email' => 'required|max:255',
             'phone' => 'required|max:25'
         ]);
         if($validated->fails()):
