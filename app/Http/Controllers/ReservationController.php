@@ -11,6 +11,7 @@ use App\Models\ReservationPayment;
 use Illuminate\Database\QueryException;
 use App\Http\Traits\ReservationTrait;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -56,54 +57,56 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        // create guest profile
-        $createGuest = $this->createGuest($request->all());
-        if(is_array($createGuest)):
-            if($createGuest['status'] == 'successful'):
-                $guest = $createGuest['id'];
-            else:
-                return back()->with('error', $createGuest['message']);
-            endif;
-        else:
-            return $createGuest;
-        endif;
-        
-        // // insert reservation details
         try {
-            $reservations = new Reservation;
-            $reference = mt_rand();
-            for($i = 0; $i < count($request->input('apartment')); $i++):
-                $reservations->reference = $reference;
-                $reservations->apartments_id = $request->input('apartment')[$i];
-                $reservations->rate_id = $request->input('rates')[$i];
-                $reservations->checkin = $request->input('arrival')[$i];
-                $reservations->checkout = $request->input('departure')[$i];
-                $reservations->nights = $request->input('nights')[$i];
-                $reservations->occupants = $request->input('occupants')[$i];
-                $reservations->status = $request->input('status')[$i];
-                $reservations->extras = $request->input('extras')[$i];
-                $reservations->source = $request->input('reservation-source');
-                $reservations->guest_id = $guest;
-                $reservations->createdBy = Auth::user()->id;
-                $reservations->save();
-            endfor;
-            // Insert reservation payment
-            $payment = new ReservationPayment;
-            $deposit = empty($request->input('deposit')) ? 0 : $request->input('deposit');
-            $payment->reference = $reference;
-            $payment->guest_id = $guest;
-            $payment->payment_status = $request->input('payment-status');
-            $payment->payment_method = $request->input('payment-method');
-            $payment->service_charge = $request->input('service-charge');
-            $payment->discount_reason = $request->input('discount-reason');
-            $payment->discount_amount = $request->input('discount');
-            $payment->total = removeCommas($request->input('total'));
-            $payment->paid = removeCommas($deposit);
-            $payment->balance = removeCommas($request->input('balance'));
-            $payment->createdBy = Auth::user()->id;
-            $payment->save();
-            return redirect('front-desk/invoice/'.$reservations->reference)->with('success', 'Reservation made successfully');
+                $reference = mt_rand();
+                $deposit = empty($request->input('deposit')) ? 0 : $request->input('deposit');
+                $discount = empty($request->input('discount')) ? 0 : $request->input('discount');
+                // create guest profile
+                $createGuest = $this->createGuest($request->all());
+                if(is_array($createGuest)):
+                    if($createGuest['status'] == 'successful'):
+                        $guest = $createGuest['id'];
+                    else:
+                        return back()->with('error', $createGuest['message']);
+                    endif;
+                else:
+                    return $createGuest;
+                endif;
+                //insert reservation details
+                DB::beginTransaction();
+                    for($i = 0; $i < count($request->input('apartment')); $i++):
+                        DB::table('reservations')->insert([
+                            'reference' => $reference,
+                            'apartments_id' => $request->input('apartment')[$i],
+                            'rate_id' => $request->input('rates')[$i],
+                            'checkin' => $request->input('arrival')[$i],
+                            'checkout' => $request->input('departure')[$i],
+                            'nights' => $request->input('nights')[$i],
+                            'occupants' => $request->input('occupants')[$i],
+                            'status' => $request->input('status')[$i],
+                            'extras' => $request->input('extras')[$i],
+                            'source' => $request->input('reservation-source'),
+                            'guest_id' => $guest,
+                            'createdBy' => Auth::user()->id
+                        ]);
+                        DB::table('reservation_payments')->insert([
+                            'reference' => $reference,
+                            'guest_id' => $guest,
+                            'payment_status' => $request->input('payment-status'),
+                            'payment_method' => $request->input('payment-method'),
+                            'service_charge' => $request->input('service-charge'),
+                            'discount_reason' => $request->input('discount-reason'),
+                            'discount_amount' => $discount,
+                            'total' => removeCommas($request->input('total')),
+                            'paid' => removeCommas($deposit),
+                            'balance' => removeCommas($request->input('balance')),
+                            'createdBy' => Auth::user()->id,
+                        ]);
+                    endfor;
+                DB::commit();
+            return redirect('front-desk/invoice/'.$reference)->with('success', 'Reservation made successfully');
         } catch (QueryException $e) {
+            DB::rollBack();
             return back()->withErrors([$e->errorInfo[2]]);
         }
     }

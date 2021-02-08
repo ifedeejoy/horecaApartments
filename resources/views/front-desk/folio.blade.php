@@ -264,7 +264,7 @@
             <!-- /Invoice Actions -->
         </div>
     </section>
-    <!-- Send Invoice Sidebar -->
+    <!-- Edit Guest Sidebar -->
     <div class="modal modal-slide-in fade" id="edit-guest-sidebar" aria-hidden="true">
         <div class="modal-dialog sidebar-lg">
             <div class="modal-content p-0">
@@ -311,7 +311,7 @@
             </div>
         </div>
     </div>
-    <!-- /Send Invoice Sidebar -->
+    <!-- /Edit Guest Sidebar -->
 
     <!-- Extend Stay Sidebar -->
     <div class="modal modal-slide-in fade" id="extend-stay-sidebar" aria-hidden="true">

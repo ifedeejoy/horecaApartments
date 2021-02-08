@@ -91,9 +91,9 @@ class GuestController extends Controller
         $guest->country = $request->input('country');
         $guest->gender = $request->input('gender');
         if($guest->save() == true):
-            return redirect('front-desk/folio/'.$request->input('reservation'))->with('success', 'Guest info updated successfully');
+            return back()->with('success', 'Guest info updated successfully');
         else:
-            return redirect('front-desk/folio/'.$request->input('reservation'))->with('error', 'Guest info not updated');
+            return back()->with('error', 'Guest info not updated');
         endif;
     }
 

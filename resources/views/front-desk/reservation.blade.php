@@ -180,7 +180,7 @@
                         <a class="btn btn-outline-secondary btn-block mb-75" href="/print-invoice/{{$reservation->reference}}" target="_blank">
                             Print
                         </a>
-                        <a class="btn btn-outline-secondary btn-block mb-75" data-toggle="modal" data-target="#add-payment-sidebar"> Edit </a>
+                        <a class="btn btn-outline-secondary btn-block mb-75" data-toggle="modal" data-target="#edit-guest-sidebar"> Edit Guest</a>
                         <form action="{{route('checkin-guest', $reservation->id)}}" method="post">
                             @csrf
                             <input type="hidden" name="reservation" value="{{$reservation->id}}">
@@ -194,6 +194,54 @@
             <!-- /Invoice Actions -->
         </div>
     </section>
+    <!-- Edit Guest Sidebar -->
+    <div class="modal modal-slide-in fade" id="edit-guest-sidebar" aria-hidden="true">
+        <div class="modal-dialog sidebar-lg">
+            <div class="modal-content p-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title">
+                        <span class="align-middle">Send Invoice</span>
+                    </h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <form method="POST" action="{{route('edit-guest', $reservation->guest->id)}}">
+                        @csrf
+                        <input type="hidden" name="reservation" value="{{$reservation->id}}">
+                        <div class="form-group">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" value="{{$reservation->guest->title}}" name="title" />
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" value="{{$reservation->guest->name}}" name="name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="{{$reservation->guest->email}}" name="email" />
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="phone" class="form-control" id="phone" value="{{$reservation->guest->phone}}" name="phone" />
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" value="{{$reservation->guest->address}}" name="address" />
+                        </div>
+                        <div class="form-group">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" class="form-control" id="country" value="{{$reservation->guest->country}}" name="country" />
+                        </div>
+                        <div class="form-group d-flex flex-wrap mt-2">
+                            <button type="submit" class="btn btn-primary mr-1">Submit</button>
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Edit Guest Sidebar -->
 @endsection
 
 @section('vendor-js')
@@ -205,4 +253,5 @@
 @section('page-js')
     @parent
     <script src="{{ asset ('/app-assets/js/scripts/pages/app-invoice.js') }}" defer></script>
+    @include('partials.form-response')
 @endsection
