@@ -82,7 +82,19 @@ class GuestController extends Controller
      */
     public function update(Request $request, Guest $guest)
     {
-        //
+        $guest = Guest::find($request->id);
+        $guest->title = $request->input('title');
+        $guest->name = $request->input('name');
+        $guest->email = $request->input('email');
+        $guest->phone = $request->input('phone');
+        $guest->address = $request->input('address');
+        $guest->country = $request->input('country');
+        $guest->gender = $request->input('gender');
+        if($guest->save() == true):
+            return redirect('front-desk/folio/'.$request->input('reservation'))->with('success', 'Guest info updated successfully');
+        else:
+            return redirect('front-desk/folio/'.$request->input('reservation'))->with('error', 'Guest info not updated');
+        endif;
     }
 
     /**

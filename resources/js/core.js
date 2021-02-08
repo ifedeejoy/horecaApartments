@@ -365,3 +365,17 @@ window.billPaymentOptions = function(option) {
         $(".payment-div").addClass('d-none')
     }
 }
+
+window.typeOptions = function(val) {
+    if (val == 'upgrade') {
+        $("#balances").removeClass('d-none')
+        $("#balance").removeAttr('disabled')
+        $("#reasons").addClass('d-none')
+        $("#reason").attr('disabled', 'disabled')
+    } else if (val == 'switch') {
+        $("#reasons").removeClass('d-none')
+        $("#reason").removeAttr('disabled')
+        $("#balances").addClass('d-none')
+        $("#balance").attr('disabled', 'disabled')
+    }
+}

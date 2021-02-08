@@ -3,6 +3,7 @@
 @section('vendor-css')
 @parent
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/forms/select/select2.min.css') }}">
 @endsection
 
 @section('page-css')
@@ -207,14 +208,23 @@
                             <button class="btn btn-outline-success btn-block mb-1" data-toggle="modal" data-target="#extend-stay-sidebar">
                                 Extend Guest Stay
                              </button>    
-                             <button class="btn bg-outline-pink btn-block mb-1" data-toggle="modal" data-target="#send-invoice-sidebar">
+                             <button class="btn bg-outline-pink btn-block mb-1" data-toggle="modal" data-target="#apartment-move-sidebar">
                                  Apartment Move
                             </button>  
-                            @if ($reservation->reservationPayments[0]->balance > 0)
-                            <button class="btn btn-outline-success btn-block mb-1" data-toggle="modal" data-target="#add-payment-sidebar">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="invoice-actions mt-md-0 mt-2 mb-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <button class="btn btn-success btn-block mb-1" data-toggle="modal" data-target="#add-payment-sidebar">
                                 Add Payment
-                            </button>
-                               
+                            </button>     
+                             <button class="btn bg-pink hover-pink btn-block mb-1" data-toggle="modal" data-target="#edit-guest-sidebar">
+                                Edit Guest Information
+                            </button>  
+                            @if ($reservation->reservationPayments[0]->balance > 0)
                             <form action="{{route('checkout', $reservation->id)}}" method="post" id="checkout-debt">
                                 @csrf
                                 <input type="hidden" name="type" value="debt">
@@ -226,8 +236,8 @@
                             <form action="{{route('checkout', $reservation->id)}}" method="post" id="checkout-postmaster">
                                 @csrf
                                 <input type="hidden" name="type" value="postmaster">
-                                <button class="btn bg-outline-dark-blue btn-block mb-1" type="submit" form="checkout-postmaster">
-                                    Add To Postmaster
+                                <button class="btn bg-dark-blue hover-dark-blue btn-block mb-1" type="submit" form="checkout-postmaster">
+                                    Add To Postmaster 
                                 </button>
                             </form>
                             <form action="{{route('checkout', $reservation->id)}}" method="post" id="checkout-refund">
@@ -255,7 +265,7 @@
         </div>
     </section>
     <!-- Send Invoice Sidebar -->
-    <div class="modal modal-slide-in fade" id="send-invoice-sidebar" aria-hidden="true">
+    <div class="modal modal-slide-in fade" id="edit-guest-sidebar" aria-hidden="true">
         <div class="modal-dialog sidebar-lg">
             <div class="modal-content p-0">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
@@ -265,39 +275,35 @@
                     </h5>
                 </div>
                 <div class="modal-body flex-grow-1">
-                    <form>
+                    <form method="POST" action="{{route('edit-guest', $reservation->guest->id)}}">
+                        @csrf
+                        <input type="hidden" name="reservation" value="{{$reservation->id}}">
                         <div class="form-group">
-                            <label for="invoice-from" class="form-label">From</label>
-                            <input type="text" class="form-control" id="invoice-from" value="shelbyComapny@email.com" placeholder="company@email.com" />
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" value="{{$reservation->guest->title}}" name="title" />
                         </div>
                         <div class="form-group">
-                            <label for="invoice-to" class="form-label">To</label>
-                            <input type="text" class="form-control" id="invoice-to" value="qConsolidated@email.com" placeholder="company@email.com" />
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" value="{{$reservation->guest->name}}" name="name"/>
                         </div>
                         <div class="form-group">
-                            <label for="invoice-subject" class="form-label">Subject</label>
-                            <input type="text" class="form-control" id="invoice-subject" value="Invoice of purchased Admin Templates" placeholder="Invoice regarding goods" />
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="{{$reservation->guest->email}}" name="email" />
                         </div>
                         <div class="form-group">
-                            <label for="invoice-message" class="form-label">Message</label>
-                            <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="11" placeholder="Message...">
-                                Dear Queen Consolidated,
-                                
-                                Thank you for your business, always a pleasure to work with you!
-                                
-                                We have generated a new invoice in the amount of $95.59
-                                
-                                We would appreciate payment of this invoice by 05/11/2019
-                            </textarea>
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="phone" class="form-control" id="phone" value="{{$reservation->guest->phone}}" name="phone" />
                         </div>
                         <div class="form-group">
-                            <span class="badge badge-light-primary">
-                                <i data-feather="link" class="mr-25"></i>
-                                <span class="align-middle">Invoice Attached</span>
-                            </span>
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" value="{{$reservation->guest->address}}" name="address" />
+                        </div>
+                        <div class="form-group">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" class="form-control" id="country" value="{{$reservation->guest->country}}" name="country" />
                         </div>
                         <div class="form-group d-flex flex-wrap mt-2">
-                            <button type="button" class="btn btn-primary mr-1" data-dismiss="modal">Send</button>
+                            <button type="submit" class="btn btn-primary mr-1">Submit</button>
                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
                         </div>
                     </form>
@@ -447,11 +453,62 @@
         </div>
     </div>
     <!-- /Add Bill Sidebar -->
+
+    <!-- Room Move Sidebar -->
+    <div class="modal modal-slide-in fade" id="apartment-move-sidebar" aria-hidden="true">
+        <div class="modal-dialog sidebar-lg">
+            <div class="modal-content p-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title">
+                        <span class="align-middle">Apartment Move</span>
+                    </h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <form method="POST" action="{{route('move-apartment', $reservation->id)}}">
+                        @csrf
+                        <div class="form-group">
+                            <label class="form-label" for="new-apartment">New Apartment</label>
+                            <select class="select2 w-100" name="new-apartment" id="new-apartment">
+                                <option label=" "></option>
+                                @foreach ($available_apartments as $available)
+                                <option value="{{$available->id}}">{{$available->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="type">Move Type</label>
+                            <select class="form-control" id="type" name="type" onchange="typeOptions(this.value)">
+                                <option value="" selected disabled>Select Move Type</option>
+                                <option value="upgrade">Apartment Upgrade</option>
+                                <option value="switch">Apartment Switch</option>
+                            </select>
+                        </div>
+                        <div class="form-group d-none" id="balances">
+                            <label class="form-label" for="balance">Balance (₦)</label>
+                            <input id="balance" class="form-control" type="number" inputmode="numeric" name="balance" placeholder="$1000" />
+                        </div>
+                        
+                        <div class="form-group d-none" id="reasons">
+                            <label class="form-label" for="reason">Reason</label>
+                            <textarea class="form-control" id="reason" name="reason" rows="5" placeholder="Reason for apartment upgrade"></textarea>
+                        </div>
+                        <div class="form-group d-flex flex-wrap mb-0">
+                            <button type="submit" class="btn btn-primary mr-1">Send</button>
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Room Move Sidebar -->
 @endsection
 
 @section('vendor-js')
     @parent
     <script src="{{ asset ('/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}" defer></script>
 @endsection
 
@@ -462,6 +519,9 @@
     <script type="module" defer>
         $('#new-checkout').flatpickr({
             enableTime: true,
+        });
+        $("#new-apartment").select2({
+            placeholder: "Select New Apartment"
         });
     </script>
     @include('partials.form-response')

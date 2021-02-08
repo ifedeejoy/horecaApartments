@@ -164,14 +164,16 @@ class InhouseController extends Controller
             $type = $request->input('type');
             $updateOld = Apartments::where('id', $reservation->apartments_id)->update(['status' => 'available']);
             $updateNew = Apartments::where('id', $request->input('new-apartment'))->update(['status' => 'occupied']);
+            $reservation->apartments_id = $request->input('new-apartment');
+            $reason = empty($request->input('reason')) ? 'Guest upgraded room' : $request->input('reason');
             if($type == 'upgrade'):
                 $balance = $request->input('balance');
                 $updatePayment = ReservationPayment::where('reference', $reservation->reference)->update(['balance' => DB::raw("balance + $balance"), 'total' => DB::raw("total + $balance")]);
             elseif($type == 'switch'):
-                $reservation->extras = "<br>". $request->input('reason');
+                $reservation->extras = $reason;
                 $reservation->save();
             endif;
-            DB::table('apartment_upgrades')->insert(['old_apartment' => $reservation->apartments_id, 'new_apartment' => $request->input('new-apartment'), 'reason' => $request->input('reason'), 'upgradedBy' => Auth::user()->id]);
+            DB::table('apartment_upgrades')->insert(['old_apartment' => $reservation->apartments_id, 'new_apartment' => $request->input('new-apartment'), 'reason' => $reason, 'upgradedBy' => Auth::user()->id]);
             $reservation->apartments_id = $request->input('new-apartment');
             $reservation->save();
             return back()->with('success', 'Apartment update successfully');
@@ -238,10 +240,11 @@ class InhouseController extends Controller
     {
         $reservation = Reservation::where('id', $id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'guestBill', 'staff')->first();
         $paidBills = Inhouse::where(['reservation_id' => $id, 'status' => 'paid'])->sum('price');
+        $avaiableApartments = Apartments::where('status', 'available')->get();
         if($request->is('front-desk/receipt/*')):
             return view('front-desk.receipt')->with(['reservation' => $reservation, 'paidBills' => $paidBills]);
         endif;
-        return view('front-desk.folio')->with(['reservation' => $reservation, 'paidBills' => $paidBills]);
+        return view('front-desk.folio')->with(['reservation' => $reservation, 'paidBills' => $paidBills, 'available_apartments' => $avaiableApartments]);
     }
 
     /**
