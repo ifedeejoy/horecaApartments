@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 use App\Http\Traits\ReservationTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ReservationController extends Controller
 {
@@ -87,7 +88,9 @@ class ReservationController extends Controller
                             'extras' => $request->input('extras')[$i],
                             'source' => $request->input('reservation-source'),
                             'guest_id' => $guest,
-                            'createdBy' => Auth::user()->id
+                            'createdBy' => Auth::user()->id,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
                         ]);
                         DB::table('reservation_payments')->insert([
                             'reference' => $reference,
@@ -101,6 +104,8 @@ class ReservationController extends Controller
                             'paid' => removeCommas($deposit),
                             'balance' => removeCommas($request->input('balance')),
                             'createdBy' => Auth::user()->id,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
                         ]);
                     endfor;
                 DB::commit();
