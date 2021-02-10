@@ -7,6 +7,7 @@
 @endsection
 
 @section('page-css')
+    <link rel="stylesheet" href="{{ asset ('/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
     <link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/app-calendar.css') }}">
     <link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/forms/form-validation.css') }}">
