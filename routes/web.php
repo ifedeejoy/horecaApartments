@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApartmentsController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InhouseController;
 use App\Http\Controllers\RateController;
@@ -40,6 +41,7 @@ Route::get('front-desk/reservation/{id}', [ReservationController::class, 'show']
 Route::get('front-desk/inhouse-guests', [InhouseController::class, 'index'])->middleware('auth')->name('inhouse-guests');
 Route::get('front-desk/folio/{id}', [InhouseController::class, 'show'])->middleware('auth')->name('folio');
 Route::get('front-desk/receipt/{id}', [InhouseController::class, 'show'])->middleware('auth')->name('receipt');
+Route::get('front-desk/calendar', [CalendarController::class, 'index'])->middleware('auth')->name('calendar');
 // Post Requests
 Route::post('front-desk/make-reservation', [ReservationController::class, 'store'])->middleware('auth')->name('make-reservation');
 Route::post('front-desk/add-guest-bill/{id}', [InhouseController::class, 'addBill'])->middleware('auth')->name('add-guest-bill');
@@ -50,9 +52,7 @@ Route::post('front-desk/move-apartment/{id}', [InhouseController::class, 'roomMo
 Route::post('front-desk/checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->middleware('auth')->name('checkin-guest');
 Route::post('front-desk/edit-guest/{id}', [GuestController::class, 'update'])->middleware('auth')->name('edit-guest');
 
-Route::view('front-desk/calendar', 'front-desk.calendar');
 Route::view('dashboard', 'front-desk.home');
-Route::view('front-desk/invoice', 'front-desk.invoice');
 
 // PUT Requests
 Route::put('checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->middleware('auth')->name('api-checkin');

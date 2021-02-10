@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InhouseController;
 use App\Http\Controllers\RateController;
@@ -36,3 +37,4 @@ Route::get('guests', [GuestController::class, 'index'])->name('api-guests');
 Route::get('reservations', [ReservationController::class, 'index'])->name('api-reservations');
 Route::get('inhouse-guests', [InhouseController::class, 'index'])->name('api-inhouse-guests');
 Route::get('availability/{apartment}/{start}/{end}', [ReservationController::class, 'availabilityCheck'])->name('api-availability');
+Route::get('calendar', [CalendarController::class, 'index'])->name('api-calendar');
