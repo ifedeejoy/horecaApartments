@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar'),
         eventToUpdate,
         sidebar = $('.event-sidebar'),
+        calendarsColor = {
+            inhouse: 'danger',
+            reserved: 'primary'
+        },
         eventForm = $('.event-form'),
         addEventBtn = $('.add-event-btn'),
         cancelBtn = $('.btn-cancel'),
@@ -154,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
         eventToUpdate = info.event;
         if (eventToUpdate.url) {
             info.jsEvent.preventDefault();
-            window.open(eventToUpdate.url, '_blank');
+            window.open(eventToUpdate.url, '_self');
         }
 
         sidebar.modal('show');
@@ -229,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
             reservations.forEach(reservation => {
                 let guest = reservation.guest
                 let apartment = reservation.apartments
+                let resStatus = reservation.status == 'checkedin' ? 'inhouse' : 'reserved'
                 getEvents.push({
                     id: reservation.id,
                     url: '/front-desk/reservation/' + reservation.id,
@@ -237,12 +242,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     end: moment(reservation.checkout).format(),
                     allDay: true,
                     extendedProps: {
-                        calendar: apartment.name
+                        calendar: resStatus
                     }
                 })
             })
             var events = getEvents
             var calendars = selectedCalendars();
+            return [events.filter(event => calendars.includes(event.extendedProps.calendar))];
             // We are reading event object from app-calendar-events.js file directly by including that file above app-calendar file.
             // You should make an API call, look into above commented API call for reference
             selectedEvents = events.filter(function(event) {
@@ -252,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (selectedEvents.length > 0) {
                 successCallback(selectedEvents);
             }
-            return [events.filter(event => calendars.includes(event.extendedProps.calendar))];
+
         }
 
     }
@@ -279,9 +285,11 @@ document.addEventListener('DOMContentLoaded', function() {
         initialDate: new Date(),
         navLinks: true, // can click day/week names to navigate views
         eventClassNames: function({ event: calendarEvent }) {
+            const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar];
+
             return [
                 // Background Color
-                'bg-light-primary'
+                'bg-light-' + colorName
             ];
         },
         dateClick: function(info) {

@@ -35,17 +35,14 @@
                                 <label class="custom-control-label" for="select-all">View All</label>
                             </div>
                             <div class="calendar-events-filter">
-                                @foreach ($apartments as $apartment)
-                                    @if ($loop->even)
-                                    <div class="custom-control custom-control-info custom-checkbox mb-1">
-                                    @endif
-                                    @if($loop->odd)
-                                    <div class="custom-control custom-control-warning custom-checkbox mb-1">
-                                    @endif
-                                        <input type="checkbox" class="custom-control-input input-filter" id="{{$apartment->name}}" data-value="{{$apartment->name}}" checked />
-                                        <label class="custom-control-label" for="{{$apartment->name}}">{{$apartment->name}}</label>
-                                    </div>
-                                @endforeach
+                                <div class="custom-control custom-control-danger custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input input-filter" id="inhouse" data-value="inhouse" checked />
+                                    <label class="custom-control-label" for="inhouse">Inhouse</label>
+                                </div>
+                                <div class="custom-control custom-control-primary custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input input-filter" id="reserved" data-value="reserved" checked />
+                                    <label class="custom-control-label" for="reserved">Reserved</label>
+                                </div>
                             </div>
                         </div>
                     </div>
