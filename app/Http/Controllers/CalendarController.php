@@ -18,7 +18,7 @@ class CalendarController extends Controller
     {
         $apartments = Apartments::all();
         $guests = Guest::all();
-        $reservations = Reservation::where('status', 'reserved')->with('apartments', 'guest')->get();
+        $reservations = Reservation::where('status', '!=', 'checkedout')->with('apartments', 'guest')->get();
         if(request()->is('front-desk/calendar')):
             return view('front-desk.calendar')->with(['apartments' => $apartments, 'guests' => $guests, 'reservations' => $reservations]);
         else:
