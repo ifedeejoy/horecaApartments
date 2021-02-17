@@ -12,7 +12,7 @@
         "doctrine/dbal": "^3.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "google/apiclient": "^2.0",
+        "google/apiclient": "^2.7",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
@@ -46,7 +46,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "classmap": [
+            "vendor/google/apiclient/src/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

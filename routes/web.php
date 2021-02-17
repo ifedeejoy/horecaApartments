@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApartmentsController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\gcalController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InhouseController;
 use App\Http\Controllers\RateController;
@@ -42,6 +43,8 @@ Route::get('front-desk/inhouse-guests', [InhouseController::class, 'index'])->mi
 Route::get('front-desk/folio/{id}', [InhouseController::class, 'show'])->middleware('auth')->name('folio');
 Route::get('front-desk/receipt/{id}', [InhouseController::class, 'show'])->middleware('auth')->name('receipt');
 Route::get('front-desk/calendar', [CalendarController::class, 'index'])->middleware('auth')->name('calendar');
+Route::get('google/oauth', [gcalController::class, 'store'])->name('google.store')->middleware('auth');
+Route::get('events', [gcalController::class, 'index'])->middleware('auth')->name('events');
 // Post Requests
 Route::post('front-desk/make-reservation', [ReservationController::class, 'store'])->middleware('auth')->name('make-reservation');
 Route::post('front-desk/add-guest-bill/{id}', [InhouseController::class, 'addBill'])->middleware('auth')->name('add-guest-bill');
