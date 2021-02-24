@@ -60,15 +60,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(GoogleAccount::class);
     }
-
-    public function events()
-    {
-        return Event::whereHas('calendar', function ($calendarQuery) {
-            $calendarQuery->whereHas('googleAccount', function ($accountQuery) {
-                $accountQuery->whereHas('user', function ($userQuery) {
-                    $userQuery->where('id', $this->id);
-                });
-            });
-        });
-    }
 }

@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GoogleAccount;
 use Illuminate\Http\Request;
-use Spatie\GoogleCalendar\Event;
-use Google\Client as googleCLient;
-use Google_Service_Calendar;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
-use App\Services\Google;
+use Google_Client;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Services\Google;
 
-class gcalController extends Controller
+class GoogleAccountController extends Controller
 {
+    protected $client;
+
+    public function __construct()
+    {
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,12 +23,7 @@ class gcalController extends Controller
      */
     public function index()
     {
-        $user = User::find(Auth::user()->id);
-        $events = $user->events()
-            ->orderBy('started_at', 'desc')
-            ->get();
-
-        return view('front-desk.events')->with('events', $events);
+        return $this->client;
     }
 
     /**
@@ -36,7 +33,7 @@ class gcalController extends Controller
      */
     public function create()
     {
-        // 
+        //
     }
 
     /**
@@ -45,19 +42,14 @@ class gcalController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
     public function store(Request $request, Google $google)
     {
         if(!$request->has('code')):
             return redirect($google->createAuthUrl());
         endif;
 
-        // Use the given code to authenticate the user.
-        $google->authenticate($request->get('code'));
-
-        // Make a call to the Google+ API to get more information on the account.
+        $google->fetchAccessTokenWithAuthCode($request->get('code'));
         $account = $google->service('PeopleService')->people->get('people/me', array('personFields' => 'emailAddresses,names,photos'));
-        // Store Auth Token
         $user = User::find(auth()->user()->id);
         $user->googleAccount()->updateOrCreate(
             [
@@ -80,10 +72,10 @@ class gcalController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\GoogleAccount  $googleAccount
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(GoogleAccount $googleAccount)
     {
         //
     }
@@ -91,10 +83,10 @@ class gcalController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\GoogleAccount  $googleAccount
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(GoogleAccount $googleAccount)
     {
         //
     }
@@ -103,10 +95,10 @@ class gcalController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\GoogleAccount  $googleAccount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, GoogleAccount $googleAccount)
     {
         //
     }
@@ -114,10 +106,10 @@ class gcalController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\GoogleAccount  $googleAccount
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(GoogleAccount $googleAccount)
     {
         //
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateCalendars extends Migration
+class UpdateGoogleAccounts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class UpdateCalendars extends Migration
      */
     public function up()
     {
-        Schema::table('google_calendars', function (Blueprint $table) {
-            $table->string('google_id'); 
-            $table->string('name'); 
-            $table->string('color'); 
-            $table->string('timezone');
+        Schema::table('google_accounts', function (Blueprint $table) {
+            $table->string('google_id')->change();
         });
     }
 
@@ -28,7 +25,7 @@ class UpdateCalendars extends Migration
      */
     public function down()
     {
-        Schema::table('google_calendars', function (Blueprint $table) {
+        Schema::table('google_accounts', function (Blueprint $table) {
             //
         });
     }

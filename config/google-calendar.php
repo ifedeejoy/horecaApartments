@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth as Auth;
+
 return [
 
     'default_auth_profile' => env('GOOGLE_CALENDAR_AUTH_PROFILE', 'service_account'),
@@ -13,7 +15,7 @@ return [
             /*
              * Path to the json file containing the credentials.
              */
-            'credentials_json' => storage_path('app/google-calendar/service-account-credentials.json'),
+            'credentials_json' => storage_path('app/keys/service-account-credentials.json'),
         ],
 
         /*
@@ -23,12 +25,12 @@ return [
             /*
              * Path to the json file containing the oauth2 credentials.
              */
-            'credentials_json' => storage_path('app/google-calendar/oauth-credentials.json'),
+            'credentials_json' => storage_path('/app/keys/oauth-credentials.json'),
 
             /*
              * Path to the json file containing the oauth2 token.
              */
-            'token_json' => storage_path('app/google-calendar/oauth-token.json'),
+            // 'token_json' => Auth::user()->googleAcount->token,
         ],
     ],
 
