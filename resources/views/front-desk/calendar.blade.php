@@ -43,6 +43,10 @@
                                     <input type="checkbox" class="custom-control-input input-filter" id="reserved" data-value="reserved" checked />
                                     <label class="custom-control-label" for="reserved">Reserved</label>
                                 </div>
+                                <div class="custom-control custom-control-info custom-checkbox mb-1">
+                                    <input type="checkbox" class="custom-control-input input-filter" id="googlecalendar" data-value="googlecalendar" checked />
+                                    <label class="custom-control-label" for="googlecalendar">Google Calendar</label>
+                                </div>
                             </div>
                         </div>
                     </div>

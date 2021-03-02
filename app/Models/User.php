@@ -55,4 +55,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function googleAccount()
+    {
+        return $this->hasOne(GoogleAccount::class);
+    }
+
+    public function calendar()
+    {
+        return $this->hasMany(GoogleCalendar::class);
+    }
+    
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

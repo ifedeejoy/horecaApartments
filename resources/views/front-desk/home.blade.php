@@ -32,7 +32,7 @@
                         <div class="text-center">
                             <h1 class="mb-1 text-white">Congratulations {{auth()->user()->name}},</h1>
                             <p class="card-text m-auto w-75">
-                                You have done <strong>57.6%</strong> more sales today. Check your new badge in your profile.
+                                You have done <strong>57.6%</strong> more reservations today. Check your new badge in your profile.
                             </p>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <h2 class="font-weight-bolder mt-1">92.6k</h2>
-                        <p class="card-text">Subscribers Gained</p>
+                        <p class="card-text">Guests Checkedin</p>
                     </div>
                     <div id="gained-chart"></div>
                 </div>
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                         <h2 class="font-weight-bolder mt-1">38.4K</h2>
-                        <p class="card-text">Orders Received</p>
+                        <p class="card-text">Reservations Checkedin</p>
                     </div>
                     <div id="order-chart"></div>
                 </div>

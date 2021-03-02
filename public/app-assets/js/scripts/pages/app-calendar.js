@@ -8,7 +8,6 @@
  * ! We are getting events from a separate file named app-calendar-events.js. You can add or remove events from there.
  **/
 
-'use-strict';
 
 // RTL Support
 var direction = 'ltr',
@@ -35,7 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebar = $('.event-sidebar'),
         calendarsColor = {
             inhouse: 'danger',
-            reserved: 'primary'
+            reserved: 'primary',
+            googlecalendar: 'info'
         },
         eventForm = $('.event-form'),
         addEventBtn = $('.add-event-btn'),
@@ -227,6 +227,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(error);
             }
         }).responseText
+
+        var googleCalendar = $.ajax({
+            url: '/front-desk/events',
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+                return data
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        }).responseText
+
+        let gcalJson = JSON.parse(googleCalendar)
+        let googleEvents = gcalJson.data
+        if (googleEvents.length > 0) {
+            googleEvents.forEach(googleEvents => {
+                let allDay = googleEvents.allDay == 1 ? true : false
+                getEvents.push({
+                    googleCalendarId: googleEvents.calendar_id,
+                    title: googleEvents.name,
+                    start: moment(googleEvents.started_at).format(),
+                    end: moment(googleEvents.ended_at).format(),
+                    allDay: allDay,
+                    extendedProps: {
+                        calendar: 'googlecalendar'
+                    }
+                })
+
+            })
+        }
+
         let jsonResult = JSON.parse(getReservations)
         let reservations = jsonResult.reservations
         if (reservations.length > 0) {
@@ -246,25 +279,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 })
             })
-            var events = getEvents
-            var calendars = selectedCalendars();
-            return [events.filter(event => calendars.includes(event.extendedProps.calendar))];
-            // We are reading event object from app-calendar-events.js file directly by including that file above app-calendar file.
-            // You should make an API call, look into above commented API call for reference
-            selectedEvents = events.filter(function(event) {
-                // console.log(event.extendedProps.calendar.toLowerCase());
-                return calendars.includes(event.extendedProps.calendar.toLowerCase());
-            });
-            if (selectedEvents.length > 0) {
-                successCallback(selectedEvents);
-            }
-
         }
+        var events = getEvents
+        var calendars = selectedCalendars();
+        selectedEvents = events.filter(function(events) {
+            // console.log(events.extendedProps.calendar.toLowerCase());
+            return calendars.includes(events.extendedProps.calendar.toLowerCase());
+        });
+        if (selectedEvents.length > 0) {
+            return selectedEvents
+        }
+        return [events.filter(event => calendars.includes(event.extendedProps.calendar))];
 
     }
     let finalEvents = fetchEvents().flat()
-
-    // Calendar plugins
+        // Calendar plugins
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         events: finalEvents,
@@ -486,9 +515,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Select all & filter functionality
     if (selectAll.length) {
-        selectAll.on('change', function() {
-            var $this = $(this);
+        $('.select-all').on('change', function() {
 
+            var $this = $(this);
+            console.log($this)
             if ($this.prop('checked')) {
                 calEventFilter.find('input').prop('checked', true);
             } else {
