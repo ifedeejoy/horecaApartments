@@ -17,4 +17,9 @@ class GoogleAccount extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function calendar()
+    {
+        return $this->hasMany(GoogleCalendar::class);
+    }
 }

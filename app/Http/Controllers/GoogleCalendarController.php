@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\GoogleCalendar;
 use Illuminate\Http\Request;
+use App\Services\Google;
+use App\Models\User;
+use App\Http\Traits\CalendarTrait;
 
 class GoogleCalendarController extends Controller
 {
+    use CalendarTrait;
     /**
      * Display a listing of the resource.
      *
@@ -33,9 +37,26 @@ class GoogleCalendarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        $user = User::find(auth()->user()->id);
+        $client = $user->googleAccount;
+        $calendars = $this->getCalendars();
+        foreach ($calendars as $calendar):
+            $updateCalendar = $user->calendar()
+                                ->updateOrCreate(
+                                    ['calendar_id' => $calendar->id],
+                                    [
+                                        'calendar_id' => $calendar->id,
+                                        'name' => $calendar->summary,
+                                        'color' => $calendar->backgroundColor,
+                                        'timezone' => $calendar->timeZone,
+                                        'google_id' => $client->google_id,
+                                    ]
+                                );
+        endforeach;
+        
+        
     }
 
     /**

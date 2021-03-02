@@ -23,7 +23,7 @@ class GoogleAccountController extends Controller
      */
     public function index()
     {
-        return $this->client;
+        // 
     }
 
     /**

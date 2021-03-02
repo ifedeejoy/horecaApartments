@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGoogleCalendarsTable extends Migration
+class CreateEventsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateGoogleCalendarsTable extends Migration
      */
     public function up()
     {
-        Schema::create('google_calendars', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('calendar_id');
             $table->string('name');
-            $table->string('color');
-            $table->string('timezone');
-            $table->foreignId('google_id');
-            $table->foreignId('user_id');
+            $table->mediumText('description');
+            $table->string('allday');
+            $table->timestamp('started_at');
+            $table->foreignId('ended_at');
+            $table->string('user_id');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateGoogleCalendarsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('google_calendars');
+        Schema::dropIfExists('events');
     }
 }
