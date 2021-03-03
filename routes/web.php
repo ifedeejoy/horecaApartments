@@ -44,6 +44,7 @@ Route::get('front-desk/folio/{id}', [InhouseController::class, 'show'])->middlew
 Route::get('front-desk/receipt/{id}', [InhouseController::class, 'show'])->middleware('auth')->name('receipt');
 Route::get('front-desk/calendar', [CalendarController::class, 'index'])->middleware('auth')->name('calendar');
 Route::get('front-desk/sync-calendar', 'App\Http\Controllers\GoogleCalendarController@store')->middleware('auth')->name('sync-calendar');
+Route::get('front-desk/sync-events', 'App\Http\Controllers\EventController@store')->middleware('auth')->name('sync-events');
 Route::get('google/oauth', 'App\Http\Controllers\GoogleAccountController@store')->middleware('auth')->name('google-oauth');
 Route::get('front-desk/events', 'App\Http\Controllers\EventController@index')->name('events')->middleware('auth');
 // Post Requests
@@ -54,14 +55,15 @@ Route::post('front-desk/extend-stay/{id}', [InhouseController::class, 'extendSta
 Route::post('front-desk/checkout/{id}', [InhouseController::class, 'checkout'])->middleware('auth')->name('checkout');
 Route::post('front-desk/move-apartment/{id}', [InhouseController::class, 'roomMove'])->middleware('auth')->name('move-apartment');
 Route::post('front-desk/checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->middleware('auth')->name('checkin-guest');
-Route::post('front-desk/edit-guest/{id}', [GuestController::class, 'update'])->middleware('auth')->name('edit-guest');
 
-Route::view('dashboard', 'front-desk.home');
 
+Route::view('dashboard', 'front-desk.home')->middleware('auth');
 // PUT Requests
 Route::put('checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->middleware('auth')->name('api-checkin');
-
-
+Route::put('front-desk/edit-guest/{id}', [GuestController::class, 'update'])->middleware('auth')->name('edit-guest');
+Route::put('front-desk/edit-reservation/{id}', [ReservationController::class, 'update'])->middleware('auth')->name('edit-reservation');
+// Delete Requests
+Route::delete('front-desk/delete-reservation/{id}', [ReservationController::class, 'destroy'])->middleware('auth')->name('delete-reservation');
 // Admin
 Route::get('admin/apartments', [ApartmentsController::class, 'index'])->middleware('auth')->name('apartments');
 Route::get('admin/apartment/{id}', [ApartmentsController::class, 'show'])->middleware('auth')->name('apartment');

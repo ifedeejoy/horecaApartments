@@ -221,7 +221,7 @@
                             <button class="btn btn-success btn-block mb-1" data-toggle="modal" data-target="#add-payment-sidebar">
                                 Add Payment
                             </button>     
-                             <button class="btn bg-pink hover-pink btn-block mb-1" data-toggle="modal" data-target="#edit-guest-sidebar">
+                            <button class="btn bg-pink hover-pink btn-block mb-1" data-toggle="modal" data-target="#edit-guest-sidebar">
                                 Edit Guest Information
                             </button>  
                             @if ($reservation->reservationPayments[0]->balance > 0)

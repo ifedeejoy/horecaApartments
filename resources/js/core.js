@@ -268,20 +268,27 @@ window.departureDate = function(arg) {
         method: 'GET',
         dataType: 'json',
         success: function(data) {
-            if (jQuery.isEmptyObject(data.data)) {
+            let currentUrl = getUrl(window.location.href)
+            if (currentUrl.includes('/front-desk/reservation/')) {
                 $("#departure" + idNo).val(departureDate)
                 $("#apartment-cost" + idNo).val(finalPrice)
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Please set the checkout date to ' + data.data.available_date + ' , the apartment is not available for ' + nights + ' night(s)',
-                    customClass: {
-                        confirmButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
+                if (jQuery.isEmptyObject(data.data)) {
+                    $("#departure" + idNo).val(departureDate)
+                    $("#apartment-cost" + idNo).val(finalPrice)
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Please set the checkout date to ' + data.data.available_date + ' , the apartment is not available for ' + nights + ' night(s)',
+                        customClass: {
+                            confirmButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                }
             }
+
         },
         error: function(data) {
             Swal.fire({

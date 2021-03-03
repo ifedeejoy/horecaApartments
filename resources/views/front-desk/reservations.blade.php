@@ -52,4 +52,5 @@
     @parent
     <script src="{{ asset('/app-assets/js/scripts/pages/app-reservations-list.js')}}" defer></script>
     <script src="{{ asset('/js/core.js') }}" defer></script>
+    @include('partials.form-response')
 @endsection
