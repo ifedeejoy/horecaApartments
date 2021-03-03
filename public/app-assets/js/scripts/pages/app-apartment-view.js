@@ -11,11 +11,18 @@
 $(function() {
     'use strict';
 
+    function getUrl(url) {
+        var parser = document.createElement('a')
+        parser.href = url
+        return parser.pathname
+    }
+    let currentUrl = getUrl(window.location.href)
+    let apartmentId = currentUrl.match(/\d+/)[0]
     var dtInvoiceTable = $('.invoice-list-table'),
         assetPath = '../../../app-assets/',
-        invoicePreview = '/front-desk/invoice',
+        invoicePreview = '/front-desk/reservation/',
         invoiceAdd = '/front-desk/new-reservation',
-        invoiceEdit = 'app-invoice-edit.html';
+        invoiceDownload = '/print-invoice/';
 
     if ($('body').attr('data-framework') === 'laravel') {
         assetPath = $('body').attr('data-asset-path');
@@ -27,17 +34,19 @@ $(function() {
     // datatable
     if (dtInvoiceTable.length) {
         var dtInvoice = dtInvoiceTable.DataTable({
-            ajax: assetPath + 'data/invoice-list.json', // JSON file to add data
+            ajax: '/api/apartment-reservations/' + apartmentId, // JSON file to add data
             autoWidth: false,
             columns: [
                 // columns according to JSON
-                { data: 'responsive_id' },
-                { data: 'reservation_id' },
-                { data: 'client_name' },
+                { data: 'id' },
+                { data: 'reference' },
+                { data: 'guest.name' },
+                { data: 'apartments.name' },
                 { data: 'checkin' },
                 { data: 'checkout' },
-                { data: 'total' },
-                { data: 'reserved_on' },
+                { data: 'reservation_payments.total' },
+                { data: 'reservation_payments.balance' },
+                { data: 'reservation_payments.[0].payment_status' },
                 { data: '' }
 
             ],
@@ -52,9 +61,9 @@ $(function() {
                     targets: 1,
                     width: '46px',
                     render: function(data, type, full, meta) {
-                        var $invoiceId = full['reservation_id'];
+                        var $invoiceId = full['reference'];
                         // Creates full output for row
-                        var $rowOutput = '<a class="font-weight-bold" href="' + invoicePreview + '"> #' + $invoiceId + '</a>';
+                        var $rowOutput = '<a class="font-weight-bold" href="' + invoicePreview + full['id'] + '"> #' + $invoiceId + '</a>';
                         return $rowOutput;
                     }
                 },
@@ -64,13 +73,13 @@ $(function() {
                     responsivePriority: 4,
                     width: '270px',
                     render: function(data, type, full, meta) {
-                        var $name = full['client_name'],
-                            $email = full['email'],
+                        var $name = full['guest']['name'],
+                            $email = full['guest']['email'],
                             $image = full['avatar'],
                             stateNum = Math.floor(Math.random() * 6),
                             states = ['success', 'danger', 'warning', 'info', 'primary', 'secondary'],
                             $state = states[stateNum],
-                            $name = full['client_name'],
+                            $name = full['guest']['name'],
                             $initials = $name.match(/\b\w/g) || [];
                         $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
                         if ($image) {
@@ -106,61 +115,79 @@ $(function() {
                     }
                 },
                 {
-                    // Checkin
+                    // Room Type
                     targets: 3,
                     width: '73px',
                     render: function(data, type, full, meta) {
-                        var $checkin = new Date(full['checkin']);
+                        var $roomType = full['apartments']['name'];
+                        return '<span class="d-none">' + $roomType + '</span>' + $roomType;
+                    }
+                },
+                {
+                    // Expected Arrival
+                    targets: 4,
+                    width: '73px',
+                    render: function(data, type, full, meta) {
+                        var $expectedArrival = full['checkin'];
                         // Creates full output for row
                         var $expectOutput =
                             '<span class="d-none">' +
-                            moment($checkin).format('YYYYMMDD') +
+                            moment($expectedArrival).format('YYYYMMDD') +
                             '</span>' +
-                            moment($checkin).format('DD MMM YYYY');
-                        $checkin;
+                            moment($expectedArrival).format('DD MMM YYYY');
+                        $expectedArrival;
                         return $expectOutput;
                     }
                 },
                 {
-                    // Checkout
-                    targets: 4,
+                    // Expected Departure
+                    targets: 5,
                     width: '73px',
                     render: function(data, type, full, meta) {
-                        var $checkout = new Date(full['checkout']);
+                        var $expectedArrival = full['checkout'];
                         // Creates full output for row
                         var $expectOutput =
                             '<span class="d-none">' +
-                            moment($checkout).format('YYYYMMDD') +
+                            moment($expectedArrival).format('YYYYMMDD') +
                             '</span>' +
-                            moment($checkout).format('DD MMM YYYY');
-                        $checkout;
+                            moment($expectedArrival).format('DD MMM YYYY');
+                        $expectedArrival;
                         return $expectOutput;
                     }
                 },
                 {
                     // Total Invoice Amount
-                    targets: 5,
+                    targets: 6,
                     width: '73px',
                     render: function(data, type, full, meta) {
-                        var $total = full['total'];
-                        return '<span class="d-none">' + $total + '</span>$' + $total;
+                        let payments = full.reservation_payments
+                        var $total = new Intl.NumberFormat().format(payments[0].total);
+                        return '<span class="d-none">' + $total + '</span>₦' + $total;
+                    }
+                },
+                {
+                    // Client Balance/Status
+                    targets: 7,
+                    width: '98px',
+                    render: function(data, type, full, meta) {
+                        let payments = full.reservation_payments
+                        var $balance = payments[0].balance;
+                        if ($balance === 0) {
+                            var $badge_class = 'badge-light-success';
+                            return '<span class="badge badge-pill ' + $badge_class + '" text-capitalized> Paid </span>';
+                        } else {
+                            return '<span class="d-none">' + new Intl.NumberFormat().format($balance) + '</span>₦' + new Intl.NumberFormat().format($balance);
+                        }
                     }
                 },
 
                 {
-                    // Reservation Date
-                    targets: 6,
-                    width: '130px',
+                    targets: 8,
+                    visible: false,
                     render: function(data, type, full, meta) {
-                        var $dueDate = new Date(full['reserved_on']);
-                        // Creates full output for row
-                        var $rowOutput =
-                            '<span class="d-none">' +
-                            moment($dueDate).format('YYYYMMDD') +
-                            '</span>' +
-                            moment($dueDate).format('DD MMM YYYY');
-                        $dueDate;
-                        return $rowOutput;
+                        let payments = full.reservation_payments
+                        var $status = payments[0].payment_status
+                        return $status
                     }
                 },
 
@@ -172,12 +199,28 @@ $(function() {
                     orderable: false,
                     render: function(data, type, full, meta) {
                         return (
-                            '<div class="d-flex justify-content-center align-items-center col-actions">' +
-                            '<a href="' +
-                            invoicePreview +
+                            '<div class="d-flex align-items-center col-actions">' +
+                            '<a class="mr-1" href="javascript:void(0);" onclick="checkinGuest(' + full['id'] + ')" data-toggle="tooltip" data-placement="top" title="Checkin">' +
+                            feather.icons['check'].toSvg({ class: 'font-medium-2' }) +
+                            '</a>' +
+                            '<a class="mr-1" href="' +
+                            invoicePreview + full['id'] +
                             '" data-toggle="tooltip" data-placement="top" title="View Reservation">' +
                             feather.icons['eye'].toSvg({ class: 'font-medium-2' }) +
                             '</a>' +
+                            '<div class="dropdown">' +
+                            '<a class="btn btn-sm btn-icon px-0" data-toggle="dropdown">' +
+                            feather.icons['more-vertical'].toSvg({ class: 'font-medium-2' }) +
+                            '</a>' +
+                            '<div class="dropdown-menu dropdown-menu-right">' +
+                            '<a href="' + invoiceDownload + full['reference'] + '" target="_blank" class="dropdown-item">' +
+                            feather.icons['download'].toSvg({ class: 'font-small-4 mr-50' }) +
+                            'Download</a>' +
+                            '<a href="javascript:void(0);" onclick=deleteReservation(' + full['id'] + ') class="dropdown-item">' +
+                            feather.icons['trash'].toSvg({ class: 'font-small-4 mr-50' }) +
+                            'Delete</a>' +
+                            '</div>' +
+                            '</div>' +
                             '</div>'
                         );
                     }
@@ -218,7 +261,7 @@ $(function() {
                     display: $.fn.dataTable.Responsive.display.modal({
                         header: function(row) {
                             var data = row.data();
-                            return 'Details of ' + data['client_name'];
+                            return 'Details of ' + data['guest']['name'];
                         }
                     }),
                     type: 'column',
@@ -239,6 +282,27 @@ $(function() {
             initComplete: function() {
                 $(document).find('[data-toggle="tooltip"]').tooltip();
                 // Adding role filter once table initialized
+                this.api()
+                    .columns(8)
+                    .every(function() {
+                        var column = this;
+                        var select = $(
+                                '<select id="UserRole" class="form-control ml-50 text-capitalize"><option value=""> Select Status </option></select>'
+                            )
+                            .appendTo('.payment_status')
+                            .on('change', function() {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function(d, j) {
+                                select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
+                            });
+                    });
             },
             drawCallback: function() {
                 $(document).find('[data-toggle="tooltip"]').tooltip();

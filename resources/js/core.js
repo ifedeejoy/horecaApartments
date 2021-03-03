@@ -6,7 +6,7 @@ window.getElByThis = function(arg) {
     return idParams
 }
 
-window.getUrl = function(url) {
+function getUrl(url) {
     var parser = document.createElement('a')
     parser.href = url
     return parser.pathname

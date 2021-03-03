@@ -164,10 +164,12 @@
                                     <th></th>
                                     <th>#</th>
                                     <th>Guest</th>
-                                    <th>Checkin</th>
-                                    <th>Checkout</th>
+                                    <th>Room Type</th>
+                                    <th>Expected Arrival</th>
+                                    <th>Expected Departure</th>
                                     <th>Total</th>
-                                    <th>Reserved On</th>
+                                    <th>Balance</th>
+                                    <th>Payment Status</th>
                                     <th class="cell-fit">Actions</th>
                                 </tr>
                             </thead>
@@ -307,7 +309,8 @@
 
 @section('page-js')
     @parent
-    <script src="{{ asset ('/app-assets/js/scripts/pages/app-apartment-view.js') }}" defer></script>
+    <script type="module" src="{{ asset ('/js/core.js') }}" defer></script>
+    <script type="module" src="{{ asset ('/app-assets/js/scripts/pages/app-apartment-view.js') }}" defer></script>
     <script type="module" defer>
         $('.touchspin').TouchSpin({
             buttondown_class: 'btn btn-primary',

@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Reservation;
 
 class ApartmentsController extends Controller
 {
@@ -64,7 +65,11 @@ class ApartmentsController extends Controller
         $apartment = $this->getApartment($request->id);
         $owner = $apartment->user;
         $rates = $apartment->rates;
+        $reservations = Reservation::where('apartments_id', $request->id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'staff')->get();
         $owners = $this->getUsers('owner');
+        if($request->is('api/apartment-reservations/*')):
+            return response()->json(['data' => $reservations]);
+        endif;
         return view('admin.apartments.apartment', ['apartment' => $apartment, 'owner' => $owner, 'rates' => $rates, 'owners' => $owners]);
     }
 
