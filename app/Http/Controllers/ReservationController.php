@@ -13,6 +13,7 @@ use App\Http\Traits\ReservationTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -34,8 +35,21 @@ class ReservationController extends Controller
 
     public function availabilityCheck(Request $request)
     {
-        $availability = $this->checkAvailability($request->apartment, $request->start, $request->end);
+        $availability = $this->checkAvailability($request->input('apartment'), $request->input('start'), $request->input('end'));
         return response()->json(['data' => $availability]);
+    }
+
+    public function webAvailability(Request $request)
+    {
+        $guests = $request->input('guests');
+        $availability = $this->websiteApartmentsAvailability($request->input('start'), $request->input('end'), $guests);
+        return response()->json([
+            'status' => true,
+            'message' => "reservations retrieved",
+            'data' => $availability,
+            'start' => Carbon::createFromFormat('m/d/Y', $request->input('start'), 'Africa/Lagos')->format('Y-m-d'),
+            'end' => Carbon::createFromFormat('m/d/Y', $request->input('end'), 'Africa/Lagos')->format('Y-m-d')
+        ]);
     }
 
     /**
@@ -59,20 +73,29 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
         try {
-                $reference = mt_rand();
+                if($request->is('api/new-reservation')):
+                    $reference = $request->input('reference');
+                    $guest = $request->input('guest');
+                    $user = $request->input('createdBy');
+                else:
+                    $reference = mt_rand();
+                    $user = Auth::user()->id;
+                    // create guest profile
+                    $createGuest = $this->createGuest($request->all());
+                    if(is_array($createGuest)):
+                        if($createGuest['status'] == 'successful'):
+                            $guest = $createGuest['id'];
+                        else:
+                            return back()->with('error', $createGuest['message']);
+                        endif;
+                    else:
+                        return $createGuest;
+                    endif;
+                endif;
+
                 $deposit = empty($request->input('deposit')) ? 0 : $request->input('deposit');
                 $discount = empty($request->input('discount')) ? 0 : $request->input('discount');
-                // create guest profile
-                $createGuest = $this->createGuest($request->all());
-                if(is_array($createGuest)):
-                    if($createGuest['status'] == 'successful'):
-                        $guest = $createGuest['id'];
-                    else:
-                        return back()->with('error', $createGuest['message']);
-                    endif;
-                else:
-                    return $createGuest;
-                endif;
+                
                 //insert reservation details
                 DB::beginTransaction();
                     for($i = 0; $i < count($request->input('apartment')); $i++):
@@ -88,7 +111,7 @@ class ReservationController extends Controller
                             'extras' => $request->input('extras')[$i],
                             'source' => $request->input('reservation-source'),
                             'guest_id' => $guest,
-                            'createdBy' => Auth::user()->id,
+                            'createdBy' => $user,
                             'created_at' => Carbon::now(),
                             'updated_at' => Carbon::now()
                         ]);
@@ -103,16 +126,32 @@ class ReservationController extends Controller
                             'total' => removeCommas($request->input('total')),
                             'paid' => removeCommas($deposit),
                             'balance' => removeCommas($request->input('balance')),
-                            'createdBy' => Auth::user()->id,
+                            'createdBy' => $user,
                             'created_at' => Carbon::now(),
                             'updated_at' => Carbon::now()
                         ]);
                     endfor;
                 DB::commit();
-            return redirect('front-desk/invoice/'.$reference)->with('success', 'Reservation made successfully');
+            if($request->is('api/new-reservation')):
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Reservation made successfully',
+                    'redirect_url' => 'http://hcapartments.test/invoice/'.$reference, 
+                ]);
+            else:
+                return redirect('front-desk/invoice/'.$reference)->with('success', 'Reservation made successfully');
+            endif;
         } catch (QueryException $e) {
             DB::rollBack();
-            return back()->withErrors([$e->errorInfo[2]]);
+            if($request->is('api/new-reservation')):
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'Reservation not made',
+                    'error' => $e->errorInfo[2], 
+                ]);
+            else:
+                return back()->withErrors([$e->errorInfo[2]]);
+            endif;
         }
     }
 
@@ -153,9 +192,13 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation, Request $request)
     {
-        if($request->is('front-desk/invoice/*') || $request->is('print-invoice/*')):
+        if($request->is('front-desk/invoice/*') || $request->is('print-invoice/*') || $request->is('invoice/*')):
             $reservation = Reservation::where('reference', $request->reference)->with('apartments', 'rate', 'reservationPayments', 'guest', 'staff')->get();
-            $view = $request->is('print-invoice/*') ? 'front-desk.print-invoice' : 'front-desk.invoice';
+            if($request->is('invoice/*')):
+                $view = 'invoice';
+            else:
+                $view = $request->is('print-invoice/*') ? 'front-desk.print-invoice' : 'front-desk.invoice';
+            endif;
             return view($view)->with('reservations', $reservation);
         else:
             $apartments = Apartments::where('status', 'available')->get();

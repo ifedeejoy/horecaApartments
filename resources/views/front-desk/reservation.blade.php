@@ -122,7 +122,7 @@
                         <div class="row invoice-sales-total-wrapper">
                             <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                 <p class="card-text mb-0">
-                                    <span class="font-weight-bold">Reserved By:</span> <span class="ml-75">{{$reservation->staff->name}}</span>
+                                    <span class="font-weight-bold">Reserved By:</span> <span class="ml-75">{{$reservation->createdBy == 0 ? 'Website' : $reservation->staff->name }}</span>
                                 </p>
                             </div>
                             <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
@@ -161,7 +161,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="font-weight-bold">Note:</span>
-                                <span>{{$reservation->extras}}</span>
+                                <span>{!! $reservation->extras !!}</span>
                             </div>
                         </div>
                     </div>

@@ -50,7 +50,7 @@
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
-@if (request()->is('/') || request()->is('index') || request()->is('print-invoice/*'))
+@if (request()->is('/') || request()->is('index') || request()->is('print-invoice/*') || request()->is('invoice/*'))
 <body class="vertical-layout vertical-menu-modern blank-page navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="blank-page">
 @else
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
@@ -87,6 +87,7 @@
 <!-- BEGIN: Theme JS-->
     <script src="{{ asset ('/app-assets/js/core/app-menu.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/js/core/app.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/customizer.min.js')}}" defer></script>
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->

@@ -20,7 +20,8 @@ class Apartments extends Model
         'status',
         'maintenance_status',
         'address',
-        'country'
+        'country',
+        'images',
     ];
 
     public function user()

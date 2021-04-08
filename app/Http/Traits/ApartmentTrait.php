@@ -9,7 +9,7 @@ trait ApartmentTrait
     public function getApartments()
     {
         // Get all apartments
-        $apartments = Apartments::all();
+        $apartments = Apartments::with('rates')->get();
         // return apartments
         return $apartments;
     }

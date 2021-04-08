@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Maintenance;
 use Illuminate\Http\Request;
+use App\Models\Apartments;
 
 class MaintenanceController extends Controller
 {
@@ -14,7 +15,8 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        //
+        $apartments = Apartments::all();
+        return view('admin.apartments.maintenance')->with('apartments', $apartments);
     }
 
     /**
