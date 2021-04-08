@@ -33,7 +33,7 @@ trait GuestTrait
 
     public function createGuest($data)
     {
-        $validated = Validator::make($data, [
+        $validated = Validator::make($data->all(), [
             'name' => 'required',
             'phone' => 'required|max:25'
         ]);
@@ -53,7 +53,16 @@ trait GuestTrait
                     'id_type' => $data['id_type'],
                 ]
             );
-            $result = collect(['status' => 'successful', 'message' => 'Guest profile created', 'id' => $guest->id]);
+            $result = collect([
+                'status' => 'successful', 
+                'message' => 'Guest profile created', 
+                'id' => $guest->id, 
+                'data' => [
+                    'name' => $guest->name, 
+                    'email' => $guest->email, 
+                    'phone' => $guest->phone
+                ]
+            ]);
         } catch (QueryException $e) {
             $result = collect(['status' => 'failed', 'message' => $e->errorInfo]);
         }

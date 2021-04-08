@@ -43,6 +43,9 @@ class GuestController extends Controller
     public function store(Request $request)
     {
         $createGuest = $this->createGuest($request);
+        if($request->is('api/create-guest')):
+            return response()->json($createGuest);
+        endif;
         return $createGuest;
     }
 

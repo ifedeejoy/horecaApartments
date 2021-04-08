@@ -7,11 +7,13 @@
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/editors/quill/quill.snow.css') }}">
 @endsection
 
 @section('page-css')
 @parent
 <link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/page-knowledge-base.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/forms/form-quill-editor.css') }}">
 @endsection
 
 @section('content-header')
@@ -80,7 +82,7 @@
                         <div class="card-body text-center">
                             <h4>{{$apartment->name}}</h4>
                             <p class="text-body mt-1 mb-0">
-                                {{$apartment->description}}
+                                {!! Str::limit($apartment->description, 40, '...') !!}
                             </p>
                         </div>
                     </a>
@@ -105,7 +107,7 @@
                     </h5>
                 </div>
                 <div class="modal-body flex-grow-1">
-                    <form method="POST" action="{{route('create-apartment')}}">
+                    <form method="POST" action="{{route('create-apartment')}}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="aparment-name" class="form-label">Apartment Name</label>
@@ -127,7 +129,12 @@
                         </div>
                         <div class="form-group">
                             <label for="apartment-description" class="form-label">Description</label>
-                            <textarea class="form-control" name="apartment-description" id="apartment-description" cols="3" rows="9" placeholder="Apartment Description"></textarea>
+                            <div id="quill-editor">
+
+                            </div>
+                        </div>
+                        <div class="form-group d-none">
+                            <textarea class="form-control" name="apartment-description" id="apartment-description" cols="3" rows="9" placeholder="Apartment Description" readonly></textarea>
                         </div>
                         <div class="input-group w-100">
                             <label class="form-label" for="max-guests">Max Guests(s)</label>
@@ -136,6 +143,15 @@
                         <div class="input-group w-100 mt-2">
                             <label class="form-label" for="beds">Bed(s)</label>
                             <input type="text" id="beds" name="beds" class="touchspin input-control-lg" value="{number}" />
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="btn btn-primary w-100" for="add-pictures">
+                                <span class="d-none d-sm-block">Add Pictures</span>
+                                <input class="form-control" type="file" id="add-pictures" name="apartment-images[]" multiple hidden/>
+                                <span class="d-block d-sm-none">
+                                    <i class="mr-0" data-feather="edit"></i>
+                                </span>
+                            </label>
                         </div>
                         <hr class="my-1 mt-2">
                         <div class="form-group">
@@ -172,10 +188,12 @@
 @section('vendor-js')
     @parent
     <script src="{{ asset ('/app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/editors/quill/quill.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
     <script src="{{ asset ('/app-assets/js/scripts/pages/page-knowledge-base.js')}}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/forms/form-quill-editor.js') }}" defer></script>
     <script type="module" defer>
         $("#apartment-type").select2({
             placeholder: 'Select apartment type'
@@ -192,6 +210,15 @@
             buttondown_txt: feather.icons['minus'].toSvg(),
             buttonup_txt: feather.icons['plus'].toSvg(),
             max: 1000
+        });
+        let editor = new Quill('#quill-editor', {
+            placeholder: 'Apartment Description',
+            theme: 'snow'
+        })
+        let htmlContent = document.getElementById('apartment-description')
+        editor.on('text-change', function(params) {
+            let htmlText = editor.root.innerHTML
+            htmlContent.innerHTML = htmlText
         });
     </script>
     @include('partials.form-response')

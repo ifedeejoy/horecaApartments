@@ -3,6 +3,7 @@
 @section('vendor-css')
 @parent
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/forms/select/select2.min.css') }}">
 @endsection
 
 @section('page-css')
@@ -121,7 +122,7 @@
                         <div class="row invoice-sales-total-wrapper">
                             <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                 <p class="card-text mb-0">
-                                    <span class="font-weight-bold">Reserved By:</span> <span class="ml-75">{{$reservation->staff->name}}</span>
+                                    <span class="font-weight-bold">Reserved By:</span> <span class="ml-75">{{$reservation->createdBy == 0 ? 'Website' : $reservation->staff->name }}</span>
                                 </p>
                             </div>
                             <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
@@ -160,7 +161,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="font-weight-bold">Note:</span>
-                                <span>{{$reservation->extras}}</span>
+                                <span>{!! $reservation->extras !!}</span>
                             </div>
                         </div>
                     </div>
@@ -176,18 +177,25 @@
                         <button class="btn btn-primary btn-block mb-75" data-toggle="modal" data-target="#send-invoice-sidebar">
                             Send Invoice
                         </button>
-                        <a href="/print-invoice/{{$reservation->reference}}" class="btn btn-outline-secondary btn-block btn-download-invoice mb-75">Download</a>
-                        <a class="btn btn-outline-secondary btn-block mb-75" href="/print-invoice/{{$reservation->reference}}" target="_blank">
-                            Print
-                        </a>
+                        <a class="btn btn-outline-secondary btn-block mb-75" href="/print-invoice/{{$reservation->reference}}" target="_blank">Print</a>
                         <a class="btn btn-outline-secondary btn-block mb-75" data-toggle="modal" data-target="#edit-guest-sidebar"> Edit Guest</a>
+                        <a class="btn bg-pink hover-pink btn-block mb-75" data-toggle="modal" data-target="#edit-reservation-sidebar"> Edit Reservation</a> 
                         <form action="{{route('checkin-guest', $reservation->id)}}" method="post">
                             @csrf
                             <input type="hidden" name="reservation" value="{{$reservation->id}}">
-                            <button class="btn btn-success btn-block" type="submit">
+                            <button class="btn btn-success btn-block mb-75" type="submit">
                                 Checkin
                             </button>
                         </form>
+                        @can('delete reservations')
+                        <form action="{{route('delete-reservation', $reservation->id)}}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-block" type="submit">
+                                Delete Reservations
+                            </button>
+                        </form>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -201,12 +209,13 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
                 <div class="modal-header mb-1">
                     <h5 class="modal-title">
-                        <span class="align-middle">Send Invoice</span>
+                        <span class="align-middle">Edit Guest Info</span>
                     </h5>
                 </div>
                 <div class="modal-body flex-grow-1">
                     <form method="POST" action="{{route('edit-guest', $reservation->guest->id)}}">
                         @csrf
+                        @method('PUT')
                         <input type="hidden" name="reservation" value="{{$reservation->id}}">
                         <div class="form-group">
                             <label for="title" class="form-label">Title</label>
@@ -242,16 +251,161 @@
         </div>
     </div>
     <!-- /Edit Guest Sidebar -->
+    <!-- Edit Reservation Sidebar -->
+    <div class="modal modal-slide-in fade" id="edit-reservation-sidebar" aria-hidden="true">
+        <div class="modal-dialog sidebar-lg">
+            <div class="modal-content p-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title">
+                        <span class="align-middle">Edit Reservation</span>
+                    </h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <form method="POST" action="{{route('edit-reservation', $reservation->id)}}">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="reference" value="{{$reservation->reference}}">
+                        <div class="form-group">
+                            <label class="form-label" for="apartment">Apartment</label>
+                            <select class="select2 w-100" id="apartment" name="apartment" onchange="apartmentInfo(this.value)" required>
+                                <option label=" "></option>
+                                <option value="{{$reservation->apartments->id}}" selected>{{$reservation->apartments->name}}</option>
+                                @foreach ($apartments as $apartment)
+                                <option value="{{$apartment->id}}">{{$apartment->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="rates">Rate</label>
+                            <select class="select2 w-100" id="rates" name="rates" onchange="ratePrice('')" required>
+                                <option label=" "></option>
+                                <option value="{{$reservation->rate->id}}" selected>{{$reservation->rate->name}}</option>
+                            </select>
+                            <input type="hidden" name="rate-price" id="rate-price">
+                            <input type="hidden" name="apartment-cost" class="prices" id="apartment-cost">
+                            <input type="hidden" name="status" value="reserved">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="arrival">Arrival Date/Time</label>
+                            <input type="text" id="arrival" name="arrival" class="form-control" value="{{$reservation->checkin}}" />
+                        </div>
+                        <div class="input-group mb-2 w-100">
+                            <label class="form-label" for="nights">Night(s)</label>
+                            <input type="text" id="nights" name="nights" class="touchspin nights input-group-lg" value="{{$reservation->nights}}" onkeyup="departureDate(this)"/>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label class="form-label" for="departure">Departure Date/Time</label>
+                            <input type="text" id="departure" name="departure" class="form-control" value="{{$reservation->checkout}}" />
+                        </div>
+                        <div class="input-group mb-2 w-100">
+                            <label class="form-label" for="occupants">Occupant(s)</label>
+                            <input type="text" id="occupants" name="occupants" class="touchspin input-group-lg" value="{{$reservation->occupants}}" />
+                        </div>
+                        <div class="col-sm-12 mb-2">
+                            <div class="form-label-group mb-0">
+                                <textarea data-length="200" class="form-control char-textarea" id="notes" name="extras" rows="2">{{$reservation->extras}}</textarea>
+                                <label for="notes">Notes</label>
+                            </div>
+                            <small class="textarea-counter-value float-right"><span class="char-count">0</span> / 200 </small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="reservation-source">Reservation Source</label>
+                            <select class="select2 w-100" id="reservation-source" name="reservation-source">
+                                <option label=" "></option>
+                                <option value="{{$reservation->source}}" selected>{{$reservation->source}}</option>
+                                <option>Airbnb</option>
+                                <option>Booking.com</option>
+                                <option>Expedia</option>
+                                <option>Hotels.ng</option>
+                                <option>Walk-In Guest</option>
+                                <option>Mr Wasiu Agent</option>
+                                <option>Mr Jamiu Agent</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="payment-status">Payment Status</label>
+                            <select class="select2 w-100" id="payment-status" name="payment-status" onchange="getTotals()" required>
+                                <option label=" "></option>
+                                <option value="{{$reservation->reservationPayments[0]->payment_status}}" selected>{{$reservation->reservationPayments[0]->payment_status}}</option>
+                                <option value="none">No Payment</option>
+                                <option value="partial">Partial Payment</option>
+                                <option value="full">Full Payment</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-2 d-none" id="pm-container">
+                            <label class="form-label" for="payment-method">Payment Method</label>
+                            <select class="select2 w-100" id="payment-method" name="payment-method" onchange="getTotals()">
+                                <option label=" "></option>
+                                <option value="{{$reservation->reservationPayments[0]->payment_method}}" selected>{{$reservation->reservationPayments[0]->payment_method}}</option>
+                                <option>Bank Transfer</option>
+                                <option>Cash</option>
+                                <option>Credit</option>
+                                <option>Cryptocurrency</option>
+                                <option>POS</option>
+                                <option>Post Master</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="discount">Discount (₦)</label>
+                            <input type="number" inputmode="numeric" id="discount" class="form-control" name="discount" value="{{$reservation->reservationPayments[0]->discount_amount}}" />
+                        </div>
+                        <div class="form-group"> 
+                            <label class="form-label" for="deposit">Deposit (₦)</label>
+                            <input type="number" inputmode="numeric" id="deposit" class="form-control" name="deposit" oninput="getTotals()" value="{{$reservation->reservationPayments[0]->paid}}" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="subtotal">Subtotal (₦)</label>
+                            <input type="text" id="subtotal" class="form-control" name="subtotal" value="{{$reservation->reservationPayments[0]->total}}" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="balance">Balance (₦)</label>
+                            <input type="text" id="balance" class="form-control" value="{{$reservation->reservationPayments[0]->balance}}" name="balance"  readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="total">Total (₦)</label>
+                            <input type="text" id="total" class="form-control" value="{{$reservation->reservationPayments[0]->total}}" name="total" readonly/>
+                        </div>
+                        <div class="form-group d-flex justify-content-end flex-wrap mt-2">
+                            <button type="button" class="btn btn-outline-info mr-1" onclick="getTotals()">Update Balances</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Edit Reservation Sidebar -->
 @endsection
 
 @section('vendor-js')
     @parent
     <script src="{{ asset ('/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
     @parent
     <script src="{{ asset ('/app-assets/js/scripts/pages/app-invoice.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/js/scripts/forms/form-number-input.js') }}" defer></script>
+    <script src="{{ asset ('/js/core.js') }}" defer></script>
+    <script type="module" defer>
+        $("#apartment").select2()
+        $("#rates").select2()
+        $("#reservation-source").select2()
+        $("#payment-status").select2()
+        $('#departure').flatpickr({
+            enableTime: true,
+        });
+        $(".nights").on("change", function(event) {
+            departureDate(this)
+        })
+
+        $('#arrival').flatpickr({
+            enableTime: true,
+        })
+    </script>
     @include('partials.form-response')
 @endsection

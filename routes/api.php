@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApartmentsController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GuestController;
@@ -36,7 +37,13 @@ Route::get('rate/{rate}', [RateController::class, 'show'])->name('api-rate');
 Route::get('guest/{id}', [GuestController::class, 'show'])->name('api-guest');
 Route::get('guests', [GuestController::class, 'index'])->name('api-guests');
 Route::get('reservations', [ReservationController::class, 'index'])->name('api-reservations');
+Route::get('apartment-reservations/{id}', [ApartmentsController::class, 'show'])->name('api-apartment-reservations');
 Route::get('inhouse-guests', [InhouseController::class, 'index'])->name('api-inhouse-guests');
-Route::get('availability/{apartment}/{start}/{end}', [ReservationController::class, 'availabilityCheck'])->name('api-availability');
 Route::get('calendar', [CalendarController::class, 'index'])->name('api-calendar');
 Route::get('events', [EventController::class, 'index'])->name('api-events');
+Route::get('apartments', [ApartmentsController::class, 'index'])->name('api-apartments');
+Route::get('apartment/{id}', [ApartmentsController::class, 'show'])->name('api-apartment');
+Route::post('web-availability', [ReservationController::class, 'webAvailability'])->name('api-web-availability');
+Route::post('availability', [ReservationController::class, 'availabilityCheck'])->name('api-availability');
+Route::post('create-guest', [GuestController::class, 'store'])->name('api-guest');
+Route::post('new-reservation', [ReservationController::class, 'store'])->name('api-new-reservation');

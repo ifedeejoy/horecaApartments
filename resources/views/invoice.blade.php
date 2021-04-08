@@ -144,6 +144,10 @@
                 <span>{!! $reservations[0]->extras !!}</span>
             </div>
         </div>
+
+        <div class="d-flex justify-content-center">
+            <a href="http://kimberlys.test" target="_blank" class="text-black">Go back</a>
+        </div>
     </div>
 @endsection
 

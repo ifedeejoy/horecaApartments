@@ -6,7 +6,7 @@ window.getElByThis = function(arg) {
     return idParams
 }
 
-window.getUrl = function(url) {
+function getUrl(url) {
     var parser = document.createElement('a')
     parser.href = url
     return parser.pathname
@@ -264,18 +264,23 @@ window.departureDate = function(arg) {
         departureDate = formatDate.add(nights, 'days').format("YYYY-MM-DD hh:mm"),
         apartment = $("#apartment" + idNo).val()
     $.ajax({
-        url: '/api/availability/' + apartment + '/' + arrival + '/' + departureDate,
-        method: 'GET',
+        url: '/api/availability',
+        method: 'POST',
+        data: { 'start': arrival, 'end': departureDate, 'apartment': apartment },
         dataType: 'json',
         success: function(data) {
+            console.log(data)
             if (jQuery.isEmptyObject(data.data)) {
                 $("#departure" + idNo).val(departureDate)
                 $("#apartment-cost" + idNo).val(finalPrice)
             } else {
+                let checkin = data.data.checkin
+                let checkout = data.data.checkout == null ? departureDate : data.data.checkout
+                let suggestedNights = data.data.nights == null ? nights : data.data.nights
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: 'Please set the checkout date to ' + data.data.available_date + ' , the apartment is not available for ' + nights + ' night(s)',
+                    text: 'Apartment is not available for selected duration, set checkin date to ' + checkin + ' and checkout date to ' + checkout + ' the apartment is available for ' + suggestedNights + ' night(s)',
                     customClass: {
                         confirmButton: 'btn btn-danger'
                     },
@@ -284,6 +289,7 @@ window.departureDate = function(arg) {
             }
         },
         error: function(data) {
+            console.log(data)
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
@@ -292,8 +298,6 @@ window.departureDate = function(arg) {
                     confirmButton: 'btn btn-danger'
                 },
                 buttonsStyling: false
-            }).then(function() {
-                window.location.reload()
             })
         }
     })

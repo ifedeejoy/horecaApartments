@@ -158,7 +158,7 @@
                                 <i data-feather="home"></i>
                             </button>
                         </div>
-                    </div>
+                    </div> 
                     <hr class="my-1">
 
                     <div id="rooms-section">

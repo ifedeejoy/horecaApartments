@@ -20,7 +20,8 @@ class Apartments extends Model
         'status',
         'maintenance_status',
         'address',
-        'country'
+        'country',
+        'images',
     ];
 
     public function user()
@@ -31,5 +32,10 @@ class Apartments extends Model
     public function rates()
     {
         return $this->hasMany(Rate::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }

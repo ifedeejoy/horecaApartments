@@ -64,9 +64,9 @@
             </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i class="lni lni-warning"></i><span class="menu-title text-truncate" data-i18n="Maintenance">Maintenance</span></a>
                 <ul class="menu-content">
-                    <li class="{{ setActive(['maintenance/apartments']) }}"><a class="d-flex align-items-center" href="/maintenance/apartments"><i data-feather="circle"></i><span class="menu-item" data-i18n="List">Apartments</span></a>
+                    <li class="{{ setActive(['admin/maintenance']) }}"><a class="d-flex align-items-center" href="/admin/maintenance"><i data-feather="circle"></i><span class="menu-item" data-i18n="List">Apartments</span></a>
                     </li>
-                    <li class="{{ setActive(['maintenance/vendors']) }}"><a class="d-flex align-items-center" href="/maintenance/vendors"><i data-feather="circle"></i><span class="menu-item" data-i18n="View">Vendors</span></a>
+                    <li class="{{ setActive(['admin/vendors']) }}"><a class="d-flex align-items-center" href="/admin/vendors"><i data-feather="circle"></i><span class="menu-item" data-i18n="View">Vendors</span></a>
                     </li>
                 </ul>
             </li>
