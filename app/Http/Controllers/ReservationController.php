@@ -199,11 +199,11 @@ class ReservationController extends Controller
             else:
                 $view = $request->is('print-invoice/*') ? 'front-desk.print-invoice' : 'front-desk.invoice';
             endif;
-            return view($view)->with('reservations', $reservation);
+            return response()->header('X-FRAME-OPTIONS', 'ALLOW FROM https://kimberlys.ng')->view($view)->with('reservations', $reservation);
         else:
             $apartments = Apartments::where('status', 'available')->get();
             $reservation = Reservation::where('id', $request->id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'staff')->first();
-            return response()->header('X-FRAME-OPTIONS', 'ALLOW FROM https://kimberlys.ng')->view('front-desk.reservation')->with(['reservation' => $reservation, 'apartments' => $apartments]);
+            return view('front-desk.reservation')->with(['reservation' => $reservation, 'apartments' => $apartments]);
         endif;
     }
 
