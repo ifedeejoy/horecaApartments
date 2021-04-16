@@ -203,7 +203,7 @@ class ReservationController extends Controller
         else:
             $apartments = Apartments::where('status', 'available')->get();
             $reservation = Reservation::where('id', $request->id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'staff')->first();
-            return view('front-desk.reservation')->with(['reservation' => $reservation, 'apartments' => $apartments]);
+            return response()->header('X-FRAME-OPTIONS', 'ALLOW FROM https://kimberlys.ng')->view('front-desk.reservation')->with(['reservation' => $reservation, 'apartments' => $apartments]);
         endif;
     }
 
