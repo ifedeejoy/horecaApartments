@@ -60,7 +60,7 @@ Route::post('front-desk/checkout/{id}', [InhouseController::class, 'checkout'])-
 Route::post('front-desk/move-apartment/{id}', [InhouseController::class, 'roomMove'])->middleware('auth')->name('move-apartment');
 Route::post('front-desk/checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->middleware('auth')->name('checkin-guest');
 
-
+// front-desk views
 Route::view('dashboard', 'front-desk.home')->middleware('auth');
 Route::view('home', 'front-desk.home')->middleware('auth');
 // PUT Requests
@@ -69,12 +69,13 @@ Route::put('front-desk/edit-guest/{id}', [GuestController::class, 'update'])->mi
 Route::put('front-desk/edit-reservation/{id}', [ReservationController::class, 'update'])->middleware('auth')->name('edit-reservation');
 // Delete Requests
 Route::delete('front-desk/delete-reservation/{id}', [ReservationController::class, 'destroy'])->middleware('auth')->name('delete-reservation');
+
 // Admin
 Route::get('admin/apartments', [ApartmentsController::class, 'index'])->middleware('auth')->name('apartments');
 Route::get('admin/apartment/{id}', [ApartmentsController::class, 'show'])->middleware('auth')->name('apartment');
-Route::get('admin/agents', [UserController::class, 'index'])->middleware('auth')->name('agents');
-Route::get('admin/owners',  [UserController::class, 'index'])->middleware('auth')->name('owners');
-Route::get('admin/employees',  [UserController::class, 'index'])->middleware('auth')->name('employees');
+Route::get('admin/users/{type}', [UserController::class, 'index'])->middleware('auth');
+Route::get('admin/user/{id}', [UserController::class, 'show'])->middleware('auth');
+Route::get('admin/edit-user/{user}', [UserController::class, 'edit'])->middleware('auth');
 Route::get('admin/rates', [RateController::class, 'index'])->middleware('auth')->name('rates');
 Route::get('admin/maintenance', [MaintenanceController::class, 'index'])->middleware('auth')->name('maintenance');
 // post requests
@@ -88,6 +89,8 @@ Route::post('admin/edit-rate', [RateController::class, 'update'])->middleware('a
 Route::delete('admin/apartment/{id}', [ApartmentsController::class, 'destroy'])->middleware('auth')->name('delete-apartment');
 Route::delete('admin/rates/{rate}', [RateController::class, 'destroy'])->middleware('auth')->name('delete-rate');
 
+// admin views
+Route::view('admin/access-control', 'admin.users.access-control')->middleware('auth');
 
 // Auth
 Auth::routes();

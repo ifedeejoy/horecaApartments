@@ -1,12 +1,5 @@
-/*=========================================================================================
-    File Name: app-user-list.js
-    Description: User List page
-    --------------------------------------------------------------------------------------
-    Item Name: Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template
-    Author: PIXINVENT
-    Author URL: http://www.themeforest.net/user/pixinvent
+import { getUrl } from './core'
 
-==========================================================================================*/
 $(function() {
     'use strict';
 
@@ -21,17 +14,18 @@ $(function() {
 
     var assetPath = '../../../app-assets/',
         userView = '/admin/user/',
-        userEdit = 'app-user-edit.html';
+        userEdit = '/admin/edit-user/';
     if ($('body').attr('data-framework') === 'laravel') {
         assetPath = $('body').attr('data-asset-path');
         userView = assetPath + 'app/user/view';
         userEdit = assetPath + 'app/user/edit';
     }
-
-    // Users List datatable
+    let currentUrl = getUrl(window.location.href)
+    let apiUrl = currentUrl.replace('admin', 'api')
+        // Users List datatable
     if (dtUserTable.length) {
         dtUserTable.DataTable({
-            ajax: '/api/users/owners', // JSON file to add data
+            ajax: apiUrl, // JSON file to add data
             columns: [
                 // columns according to JSON
                 { data: 'id' },
@@ -82,9 +76,7 @@ $(function() {
                             '</div>' +
                             '</div>' +
                             '<div class="d-flex flex-column">' +
-                            '<a href="' +
-                            userView +
-                            '" class="user_name text-truncate"><span class="font-weight-bold">' +
+                            '<a href="' + userView + full['id'] + '" class="user_name text-truncate"><span class="font-weight-bold">' +
                             $name +
                             '</span></a>' +
                             '<small class="emp_post text-muted">@' +
@@ -143,9 +135,7 @@ $(function() {
                             '" class="dropdown-item">' +
                             feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) +
                             'Details</a>' +
-                            '<a href="' +
-                            userEdit +
-                            '" class="dropdown-item">' +
+                            '<a href="' + userEdit + full['id'] + '" class="dropdown-item">' +
                             feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) +
                             'Edit</a>' +
                             '<a href="javascript:;" class="dropdown-item delete-record">' +
@@ -236,7 +226,6 @@ $(function() {
                             .unique()
                             .sort()
                             .each(function(d, j) {
-                                console.log(column)
                                 select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
                             });
                     });

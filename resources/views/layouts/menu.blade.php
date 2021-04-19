@@ -77,11 +77,15 @@
             </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="User">Users</span></a>
                 <ul class="menu-content">
-                    <li class="{{ setActive(['admin/owners']) }}"><a class="d-flex align-items-center" href="/admin/owners"><i data-feather="circle"></i><span class="menu-item" data-i18n="List">Owners</span></a>
+                    <li class="{{ setActive(['admin/users/owners']) }}"><a class="d-flex align-items-center" href="/admin/users/owners"><i data-feather="circle"></i><span class="menu-item" data-i18n="List">Owners</span></a>
                     </li>
-                    <li class="{{ setActive(['admin/agents']) }}"><a class="d-flex align-items-center" href="/admin/agents"><i data-feather="circle"></i><span class="menu-item" data-i18n="View">Agents</span></a>
+                    <li class="{{ setActive(['admin/users/agents']) }}"><a class="d-flex align-items-center" href="/admin/users/agents"><i data-feather="circle"></i><span class="menu-item" data-i18n="View">Agents</span></a>
                     </li>
-                    <li class="{{ setActive(['admin/employees']) }}"><a class="d-flex align-items-center" href="/admin/employees"><i data-feather="circle"></i><span class="menu-item" data-i18n="Edit">Employees</span></a>
+                    <li class="{{ setActive(['admin/users/employees', 'admin/user/*']) }}"><a class="d-flex align-items-center" href="/admin/users/employees"><i data-feather="circle"></i><span class="menu-item" data-i18n="Edit">Employees</span></a>
+                    </li>
+                    <li class="{{ setActive(['admin/users/managers']) }}"><a class="d-flex align-items-center" href="/admin/users/managers"><i data-feather="circle"></i><span class="menu-item" data-i18n="Edit">Managers</span></a>
+                    </li>
+                    <li class="{{ setActive(['admin/users/admin']) }}"><a class="d-flex align-items-center" href="/admin/users/admin"><i data-feather="circle"></i><span class="menu-item" data-i18n="Edit">Admin</span></a>
                     </li>
                 </ul>
             </li>

@@ -38,6 +38,7 @@ Route::get('guest/{id}', [GuestController::class, 'show'])->name('api-guest');
 Route::get('guests', [GuestController::class, 'index'])->name('api-guests');
 Route::get('reservations', [ReservationController::class, 'index'])->name('api-reservations');
 Route::get('apartment-reservations/{id}', [ApartmentsController::class, 'show'])->name('api-apartment-reservations');
+Route::get('user-reservations/{id}', [UserController::class, 'show']);
 Route::get('inhouse-guests', [InhouseController::class, 'index'])->name('api-inhouse-guests');
 Route::get('calendar', [CalendarController::class, 'index'])->name('api-calendar');
 Route::get('events', [EventController::class, 'index'])->name('api-events');

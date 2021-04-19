@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Traits\UserTrait;
+use App\Models\Reservation;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -22,21 +23,22 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $type = $request->type;
+        $users = $this->getUsers($type);
         if($request->is('api/users/*')):
-            $type = $request->type;
-            $users = $this->getUsers($type);
             $response = $this->apiResponse($users);
             return $response;
         else:
-            if($request->is('admin/owners')):
-                $users = User::where('type', 'owner');
-                return view('admin.users.owners')->with('users', $users);
-            elseif($request->is('admin/agents')):
-                $users = User::where('type', 'agents');
-                return view('admin.users.agents')->with('users', $users);
-            elseif($request->is('admin/employees')):
-                $users = User::where('type', 'staff');
-                return view('admin.users.employees')->with('users', $users);
+            if($request->is('admin/users/owners')):
+                return view('admin.users.owners');
+            elseif($request->is('admin/users/agents')):
+                return view('admin.users.agents');
+            elseif($request->is('admin/users/employees')):
+                return view('admin.users.employees');
+            elseif($request->is('admin/users/managers')):
+                return view('admin.users.managers');
+            elseif($request->is('admin/users/admin')):
+                return view('admin.users.admin');
             endif;
         endif;
     }
@@ -62,15 +64,20 @@ class UserController extends Controller
         $validated = $this->validateUserData($request->all());
         try {
             $user = new User;
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->address = $request->address;
-            $user->country = $request->country;
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->phone = $request->input('phone');
+            $user->address = $request->input('address');
+            $user->country = $request->input('country');
             $user->password = Hash::make('12345678');
-            $user->type = $request->type;
+            $user->type = $request->input('type');
             $user->save();
-            $user->assignRole($request->type);
+
+            if($request->input('type') == 'super-admin'):
+                $user->assignRole($request->input('type'));
+            else:
+                $user->givePermissionTo($request->input('permissions'));
+            endif;
             return back()->with('success', 'User created successfully');
         } catch (QueryException $e) {
             return back()->with('error', 'User not created');
@@ -84,7 +91,12 @@ class UserController extends Controller
      */
     public function show(Request $request)
     {
-        // 
+        $user = User::find($request->id);
+        $reservations = Reservation::where('createdBy', $user->id)->with('reservationPayments', 'guest', 'apartments')->get();
+        if($request->is('api/user-reservations/*')):
+            return response()->json(['data' => $reservations]);
+        endif;
+        return view('admin.users.user')->with('user', $user);
     }
 
     /**
@@ -93,9 +105,10 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(Request $request)
     {
-        //
+        $user = User::find($request->user);
+        return view('admin.users.edit-user')->with('user', $user);
     }
 
     /**
