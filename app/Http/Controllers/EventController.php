@@ -70,21 +70,32 @@ class EventController extends Controller
             endif;
             if(!empty($event->description)):
                 $calendar = $gcal->where('calendar_id', $event->creator->email)->first();
-                $calendar->event()->updateOrCreate(
-                    ['google_id' => $event->id],
-                    [
-                        'name' => $event->summary,
-                        'description' => $event->description,
-                        'allday' => $this->isAllDayEvent($event), 
-                        'started_at' => $this->parseDatetime($event->start), 
-                        'ended_at' => $this->parseDatetime($event->end), 
-                        'user_id' => auth()->user()->id,
-                        'calendar_id' => $event->creator->email,
-                        'google_id' => $event->id,
-                    ]
-                );
+                if(is_null($calendar)):
+                    $attendees = collect($event->attendees);
+                    $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
+                    $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
+                endif;
+                if(!empty($calendar)):
+                    $checkEvent = Event::where('google_id', $event->id)->count();
+                    if($checkEvent < 1):
+                        $calendar->event()->updateOrCreate(
+                            ['google_id' => $event->id],
+                            [
+                                'name' => $event->summary,
+                                'description' => $event->description,
+                                'allday' => $this->isAllDayEvent($event), 
+                                'started_at' => $this->parseDatetime($event->start), 
+                                'ended_at' => $this->parseDatetime($event->end), 
+                                'user_id' => auth()->user()->id,
+                                'calendar_id' => $event->creator->email,
+                                'google_id' => $event->id,
+                            ]
+                        );
+                    endif;
+                endif;
             endif;
         endforeach;
+        return redirect('front-desk/calendar');
     }
     
     /**

@@ -92,7 +92,7 @@ $(function() {
                             '</a>' +
                             '<div class="dropdown-menu dropdown-menu-right">' +
                             '<a href="' +
-                            rateView + full['apartment_id'] +
+                            rateView + full['apartments']['id'] +
                             '" class="dropdown-item">' +
                             feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) +
                             'Details</a>' +

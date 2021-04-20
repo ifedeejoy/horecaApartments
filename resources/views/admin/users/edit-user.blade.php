@@ -24,7 +24,7 @@
                             <i data-feather="user"></i><span class="d-none d-sm-block">Account</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link d-flex align-items-center" id="information-tab" data-toggle="tab" href="#information" aria-controls="information" role="tab" aria-selected="false">
                             <i data-feather="info"></i><span class="d-none d-sm-block">Information</span>
                         </a>
@@ -33,7 +33,7 @@
                         <a class="nav-link d-flex align-items-center" id="social-tab" data-toggle="tab" href="#social" aria-controls="social" role="tab" aria-selected="false">
                             <i data-feather="share-2"></i><span class="d-none d-sm-block">Social</span>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
                 <div class="tab-content">
                     <!-- Account Tab starts -->
@@ -60,18 +60,32 @@
                         </div>
                         <!-- users edit media object ends -->
                         <!-- users edit account form start -->
-                        <form class="form-validate">
+                        <form class="form-validate" method="POST" action="{{route('update-user', $user->id)}}">
+                            @csrf 
+                            @method('PUT')
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input type="text" class="form-control" placeholder="Name" value="{{$user->name}}" name="name" id="name" />
+                                        <input type="text" class="form-control" value="{{$user->name}}" name="name" id="name" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="email">E-mail</label>
-                                        <input type="email" class="form-control" placeholder="Email" value="{{$user->email}}" name="email" id="email" />
+                                        <input type="email" class="form-control" value="{{$user->email}}" name="email" id="email" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 ">
+                                    <div class="form-group">
+                                        <label for="mobile">Mobile</label>
+                                        <input type="text" class="form-control" id="mobile" value="{{$user->phone}}" name="phone" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="address-1">Address</label>
+                                        <input id="address-1" type="text" class="form-control" value="{{$user->address}}" name="address" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -149,6 +163,45 @@
                                                             @endif
                                                             <input type="checkbox" class="custom-control-input" id="reservations-delete" value="delete reservations" name="permissions[]">
                                                             <label class="custom-control-label" for="reservations-delete"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Calendar</td>
+                                                    <td>
+                                                        <div class="custom-control custom-checkbox">
+                                                            @if($user->hasPermissionTo('view calendars'))
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-read" value="view calendars" name="permissions[]" checked>
+                                                            @endif
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-read" value="view calendars" name="permissions[]">
+                                                            <label class="custom-control-label" for="calendars-read"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-checkbox">
+                                                            @if($user->hasPermissionTo('manage calendars'))
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-write" value="manage calendars" name="permissions[]" checked>
+                                                            @endif
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-write" value="manage calendars" name="permissions[]">
+                                                            <label class="custom-control-label" for="calendars-write"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-checkbox">
+                                                            @if($user->hasPermissionTo('create calendars'))
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-create" value="create calendars" name="permissions[]" checked>   
+                                                            @endif
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-create" value="create calendars" name="permissions[]">   
+                                                            <label class="custom-control-label" for="calendars-create"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-checkbox">
+                                                            @if($user->hasPermissionTo('delete calendars'))
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-delete" value="delete calendars" name="permissions[]" checked>
+                                                            @endif
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-delete" value="delete calendars" name="permissions[]">
+                                                            <label class="custom-control-label" for="calendars-delete"></label>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -479,7 +532,7 @@
                     <!-- Account Tab ends -->
 
                     <!-- Information Tab starts -->
-                    <div class="tab-pane" id="information" aria-labelledby="information-tab" role="tabpanel">
+                    {{-- <div class="tab-pane" id="information" aria-labelledby="information-tab" role="tabpanel">
                         <!-- users edit Info form start -->
                         <form class="form-validate">
                             <div class="row mt-1">
@@ -600,11 +653,11 @@
                             </div>
                         </form>
                         <!-- users edit Info form ends -->
-                    </div>
+                    </div> --}}
                     <!-- Information Tab ends -->
 
                     <!-- Social Tab starts -->
-                    <div class="tab-pane" id="social" aria-labelledby="social-tab" role="tabpanel">
+                    {{-- <div class="tab-pane" id="social" aria-labelledby="social-tab" role="tabpanel">
                         <!-- users edit social form start -->
                         <form class="form-validate">
                             <div class="row">
@@ -682,7 +735,7 @@
                             </div>
                         </form>
                         <!-- users edit social form ends -->
-                    </div>
+                    </div> --}}
                     <!-- Social Tab ends -->
                 </div>
             </div>

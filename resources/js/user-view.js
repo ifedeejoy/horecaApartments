@@ -17,7 +17,6 @@ $(function() {
         invoiceAdd = assetPath + 'app/invoice/add';
         invoiceEdit = assetPath + 'app/invoice/edit';
     }
-
     // datatable
     if (dtInvoiceTable.length) {
         var dtInvoice = dtInvoiceTable.DataTable({

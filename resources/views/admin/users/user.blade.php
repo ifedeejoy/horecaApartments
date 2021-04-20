@@ -159,6 +159,45 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>Calendar</td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        @if($user->hasPermissionTo('view calendars'))
+                                        <input type="checkbox" class="custom-control-input" id="calendars-read" value="view calendars" name="permissions[]" disabled checked>
+                                        @endif
+                                        <input type="checkbox" class="custom-control-input" id="calendars-read" value="view calendars" name="permissions[]" disabled>
+                                        <label class="custom-control-label" for="calendars-read"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        @if($user->hasPermissionTo('manage calendars'))
+                                        <input type="checkbox" class="custom-control-input" id="calendars-write" value="manage calendars" name="permissions[]" checked disabled>
+                                        @endif
+                                        <input type="checkbox" disabled class="custom-control-input" id="calendars-write" value="manage calendars" name="permissions[]" disabled>
+                                        <label class="custom-control-label" for="calendars-write"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        @if($user->hasPermissionTo('create calendars'))
+                                        <input type="checkbox" class="custom-control-input" id="calendars-create" value="create calendars" name="permissions[]" disabled checked>   
+                                        @endif
+                                        <input type="checkbox" class="custom-control-input" id="calendars-create" value="create calendars" name="permissions[]" disabled>   
+                                        <label class="custom-control-label" for="calendars-create"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        @if($user->hasPermissionTo('delete calendars'))
+                                        <input type="checkbox" class="custom-control-input" id="calendars-delete" value="delete calendars" name="permissions[]" disabled checked>
+                                        @endif
+                                        <input type="checkbox" class="custom-control-input" id="calendars-delete" value="delete calendars" name="permissions[]" disabled>
+                                        <label class="custom-control-label" for="calendars-delete"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>User Management</td>
                                 <td>
                                     <div class="custom-control custom-checkbox">

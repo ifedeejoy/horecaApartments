@@ -73,6 +73,13 @@ class UserController extends Controller
             $user->type = $request->input('type');
             $user->save();
 
+            // foreach($request->input('permissions') as $permission):
+            //     $check = Permission::where('name', $permission)->count();
+            //     if($check < 1):
+            //         Permission::create(['name' => $permission]);
+            //     endif;
+            // endforeach;
+
             if($request->input('type') == 'super-admin'):
                 $user->assignRole($request->input('type'));
             else:
@@ -120,7 +127,20 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        try {
+            $user = User::find($request->id);
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->phone = $request->input('phone');
+            $user->address = $request->input('address');
+            $user->country = $request->input('country');
+            $user->type = $request->input('role');
+            $user->save();
+            $user->givePermissionTo($request->input('permissions'));
+            return back()->with('success', 'User updated successfully');
+        } catch (QueryException $e) {
+            return back()->with('error', 'User not updated');
+        }
     }
 
     /**

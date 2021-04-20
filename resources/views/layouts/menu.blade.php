@@ -89,9 +89,6 @@
                     </li>
                 </ul>
             </li>
-            <li class="{{ setActive(['admin/access-control']) }} nav-item">
-                <a class="d-flex align-items-center" href="/admin/access-control"><i class="lni lni-key"></i><span class="menu-title text-truncate" data-i18n="Access Control">Acess Control</span></a>
-            </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i class="lni lni-blackboard"></i><span class="menu-title text-truncate" data-i18n="Blacklist">Blacklist</span></a>
                 <ul class="menu-content">
                     <li class="{{ setActive(['admin/employees-blacklist']) }}"><a class="d-flex align-items-center" href="/admin/employees-blacklist"><i data-feather="circle"></i><span class="menu-item" data-i18n="List">Employees</span></a>

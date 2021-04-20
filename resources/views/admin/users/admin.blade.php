@@ -129,6 +129,33 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td>Calendar</td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="calendars-read" name="permissions[]" value="view calendars"/>
+                                                    <label class="custom-control-label" for="calendars-read"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="calendars-write" name="permissions[]" value="manage calendars"/>
+                                                    <label class="custom-control-label" for="calendars-write"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="calendars-create" name="permissions[]" value="create calendars"/>
+                                                    <label class="custom-control-label" for="calendars-create"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="calendars-delete" name="permissions[]" value="delete calendars"/>
+                                                    <label class="custom-control-label" for="calendars-delete"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <td>User Management</td>
                                             <td>
                                                 <div class="custom-control custom-checkbox">

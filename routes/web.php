@@ -82,15 +82,15 @@ Route::get('admin/maintenance', [MaintenanceController::class, 'index'])->middle
 Route::post('admin/create-apartment', [ApartmentsController::class, 'store'])->middleware('auth')->name('create-apartment');
 Route::post('admin/creates-owner', [UserController::class, 'store'])->middleware('auth')->name('creates-owner');
 Route::post('admin/creates-rate', [RateController::class, 'store'])->middleware('auth')->name('creates-rate');
-
 Route::post('admin/edit-apartment/{id}', [ApartmentsController::class, 'update'])->middleware('auth')->name('edit-apartment');
 Route::post('admin/edit-rate', [RateController::class, 'update'])->middleware('auth')->name('edit-rate');
+// Put requests
+Route::put('admin/update-user/{id}', [UserController::class, 'update'])->middleware('auth')->name('update-user');
 // delete requests
 Route::delete('admin/apartment/{id}', [ApartmentsController::class, 'destroy'])->middleware('auth')->name('delete-apartment');
 Route::delete('admin/rates/{rate}', [RateController::class, 'destroy'])->middleware('auth')->name('delete-rate');
 
 // admin views
-Route::view('admin/access-control', 'admin.users.access-control')->middleware('auth');
 
 // Auth
 Auth::routes();
