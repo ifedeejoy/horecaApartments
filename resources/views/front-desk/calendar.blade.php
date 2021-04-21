@@ -82,6 +82,6 @@
 
 @section('page-js')
     @parent
-    <script src="{{ asset ('/app-assets/js/scripts/pages/app-calendar-events.js') }}" defer></script>
-    <script src="{{ asset ('/app-assets/js/scripts/pages/app-calendar.js') }}" defer></script>
+    <script src="{{ asset ('/js/calendar-events.js') }}" defer></script>
+    <script src="{{ asset ('/js/calendar.js') }}" defer></script>
 @endsection

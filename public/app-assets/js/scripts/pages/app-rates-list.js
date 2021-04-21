@@ -109,8 +109,8 @@ $(function() {
                 [2, 'desc']
             ],
             dom: '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
-                '<"col-lg-12 col-xl-6" l>' +
-                '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
+                '<"col-lg-12 col-xl-3" l>' +
+                '<"col-lg-12 col-xl-9 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
                 '>t' +
                 '<"d-flex justify-content-between mx-2 row mb-1"' +
                 '<"col-sm-12 col-md-6"i>' +
@@ -123,16 +123,44 @@ $(function() {
             },
             // Buttons with Dropdown
             buttons: [{
-                text: 'Add New Rate',
-                className: 'add-new btn btn-primary mt-50',
-                attr: {
-                    'data-toggle': 'modal',
-                    'data-target': '#modals-slide-in'
+                    extend: 'pdf',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
                 },
-                init: function(api, node, config) {
-                    $(node).removeClass('btn-secondary');
+                {
+                    extend: 'excel',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                },
+                {
+                    extend: 'print',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                },
+                {
+                    text: 'Add New Rate',
+                    className: 'add-new btn btn-primary mt-50',
+                    attr: {
+                        'data-toggle': 'modal',
+                        'data-target': '#modals-slide-in'
+                    },
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
                 }
-            }],
+            ],
             // For responsive popup
             responsive: {
                 details: {

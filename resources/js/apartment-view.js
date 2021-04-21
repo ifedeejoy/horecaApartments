@@ -236,12 +236,40 @@ $(function() {
             },
             // Buttons with Dropdown
             buttons: [{
-                text: 'New Reservation',
-                className: 'btn btn-primary btn-add-record ml-2',
-                action: function(e, dt, button, config) {
-                    window.location = invoiceAdd;
+                    extend: 'pdf',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                },
+                {
+                    extend: 'excel',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                },
+                {
+                    extend: 'print',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                },
+                {
+                    text: 'New Reservation',
+                    className: 'add-new btn btn-primary mt-50',
+                    action: function(e, dt, button, config) {
+                        window.location = invoiceAdd;
+                    }
                 }
-            }],
+            ],
             // For responsive popup
             responsive: {
                 details: {

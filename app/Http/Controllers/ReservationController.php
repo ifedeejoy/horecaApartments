@@ -81,7 +81,7 @@ class ReservationController extends Controller
                     $reference = mt_rand();
                     $user = Auth::user()->id;
                     // create guest profile
-                    $createGuest = $this->createGuest($request->all());
+                    $createGuest = $this->createGuest($request);
                     if(is_array($createGuest)):
                         if($createGuest['status'] == 'successful'):
                             $guest = $createGuest['id'];

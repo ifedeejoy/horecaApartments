@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\ApartmentsController;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\gcalController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InhouseController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
-use App\Models\Apartments;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\GoogleAccountController;
+use App\Http\Controllers\GoogleCalendarController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,10 +49,10 @@ Route::get('front-desk/folio/{id}', [InhouseController::class, 'show'])->middlew
 Route::get('front-desk/receipt/{id}', [InhouseController::class, 'show'])->middleware('auth')->name('receipt');
 Route::get('front-desk/calendar', [CalendarController::class, 'index'])->middleware('auth')->name('calendar');
 // Calendar doings
-Route::get('front-desk/sync-calendar', 'App\Http\Controllers\GoogleCalendarController@store')->middleware('auth')->name('sync-calendar');
-Route::get('front-desk/sync-events', 'App\Http\Controllers\EventController@store')->middleware('auth')->name('sync-events');
-Route::get('google/oauth', 'App\Http\Controllers\GoogleAccountController@store')->middleware('auth')->name('google-oauth');
-Route::get('front-desk/events', 'App\Http\Controllers\EventController@index')->name('events')->middleware('auth');
+Route::get('front-desk/sync-calendar', [GoogleCalendarController::class, 'store'])->middleware('auth')->name('sync-calendar');
+Route::get('front-desk/sync-events', [EventController::class, 'store'])->middleware('auth')->name('sync-events');
+Route::get('google/oauth', [GoogleAccountController::class, 'store'])->middleware('auth')->name('google-oauth');
+Route::get('front-desk/events', [EventController::class, 'index'])->name('events');
 // Post Requests
 Route::post('front-desk/make-reservation', [ReservationController::class, 'store'])->middleware('auth')->name('make-reservation');
 Route::post('front-desk/add-guest-bill/{id}', [InhouseController::class, 'addBill'])->middleware('auth')->name('add-guest-bill');

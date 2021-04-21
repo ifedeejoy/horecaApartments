@@ -1,38 +1,27 @@
-import { getUrl } from './core'
-
 $(function() {
     'use strict';
 
     var dtUserTable = $('.user-list-table'),
         newUserSidebar = $('.new-user-modal'),
-        newUserForm = $('.add-new-user'),
-        statusObj = {
-            'pending': { title: 'Pending', class: 'badge-light-warning' },
-            'online': { title: 'Active', class: 'badge-light-success' },
-            'offline': { title: 'Offline', class: 'badge-light-secondary' }
-        };
+        newUserForm = $('.add-new-user');
 
     var assetPath = '../../../app-assets/',
-        userView = '/admin/user/',
-        userEdit = '/admin/edit-user/';
+        rateView = '/admin/apartment/';
     if ($('body').attr('data-framework') === 'laravel') {
         assetPath = $('body').attr('data-asset-path');
-        userView = assetPath + 'app/user/view';
-        userEdit = assetPath + 'app/user/edit';
+        rateView = '/admin/apartment/';
     }
-    let currentUrl = getUrl(window.location.href)
-    let apiUrl = currentUrl.replace('admin', 'api')
-        // Users List datatable
+
+    // Users List datatable
     if (dtUserTable.length) {
         dtUserTable.DataTable({
-            ajax: apiUrl, // JSON file to add data
+            ajax: '/api/rates', // JSON file to add data
             columns: [
                 // columns according to JSON
                 { data: 'id' },
                 { data: 'name' },
-                { data: 'email' },
-                { data: 'type' },
-                { data: 'status' },
+                { data: 'amount' },
+                { data: 'apartments.name' },
                 { data: '' }
             ],
             columnDefs: [{
@@ -43,44 +32,22 @@ $(function() {
                     targets: 0
                 },
                 {
-                    // User full name and username
+                    // Rate
                     targets: 1,
                     responsivePriority: 4,
                     render: function(data, type, full, meta) {
-                        var $name = full['name'],
-                            $uname = full['name'],
-                            $image = full['avatar'];
-                        if ($image) {
-                            // For Avatar image
-                            var $output =
-                                '<img src="' + assetPath + 'images/avatars/' + $image + '" alt="Avatar" height="32" width="32">';
-                        } else {
-                            // For Avatar badge
-                            var stateNum = Math.floor(Math.random() * 6) + 1;
-                            var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-                            var $state = states[stateNum],
-                                $name = full['name'],
-                                $initials = $name.match(/\b\w/g) || [];
-                            $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
-                            $output = '<span class="avatar-content">' + $initials + '</span>';
-                        }
-                        var colorClass = $image === '' ? ' bg-light-' + $state + ' ' : '';
+                        var $name = full['name'];
+                        var $apartmentType = full['apartments']['type'];
                         // Creates full output for row
                         var $row_output =
                             '<div class="d-flex justify-content-left align-items-center">' +
-                            '<div class="avatar-wrapper">' +
-                            '<div class="avatar ' +
-                            colorClass +
-                            ' mr-1">' +
-                            $output +
-                            '</div>' +
-                            '</div>' +
+
                             '<div class="d-flex flex-column">' +
-                            '<a href="' + userView + full['id'] + '" class="user_name text-truncate"><span class="font-weight-bold">' +
+                            '<a href="#" class="user_name text-truncate"><span class="font-weight-bold">' +
                             $name +
                             '</span></a>' +
                             '<small class="emp_post text-muted">@' +
-                            $uname +
+                            $apartmentType +
                             '</small>' +
                             '</div>' +
                             '</div>';
@@ -88,34 +55,19 @@ $(function() {
                     }
                 },
                 {
-                    // User Role
-                    targets: 3,
+                    // Price
+                    targets: 2,
                     render: function(data, type, full, meta) {
-                        var $role = full['type'];
-                        // let $property_manager = 'property manager'
-                        // let $super_admin = 'super admin'
-                        // var roleBadgeObj = {
-                        //     agent: feather.icons['user'].toSvg({ class: 'font-medium-3 text-primary mr-50' }),
-                        //     accountant: feather.icons['settings'].toSvg({ class: 'font-medium-3 text-warning mr-50' }),
-                        //     owner: feather.icons['database'].toSvg({ class: 'font-medium-3 text-success mr-50' }),
-                        //     $property_manager: feather.icons['edit-2'].toSvg({ class: 'font-medium-3 text-info mr-50' }),
-                        //     $super_admin: feather.icons['slack'].toSvg({ class: 'font-medium-3 text-danger mr-50' })
-                        // };
-                        return "<span class='text-truncate align-middle'>" + $role + '</span>';
+                        var $amount = new Intl.NumberFormat({ style: 'decimal', decimal: 2 }).format(full['amount']);
+                        return "<span class='text-truncate align-middle'>" + $amount + '</span>';
                     }
                 },
                 {
-                    // User Status
-                    targets: 4,
+                    // Apartment
+                    targets: 3,
                     render: function(data, type, full, meta) {
-                        var $status = full['status'];
-                        return (
-                            '<span class="badge badge-pill ' +
-                            statusObj[$status].class +
-                            '" text-capitalized>' +
-                            statusObj[$status].title +
-                            '</span>'
-                        );
+                        var $apartment = full['apartments']['name'];
+                        return "<span class='text-truncate align-middle'>" + $apartment + '</span>';
                     }
                 },
                 {
@@ -131,14 +83,11 @@ $(function() {
                             '</a>' +
                             '<div class="dropdown-menu dropdown-menu-right">' +
                             '<a href="' +
-                            userView + full['id'] +
+                            rateView + full['apartments']['id'] +
                             '" class="dropdown-item">' +
                             feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) +
                             'Details</a>' +
-                            '<a href="' + userEdit + full['id'] + '" class="dropdown-item">' +
-                            feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) +
-                            'Edit</a>' +
-                            '<a href="javascript:;" class="dropdown-item delete-record">' +
+                            '<a href="javascript:;" onclick = deleteRate(' + full['id'] + ') class="dropdown-item delete-record">' +
                             feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
                             'Delete</a></div>' +
                             '</div>' +
@@ -151,8 +100,8 @@ $(function() {
                 [2, 'desc']
             ],
             dom: '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
-                '<"col-lg-12 col-xl-2" l>' +
-                '<"col-lg-12 col-xl-10 pl-xl-75 pl-0"<"dt-action-buttons d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap mr-1"<"mr-1"f>B>>' +
+                '<"col-lg-12 col-xl-3" l>' +
+                '<"col-lg-12 col-xl-9 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
                 '>t' +
                 '<"d-flex justify-content-between mx-2 row mb-1"' +
                 '<"col-sm-12 col-md-6"i>' +
@@ -192,7 +141,7 @@ $(function() {
                     }
                 },
                 {
-                    text: 'Add New User',
+                    text: 'Add New Rate',
                     className: 'add-new btn btn-primary mt-50',
                     attr: {
                         'data-toggle': 'modal',
@@ -216,7 +165,7 @@ $(function() {
                     renderer: $.fn.dataTable.Responsive.renderer.tableAll({
                         tableClass: 'table',
                         columnDefs: [{
-                                targets: 2,
+                                targets: 1,
                                 visible: false
                             },
                             {
@@ -241,9 +190,9 @@ $(function() {
                     .every(function() {
                         var column = this;
                         var select = $(
-                                '<select id="UserRole" class="form-control text-capitalize mb-md-0 mb-2"><option value=""> Select Role </option></select>'
+                                '<select id="FilterApartment" class="form-control text-capitalize mb-md-0 mb-2"><option value=""> Select Apartment </option></select>'
                             )
-                            .appendTo('.user_role')
+                            .appendTo('.filter_apartment')
                             .on('change', function() {
                                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                 column.search(val ? '^' + val + '$' : '', true, false).draw();
@@ -257,69 +206,6 @@ $(function() {
                                 select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
                             });
                     });
-                // Adding status filter once table initialized
-                this.api()
-                    .columns(4)
-                    .every(function() {
-                        var column = this;
-                        var select = $(
-                                '<select id="FilterTransaction" class="form-control text-capitalize mb-md-0 mb-2xx"><option value=""> Select Status </option></select>'
-                            )
-                            .appendTo('.user_status')
-                            .on('change', function() {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column.search(val ? '^' + val + '$' : '', true, false).draw();
-                            });
-
-                        column
-                            .data()
-                            .unique()
-                            .sort()
-                            .each(function(d, j) {
-                                select.append(
-                                    '<option value="' +
-                                    statusObj[d].title +
-                                    '" class="text-capitalize">' +
-                                    statusObj[d].title +
-                                    '</option>'
-                                );
-                            });
-                    });
-            }
-        });
-    }
-
-    // Check Validity
-    function checkValidity(el) {
-        if (el.validate().checkForm()) {
-            submitBtn.attr('disabled', false);
-        } else {
-            submitBtn.attr('disabled', true);
-        }
-    }
-
-    // Form Validation
-    if (newUserForm.length) {
-        newUserForm.validate({
-            errorClass: 'error',
-            rules: {
-                'user-fullname': {
-                    required: true
-                },
-                'user-name': {
-                    required: true
-                },
-                'user-email': {
-                    required: true
-                }
-            }
-        });
-
-        newUserForm.on('submit', function(e) {
-            var isValid = newUserForm.valid();
-            e.preventDefault();
-            if (isValid) {
-                newUserSidebar.modal('hide');
             }
         });
     }

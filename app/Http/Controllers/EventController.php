@@ -22,8 +22,7 @@ class EventController extends Controller
     
     public function index()
     {
-        $user = User::find(auth()->user()->id);
-        $events = $user->events()->orderBy('started_at', 'desc')->get();
+        $events = Event::all();
         return response()->json(['data' => $events]);
     }
 

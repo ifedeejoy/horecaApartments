@@ -82,7 +82,14 @@
     <script src="{{ asset ('/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}" defer></script>
     <!-- BEGIN Vendor JS-->
 @show
+<script src="{{ asset ('/app-assets/vendors/js/tables/datatable/jszip.min.js') }}" defer></script>
+<script src="{{ asset ('/app-assets/vendors/js/tables/datatable/pdfmake.min.js') }}" defer></script>
+<script src="{{ asset ('/app-assets/vendors/js/tables/datatable/vfs_fonts.js') }}" defer></script>
 
+@if(request()->is('admin/*'))
+<script src="{{ asset ('/app-assets/vendors/js/tables/datatable/buttons.html5.min.js') }}" defer></script>
+<script src="{{ asset ('/app-assets/vendors/js/tables/datatable/buttons.print.min.js') }}" defer></script>
+@endif
 
 <!-- BEGIN: Theme JS-->
     <script src="{{ asset ('/app-assets/js/core/app-menu.js') }}" defer></script>

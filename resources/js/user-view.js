@@ -234,7 +234,45 @@ $(function() {
                 }
             },
             // Buttons with Dropdown
-            buttons: [],
+            buttons: [{
+                    extend: 'pdf',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                },
+                {
+                    extend: 'excel',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                },
+                {
+                    extend: 'print',
+                    className: 'add-new btn btn-primary mt-50',
+                    messageTop: null,
+                    messageBottom: null,
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                },
+                {
+                    text: 'Add New User',
+                    className: 'add-new btn btn-primary mt-50',
+                    attr: {
+                        'data-toggle': 'modal',
+                        'data-target': '#modals-slide-in'
+                    },
+                    init: function(api, node, config) {
+                        $(node).removeClass('btn-secondary');
+                    }
+                }
+            ],
             // For responsive popup
             responsive: {
                 details: {

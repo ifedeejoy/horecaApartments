@@ -752,6 +752,6 @@
 @endsection
 
 @section('page-js')
-    <script src="{{ asset ('/app-assets/js/scripts/pages/app-user-edit.js') }}" defer></script>
+    <script src="{{ asset ('/js/user-edit.js') }}" defer></script>
     @include('partials.form-response')
 @endsection

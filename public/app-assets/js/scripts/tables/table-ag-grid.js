@@ -12,9 +12,9 @@ $(function() {
 
     /*** COLUMN DEFINE ***/
     var columnDefs = [{
-            headerName: 'First Name',
-            field: 'firstname',
-            editable: true,
+            headerName: 'Apartment',
+            field: 'name',
+            editable: false,
             sortable: true,
             filter: true,
             width: 175,
@@ -24,66 +24,41 @@ $(function() {
             headerCheckboxSelection: true
         },
         {
-            headerName: 'Last Name',
-            field: 'lastname',
-            editable: true,
+            headerName: 'Apartment Type',
+            field: 'type',
+            editable: false,
             sortable: true,
             filter: true,
             width: 175
         },
         {
-            headerName: 'Company',
-            field: 'company',
+            headerName: 'Beds',
+            field: 'beds',
             editable: true,
+            sortable: true,
+            filter: true,
+            width: 125
+        },
+        {
+            headerName: 'Availability Status',
+            field: 'status',
+            editable: false,
             sortable: true,
             filter: true,
             width: 250
         },
         {
-            headerName: 'City',
-            field: 'city',
+            headerName: 'Maintenance Status',
+            field: 'maintenance_status',
             editable: true,
             sortable: true,
             filter: true,
             width: 125
         },
         {
-            headerName: 'Country',
-            field: 'country',
-            editable: true,
-            sortable: true,
-            filter: true,
-            width: 150
-        },
-        {
-            headerName: 'State',
-            field: 'state',
-            editable: true,
-            sortable: true,
-            filter: true,
-            width: 125
-        },
-        {
-            headerName: 'Zip',
-            field: 'zip',
-            editable: true,
-            sortable: true,
-            filter: true,
-            width: 125
-        },
-        {
-            headerName: 'Email',
-            field: 'email',
-            editable: true,
-            sortable: true,
-            filter: true,
-            width: 260,
-            pinned: 'left'
-        },
-        {
-            headerName: 'Followers',
-            field: 'followers',
-            editable: true,
+            headerName: 'Address',
+            field: 'address',
+            editable: false,
             sortable: true,
             filter: true,
             width: 150
@@ -95,13 +70,15 @@ $(function() {
         columnDefs: columnDefs,
         rowSelection: 'multiple',
         floatingFilter: true,
-        filter: true,
+        defaultColDef: {
+            filter: 'agTextColumnFilter',
+            enableColResize: true
+        },
         pagination: true,
         paginationPageSize: 20,
         pivotPanelShow: 'always',
         colResizeDefault: 'shift',
-        animateRows: true,
-        resizable: true
+        animateRows: true
     };
 
     /*** DEFINED TABLE VARIABLE ***/
@@ -114,7 +91,7 @@ $(function() {
 
     /*** GET TABLE DATA FROM URL ***/
 
-    agGrid.simpleHttpRequest({ url: assetPath + 'data/ag-grid-data.json' }).then(function(data) {
+    agGrid.simpleHttpRequest({ url: '/api/apartments' }).then(function(data) {
         console.log(data);
         gridOptions.api.setRowData(data);
     });
@@ -150,15 +127,15 @@ $(function() {
     /*** SET OR REMOVE EMAIL AS PINNED DEPENDING ON DEVICE SIZE ***/
 
     if ($(window).width() < 768) {
-        gridOptions.columnApi.setColumnPinned('email', null);
+        gridOptions.columnApi.setColumnPinned('name', null);
     } else {
-        gridOptions.columnApi.setColumnPinned('email', 'left');
+        gridOptions.columnApi.setColumnPinned('name', 'left');
     }
     $(window).on('resize', function() {
         if ($(window).width() < 768) {
-            gridOptions.columnApi.setColumnPinned('email', null);
+            gridOptions.columnApi.setColumnPinned('name', null);
         } else {
-            gridOptions.columnApi.setColumnPinned('email', 'left');
+            gridOptions.columnApi.setColumnPinned('name', 'left');
         }
     });
 });
