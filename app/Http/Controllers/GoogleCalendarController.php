@@ -55,7 +55,7 @@ class GoogleCalendarController extends Controller
                                     ]
                                 );
         endforeach;
-        
+        return redirect('front-desk/sync-events');
         
     }
 

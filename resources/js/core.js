@@ -383,3 +383,5 @@ window.typeOptions = function(val) {
         $("#balance").attr('disabled', 'disabled')
     }
 }
+
+export { getUrl }

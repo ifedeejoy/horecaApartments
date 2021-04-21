@@ -326,8 +326,7 @@
 
 @section('page-js')
     @parent
-    <script type="module" src="{{ asset ('/js/core.js') }}" defer></script>
-    <script type="module" src="{{ asset ('/app-assets/js/scripts/pages/app-apartment-view.js') }}" defer></script>
+    <script type="module" src="{{ asset ('/js/apartment-view.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/js/scripts/forms/form-quill-editor.js') }}" defer></script>
     <script type="module" defer>
         $('.touchspin').TouchSpin({

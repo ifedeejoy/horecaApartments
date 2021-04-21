@@ -22,9 +22,9 @@
                 <div class="col app-calendar-sidebar flex-grow-0 overflow-hidden d-flex flex-column" id="app-calendar-sidebar">
                     <div class="sidebar-wrapper">
                         <div class="card-body d-flex justify-content-center">
-                            <button class="btn btn-primary btn-toggle-sidebar btn-block" data-toggle="modal" data-target="#add-new-sidebar">
+                            <a href="/front-desk/sync-events" class="btn btn-primary btn-toggle-sidebar btn-block">
                                 <span class="align-middle">Sync Calendar</span>
-                            </button>
+                            </a>
                         </div>
                         <div class="card-body pb-0">
                             <h5 class="section-label mb-1">
@@ -82,6 +82,6 @@
 
 @section('page-js')
     @parent
-    <script src="{{ asset ('/app-assets/js/scripts/pages/app-calendar-events.js') }}" defer></script>
-    <script src="{{ asset ('/app-assets/js/scripts/pages/app-calendar.js') }}" defer></script>
+    <script src="{{ asset ('/js/calendar-events.js') }}" defer></script>
+    <script src="{{ asset ('/js/calendar.js') }}" defer></script>
 @endsection

@@ -81,7 +81,7 @@ class ReservationController extends Controller
                     $reference = mt_rand();
                     $user = Auth::user()->id;
                     // create guest profile
-                    $createGuest = $this->createGuest($request->all());
+                    $createGuest = $this->createGuest($request);
                     if(is_array($createGuest)):
                         if($createGuest['status'] == 'successful'):
                             $guest = $createGuest['id'];
@@ -199,7 +199,8 @@ class ReservationController extends Controller
             else:
                 $view = $request->is('print-invoice/*') ? 'front-desk.print-invoice' : 'front-desk.invoice';
             endif;
-            return view($view)->with('reservations', $reservation);
+            return response(view($view, ['reservations' => $reservation]))
+                    ->header('X-FRAME-OPTIONS','');
         else:
             $apartments = Apartments::where('status', 'available')->get();
             $reservation = Reservation::where('id', $request->id)->with('apartments', 'rate', 'reservationPayments', 'guest', 'staff')->first();

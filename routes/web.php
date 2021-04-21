@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\ApartmentsController;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\gcalController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InhouseController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
-use App\Models\Apartments;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\GoogleAccountController;
+use App\Http\Controllers\GoogleCalendarController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,10 +49,10 @@ Route::get('front-desk/folio/{id}', [InhouseController::class, 'show'])->middlew
 Route::get('front-desk/receipt/{id}', [InhouseController::class, 'show'])->middleware('auth')->name('receipt');
 Route::get('front-desk/calendar', [CalendarController::class, 'index'])->middleware('auth')->name('calendar');
 // Calendar doings
-Route::get('front-desk/sync-calendar', 'App\Http\Controllers\GoogleCalendarController@store')->middleware('auth')->name('sync-calendar');
-Route::get('front-desk/sync-events', 'App\Http\Controllers\EventController@store')->middleware('auth')->name('sync-events');
-Route::get('google/oauth', 'App\Http\Controllers\GoogleAccountController@store')->middleware('auth')->name('google-oauth');
-Route::get('front-desk/events', 'App\Http\Controllers\EventController@index')->name('events')->middleware('auth');
+Route::get('front-desk/sync-calendar', [GoogleCalendarController::class, 'store'])->middleware('auth')->name('sync-calendar');
+Route::get('front-desk/sync-events', [EventController::class, 'store'])->middleware('auth')->name('sync-events');
+Route::get('google/oauth', [GoogleAccountController::class, 'store'])->middleware('auth')->name('google-oauth');
+Route::get('front-desk/events', [EventController::class, 'index'])->name('events');
 // Post Requests
 Route::post('front-desk/make-reservation', [ReservationController::class, 'store'])->middleware('auth')->name('make-reservation');
 Route::post('front-desk/add-guest-bill/{id}', [InhouseController::class, 'addBill'])->middleware('auth')->name('add-guest-bill');
@@ -60,7 +62,7 @@ Route::post('front-desk/checkout/{id}', [InhouseController::class, 'checkout'])-
 Route::post('front-desk/move-apartment/{id}', [InhouseController::class, 'roomMove'])->middleware('auth')->name('move-apartment');
 Route::post('front-desk/checkin-guest/{reservation}', [ReservationController::class, 'checkinGuest'])->middleware('auth')->name('checkin-guest');
 
-
+// front-desk views
 Route::view('dashboard', 'front-desk.home')->middleware('auth');
 Route::view('home', 'front-desk.home')->middleware('auth');
 // PUT Requests
@@ -69,25 +71,28 @@ Route::put('front-desk/edit-guest/{id}', [GuestController::class, 'update'])->mi
 Route::put('front-desk/edit-reservation/{id}', [ReservationController::class, 'update'])->middleware('auth')->name('edit-reservation');
 // Delete Requests
 Route::delete('front-desk/delete-reservation/{id}', [ReservationController::class, 'destroy'])->middleware('auth')->name('delete-reservation');
+
 // Admin
 Route::get('admin/apartments', [ApartmentsController::class, 'index'])->middleware('auth')->name('apartments');
 Route::get('admin/apartment/{id}', [ApartmentsController::class, 'show'])->middleware('auth')->name('apartment');
-Route::get('admin/agents', [UserController::class, 'index'])->middleware('auth')->name('agents');
-Route::get('admin/owners',  [UserController::class, 'index'])->middleware('auth')->name('owners');
-Route::get('admin/employees',  [UserController::class, 'index'])->middleware('auth')->name('employees');
+Route::get('admin/users/{type}', [UserController::class, 'index'])->middleware('auth');
+Route::get('admin/user/{id}', [UserController::class, 'show'])->middleware('auth');
+Route::get('admin/edit-user/{user}', [UserController::class, 'edit'])->middleware('auth');
 Route::get('admin/rates', [RateController::class, 'index'])->middleware('auth')->name('rates');
 Route::get('admin/maintenance', [MaintenanceController::class, 'index'])->middleware('auth')->name('maintenance');
 // post requests
 Route::post('admin/create-apartment', [ApartmentsController::class, 'store'])->middleware('auth')->name('create-apartment');
 Route::post('admin/creates-owner', [UserController::class, 'store'])->middleware('auth')->name('creates-owner');
 Route::post('admin/creates-rate', [RateController::class, 'store'])->middleware('auth')->name('creates-rate');
-
 Route::post('admin/edit-apartment/{id}', [ApartmentsController::class, 'update'])->middleware('auth')->name('edit-apartment');
 Route::post('admin/edit-rate', [RateController::class, 'update'])->middleware('auth')->name('edit-rate');
+// Put requests
+Route::put('admin/update-user/{id}', [UserController::class, 'update'])->middleware('auth')->name('update-user');
 // delete requests
 Route::delete('admin/apartment/{id}', [ApartmentsController::class, 'destroy'])->middleware('auth')->name('delete-apartment');
 Route::delete('admin/rates/{rate}', [RateController::class, 'destroy'])->middleware('auth')->name('delete-rate');
 
+// admin views
 
 // Auth
 Auth::routes();

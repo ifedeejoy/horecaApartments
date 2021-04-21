@@ -116,8 +116,7 @@
 @endsection
 
 @section('page-js')
-    <script src="{{ asset ('/app-assets/js/scripts/pages/app-owner-list.js') }}" defer></script>
-    <script src="{{ asset ('/app-assets/js/scripts/pages/page-knowledge-base.js')}}" defer></script>
+    <script src="{{ asset ('/js/users-list.js') }}" defer></script>
     <script type="module" defer>
         $("#user-country").select2({
             placeholder: 'Select Country'

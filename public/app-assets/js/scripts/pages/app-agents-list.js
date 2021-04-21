@@ -31,7 +31,7 @@ $(function() {
     // Users List datatable
     if (dtUserTable.length) {
         dtUserTable.DataTable({
-            ajax: '/api/users/owners', // JSON file to add data
+            ajax: '/api/users/agents', // JSON file to add data
             columns: [
                 // columns according to JSON
                 { data: 'id' },

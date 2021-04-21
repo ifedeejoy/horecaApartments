@@ -26,7 +26,24 @@ trait UserTrait
 
     public function getUsers(string $type)
     {
-        $users = User::where('type', $type)->get();
+        switch(true):
+            case  ($type == "admin"):
+                $usertype = 'super-admin';
+                break;
+            case ($type == "owners" || $type == "owner"):
+                $usertype = 'owner';
+                break;
+            case ($type == "managers" || $type == "property manager"):
+                $usertype = 'property manager';
+                break;
+            case ($type == "agents"):
+                $usertype = 'agents';
+                break;
+            case ($type == "employees" || $type == "staff"):
+                $usertype = 'staff';
+                break;
+        endswitch;
+        $users = User::where('type', $usertype)->get();
         return $users;
     }
 

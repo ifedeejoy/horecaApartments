@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/forms/select/select2.min.css') }}">
 @endsection
 
 @section('page-css')
@@ -36,7 +37,6 @@
                             <th>User</th>
                             <th>Email</th>
                             <th>Role</th>
-                            <th>Plan</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -55,35 +55,40 @@
                         <div class="modal-body flex-grow-1">
                             <div class="form-group">
                                 <label class="form-label" for="basic-icon-default-fullname">Full Name</label>
-                                <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" placeholder="John Doe" name="name" required />
+                                <input type="text" inputmode="text" class="form-control dt-full-name" id="basic-icon-default-fullname" placeholder="John Doe" name="name" required />
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="basic-icon-default-email">Email</label>
-                                <input type="text" id="basic-icon-default-email" class="form-control dt-email" placeholder="john.doe@example.com" name="email" required/>
+                                <input type="text" inputmode="email" id="basic-icon-default-email" class="form-control dt-email" placeholder="john.doe@example.com" name="email" required/>
                                 <small class="form-text text-muted"> You can use letters, numbers & periods </small>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="user-type">User Type</label>
+                                <label class="form-label" for="basic-icon-default-phone">Phone</label>
+                                <input type="text" inputmode="tel" id="basic-icon-default-phone" class="form-control dt-phone" placeholder="+234-903-521-7974" name="phone" required/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="basic-icon-default-address">Address</label>
+                                <input type="text" inputmode="text" class="form-control dt-full-name" id="basic-icon-default-address" placeholder="Lekki, Lagos" name="address" required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="user-country">Country</label>
+                                <select class="select2 w-100" id="user-country" name="country">
+                                    <option label=" "></option>
+                                    @include('partials.country-options')
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="user-type">Select Role</label>
                                 <select id="user-type" name="type" class="form-control" required>
-                                    <option value="Agent">Agent</option>
-                                    <option value="Accountant">Accountant</option>
-                                    <option value="Manager">Manager</option>
-                                    <option value="Owner">Owner</option>
-                                    <option value="Property Manager">Property Manager</option>
-                                    <option value="Staff">Staff</option>
+                                    <option value="agents">Agent</option>
+                                    <option value="accountant">Accountant</option>
+                                    <option value="owner">Owner</option>
+                                    <option value="property manager">Property Manager</option>
+                                    <option value="staff">Staff</option>
+                                    <option value="super-admin">Super Admin</option>
                                 </select>
                             </div>
-                            <div class="form-group mb-2">
-                                <label class="form-label" for="user-department">Select Department</label>
-                                <select id="user-department" name="department" class="form-control" required>
-                                    <option value="Admin">Admin</option>
-                                    <option value="Account">Account</option>
-                                    <option value="FrontDesk">Front Desk</option>
-                                    <option value="FandB">Food and Beverage</option>
-                                    <option value="Housekeeping">Housekeeping/Maintenance</option>
-                                </select>
-                            </div>
-                            <p class="card-text ml-2">Permission according to role</p>
+                            <p class="card-text ml-2">Permissions</p>
                             <div class="table-responsive">
                                 <table class="table table-striped table-borderless">
                                     <thead class="thead-light">
@@ -120,6 +125,33 @@
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input" id="reservations-delete" value="delete reservations" name="permissions[]"/>
                                                     <label class="custom-control-label" for="reservations-delete"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Calendar</td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="calendars-read" name="permissions[]" value="view calendars"/>
+                                                    <label class="custom-control-label" for="calendars-read"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="calendars-write" name="permissions[]" value="manage calendars"/>
+                                                    <label class="custom-control-label" for="calendars-write"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="calendars-create" name="permissions[]" value="create calendars"/>
+                                                    <label class="custom-control-label" for="calendars-create"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="calendars-delete" name="permissions[]" value="delete calendars"/>
+                                                    <label class="custom-control-label" for="calendars-delete"></label>
                                                 </div>
                                             </td>
                                         </tr>
@@ -366,10 +398,15 @@
     <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}" defer></script>
+    <script src="{{ asset ('/app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
-    <script src="{{ asset ('/app-assets/js/scripts/pages/app-user-list.js') }}" defer></script>
-    <script src="{{ asset ('/app-assets/js/scripts/pages/page-knowledge-base.js')}}" defer></script>
+    <script src="{{ asset ('/js/users-list.js') }}" defer></script>
+    <script type="module" defer>
+        $("#user-country").select2({
+            placeholder: 'Select Country'
+        });
+    </script>
     @include('partials.form-response')
 @endsection

@@ -38,7 +38,11 @@ Class Google
     public function connectUsing($token)
     {
         $this->client->setAccessToken($token);
-
+        if($this->client->isAccessTokenExpired()):
+            if($this->client->getRefreshToken()):
+                $this->client->fetchAccessTokenWithRefreshToken($this->client->getRefreshToken());
+            endif;
+        endif;
         return $this;
     }
     
