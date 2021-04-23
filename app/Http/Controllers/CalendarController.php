@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Apartments;
+use Spatie\Permission\Models\Permission;
 use App\Models\Guest;
+use App\Models\User;
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class CalendarController extends Controller
@@ -19,6 +22,12 @@ class CalendarController extends Controller
         $apartments = Apartments::all();
         $guests = Guest::all();
         $reservations = Reservation::where('status', '!=', 'checkedout')->with('apartments', 'guest')->get();
+        $user = User::find(Auth::user()->id);
+        $googleAccount = $user->googleAccount->count();
+        if($googleAccount < 1 && $user->hasPermissionTo('create calendar')):
+            Permission::create(['name' => 'connect gooogle account']);
+            $user->givePermissionTo('connect google account');
+        endif;
         if(request()->is('front-desk/calendar')):
             return view('front-desk.calendar')->with(['apartments' => $apartments, 'guests' => $guests, 'reservations' => $reservations]);
         else:
