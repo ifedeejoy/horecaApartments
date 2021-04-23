@@ -73,12 +73,12 @@ class UserController extends Controller
             $user->type = $request->input('type');
             $user->save();
 
-            // foreach($request->input('permissions') as $permission):
-            //     $check = Permission::where('name', $permission)->count();
-            //     if($check < 1):
-            //         Permission::create(['name' => $permission]);
-            //     endif;
-            // endforeach;
+            foreach($request->input('permissions') as $permission):
+                $check = Permission::where('name', $permission)->count();
+                if($check < 1):
+                    Permission::create(['name' => $permission]);
+                endif;
+            endforeach;
 
             if($request->input('type') == 'super-admin'):
                 $user->assignRole($request->input('type'));
