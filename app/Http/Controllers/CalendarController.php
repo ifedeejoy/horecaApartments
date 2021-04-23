@@ -19,17 +19,17 @@ class CalendarController extends Controller
      */
     public function index()
     {
-        $apartments = Apartments::all();
-        $guests = Guest::all();
         $reservations = Reservation::where('status', '!=', 'checkedout')->with('apartments', 'guest')->get();
-        $user = User::find(auth()->user()->id);
-        $googleAccount = $user->googleAccount;
-        if(is_null($googleAccount) && $user->hasPermissionTo('create calendars')):
-            Permission::create(['name' => 'connect gooogle account']);
-            $user->givePermissionTo('connect google account');
+        if(Auth::check() == true):
+            $user = User::find(auth()->user()->id);
+            $googleAccount = $user->googleAccount;
+            if(is_null($googleAccount) && $user->hasPermissionTo('create calendars')):
+                Permission::create(['name' => 'connect gooogle account']);
+                $user->givePermissionTo('connect google account');
+            endif;
         endif;
         if(request()->is('front-desk/calendar')):
-            return view('front-desk.calendar')->with(['apartments' => $apartments, 'guests' => $guests, 'reservations' => $reservations]);
+            return view('front-desk.calendar');
         else:
             return response()->json(['reservations' => $reservations]);
         endif;
