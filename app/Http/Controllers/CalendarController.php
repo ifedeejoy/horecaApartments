@@ -22,7 +22,7 @@ class CalendarController extends Controller
         $apartments = Apartments::all();
         $guests = Guest::all();
         $reservations = Reservation::where('status', '!=', 'checkedout')->with('apartments', 'guest')->get();
-        $user = User::find(Auth::user()->id);
+        $user = User::find(auth()->user()->id);
         $googleAccount = $user->googleAccount;
         if(is_null($googleAccount) && $user->hasPermissionTo('create calendars')):
             Permission::create(['name' => 'connect gooogle account']);
