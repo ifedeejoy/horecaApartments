@@ -66,7 +66,7 @@ class GoogleAccountController extends Controller
                 'token' => $google->getAccessToken(),
             ]
         );
-        return redirect()->route('calendar');
+        return redirect()->route('calendar'); 
     }
 
     /**
