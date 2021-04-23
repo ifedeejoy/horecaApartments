@@ -23,8 +23,8 @@ class CalendarController extends Controller
         $guests = Guest::all();
         $reservations = Reservation::where('status', '!=', 'checkedout')->with('apartments', 'guest')->get();
         $user = User::find(Auth::user()->id);
-        $googleAccount = $user->googleAccount->count();
-        if($googleAccount < 1 && $user->hasPermissionTo('create calendar')):
+        $googleAccount = $user->googleAccount;
+        if(is_null($googleAccount) && $user->hasPermissionTo('create calendar')):
             Permission::create(['name' => 'connect gooogle account']);
             $user->givePermissionTo('connect google account');
         endif;
