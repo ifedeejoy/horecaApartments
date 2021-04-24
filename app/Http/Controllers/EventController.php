@@ -67,7 +67,7 @@ class EventController extends Controller
             if($event->status == 'cancelled'):
                 $event->where('google_id', $event->id)->delete();
             endif;
-            if(!empty($event->description)):
+            if(!empty($event->summary)):
                 echo ($event->organizer->email);
                 // $calendars = $gcal->where('calendar_id', $event->creator->email)->orWhere('calendar_id', $event->organizer->email)->first();
                 // dd($calendars);
