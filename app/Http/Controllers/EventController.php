@@ -72,8 +72,9 @@ class EventController extends Controller
                 if(is_null($calendar)):
                     $attendees = collect($event->attendees);
                     $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
+                    dd($filteredAttendees);
                     if(!empty($attendees) || !empty($filteredAttendees)):
-                    $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
+                        $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
                     endif;
                 endif;
                 if(!empty($calendar)):
