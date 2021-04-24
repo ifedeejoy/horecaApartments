@@ -69,15 +69,16 @@ class EventController extends Controller
             endif;
             if(!empty($event->description)):
                 $calendars = $gcal->where('calendar_id', $event->creator->email)->orWhere('calendar_id', $event->organizer->email)->get();
-                if(is_null($calendar)):
-                    $attendees = collect($event->attendees);
-                    $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
-                    if(!empty($attendees) || !empty($filteredAttendees)):
-                        $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
-                    endif;
-                endif;
+                dd($calendars);
                 if(!empty($calendar)):
                     foreach($calendars as $calendar):
+                        if(is_null($calendar)):
+                            $attendees = collect($event->attendees);
+                            $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
+                            if(!empty($attendees) || !empty($filteredAttendees)):
+                                $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
+                            endif;
+                        endif;
                         $checkEvent = Event::where('google_id', $event->id)->count();
                         if($checkEvent < 1):
                             $calendar->event()->updateOrCreate(
