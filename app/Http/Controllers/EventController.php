@@ -78,12 +78,13 @@ class EventController extends Controller
                 endif;
                 if(!empty($calendar)):
                     $checkEvent = Event::where('google_id', $event->id)->count();
+                    $description = is_null($event->description) ? $event->summary : $event->description;
                     if($checkEvent < 1):
                         $calendar->event()->updateOrCreate(
                             ['google_id' => $event->id],
                             [
                                 'name' => $event->summary,
-                                'description' => $event->description,
+                                'description' => $description,
                                 'allday' => $this->isAllDayEvent($event), 
                                 'started_at' => $this->parseDatetime($event->start), 
                                 'ended_at' => $this->parseDatetime($event->end), 
