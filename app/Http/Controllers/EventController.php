@@ -61,7 +61,7 @@ class EventController extends Controller
             endforeach;
         endforeach;
         $listEvents->all();
-        dd($listEvents);
+        dd($calendars);
         // events
         $events = collect();
         foreach($listEvents as $event):
