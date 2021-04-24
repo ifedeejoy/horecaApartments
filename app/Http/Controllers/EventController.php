@@ -68,14 +68,15 @@ class EventController extends Controller
             if($event->status == 'cancelled'):
                 $event->where('google_id', $event->id)->delete();
             endif;
-            if(!empty($event->description)):
+            if(!empty($event->description) || !empty($event->summary)):
                 $checkEvent = Event::where('google_id', $event->id)->count();
+                $description = is_null($event->description) ? $event->description : $event->summary;
                 if($checkEvent < 1):
                     $calendar->event()->updateOrCreate(
                         ['google_id' => $event->id],
                         [
                             'name' => $event->summary,
-                            'description' => $event->description,
+                            'description' => $description,
                             'allday' => $this->isAllDayEvent($event), 
                             'started_at' => $this->parseDatetime($event->start), 
                             'ended_at' => $this->parseDatetime($event->end), 
