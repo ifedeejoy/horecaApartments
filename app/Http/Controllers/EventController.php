@@ -68,7 +68,7 @@ class EventController extends Controller
                 $event->where('google_id', $event->id)->delete();
             endif;
             if(!empty($event->description)):
-                $calendar = $gcal->where('calendar_id', $event->creator->email)->orWhere('calendar_id', $event->organizer->email)->first();
+                $calendar = $gcal->where('calendar_id', $event->organizer->email)->first();
                 if(is_null($calendar)):
                     $attendees = collect($event->attendees);
                     $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
