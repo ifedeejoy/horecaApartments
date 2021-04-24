@@ -27,7 +27,7 @@
                                 <span class="align-middle">Connect Google Account</span>
                             </a>
                             @elseif('manage calendars' && $connected == true)
-                            <a href="/front-desk/sync-events" class="btn btn-primary btn-toggle-sidebar btn-block">
+                            <a href="/front-desk/sync-calendar" class="btn btn-primary btn-toggle-sidebar btn-block">
                                 <span class="align-middle">Sync Calendar</span>
                             </a>  
                             @endif
