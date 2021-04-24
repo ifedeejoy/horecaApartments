@@ -20,6 +20,7 @@ class CalendarController extends Controller
     public function index()
     {
         $reservations = Reservation::where('status', '!=', 'checkedout')->with('apartments', 'guest')->get();
+        $connected = null;
         if(Auth::check() == true):
             $user = User::find(auth()->user()->id);
             $googleAccount = $user->googleAccount;
@@ -30,7 +31,7 @@ class CalendarController extends Controller
                 endif;
                 $user->givePermissionTo('connect google account');
                 $connected = false;
-            else:
+            elseif($user->hasPermissionTo('create calendars') && !empty($googleAccount)):
                 $connected = true;
             endif;
         endif;
