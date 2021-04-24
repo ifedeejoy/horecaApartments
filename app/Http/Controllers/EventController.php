@@ -63,7 +63,7 @@ class EventController extends Controller
         $listEvents->all();
         // events
         $events = collect();
-        dd($events);
+        dd($listEvents);
         foreach($listEvents as $event):
             if($event->status == 'cancelled'):
                 $event->where('google_id', $event->id)->delete();
