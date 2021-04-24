@@ -22,15 +22,15 @@
                 <div class="col app-calendar-sidebar flex-grow-0 overflow-hidden d-flex flex-column" id="app-calendar-sidebar">
                     <div class="sidebar-wrapper">
                         <div class="card-body d-flex justify-content-center">
-                            @can('connect google account')
+                            @if(auth()->user()->hasPermissionTo('create calendars') && $connected == false)
                             <a href="/google/oauth" class="btn btn-primary btn-toggle-sidebar btn-block">
                                 <span class="align-middle">Connect Google Account</span>
                             </a>
-                            @elsecan('manage calendars')
+                            @elseif('manage calendars' && $connected == true)
                             <a href="/front-desk/sync-events" class="btn btn-primary btn-toggle-sidebar btn-block">
                                 <span class="align-middle">Sync Calendar</span>
                             </a>  
-                            @endcan
+                            @endif
                         </div>
                         <div class="card-body pb-0">
                             <h5 class="section-label mb-1">

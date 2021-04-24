@@ -13,7 +13,6 @@ Class Google
         $client->setApplicationName('Horeca Apartment Calendar');
         $client->setScopes(config('services.google.scopes'));
         $client->setAuthConfig(storage_path('/app/keys/oauth-credentials.json'));
-        $client->setRedirectUri(config('app.url'));
         $client->setAccessType('offline');
         $client->setIncludeGrantedScopes(true);
         $client->setApprovalPrompt('force');

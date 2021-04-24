@@ -24,12 +24,18 @@ class CalendarController extends Controller
             $user = User::find(auth()->user()->id);
             $googleAccount = $user->googleAccount;
             if(is_null($googleAccount) && $user->hasPermissionTo('create calendars')):
-                Permission::create(['name' => 'connect gooogle account']);
+                $connect = Permission::where('name', 'connect google account')->count();
+                if($connect < 1):
+                    Permission::create(['name' => 'connect google account']);
+                endif;
                 $user->givePermissionTo('connect google account');
+                $connected = false;
+            else:
+                $connected = true;
             endif;
         endif;
         if(request()->is('front-desk/calendar')):
-            return view('front-desk.calendar');
+            return view('front-desk.calendar')->with('connected', $connected);
         else:
             return response()->json(['reservations' => $reservations]);
         endif;
