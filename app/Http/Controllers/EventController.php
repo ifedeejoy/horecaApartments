@@ -68,39 +68,39 @@ class EventController extends Controller
                 $event->where('google_id', $event->id)->delete();
             endif;
             if(!empty($event->description)):
-                dd($event->organizer->email);
+                echo ($event->organizer->email);
                 // $calendars = $gcal->where('calendar_id', $event->creator->email)->orWhere('calendar_id', $event->organizer->email)->first();
                 // dd($calendars);
-                if(!empty($calendar)):
-                    foreach($calendars as $calendar):
-                        if(is_null($calendar)):
-                            $attendees = collect($event->attendees);
-                            $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
-                            if(!empty($attendees) || !empty($filteredAttendees)):
-                                $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
-                            endif;
-                        endif;
-                        $checkEvent = Event::where('google_id', $event->id)->count();
-                        if($checkEvent < 1):
-                            $calendar->event()->updateOrCreate(
-                                ['google_id' => $event->id],
-                                [
-                                    'name' => $event->summary,
-                                    'description' => $event->description,
-                                    'allday' => $this->isAllDayEvent($event), 
-                                    'started_at' => $this->parseDatetime($event->start), 
-                                    'ended_at' => $this->parseDatetime($event->end), 
-                                    'user_id' => auth()->user()->id,
-                                    'calendar_id' => $event->creator->email,
-                                    'google_id' => $event->id,
-                                ]
-                            );
-                        endif;
-                    endforeach;
-                endif;
+                // if(!empty($calendar)):
+                //     foreach($calendars as $calendar):
+                //         if(is_null($calendar)):
+                //             $attendees = collect($event->attendees);
+                //             $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
+                //             if(!empty($attendees) || !empty($filteredAttendees)):
+                //                 $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
+                //             endif;
+                //         endif;
+                //         $checkEvent = Event::where('google_id', $event->id)->count();
+                //         if($checkEvent < 1):
+                //             $calendar->event()->updateOrCreate(
+                //                 ['google_id' => $event->id],
+                //                 [
+                //                     'name' => $event->summary,
+                //                     'description' => $event->description,
+                //                     'allday' => $this->isAllDayEvent($event), 
+                //                     'started_at' => $this->parseDatetime($event->start), 
+                //                     'ended_at' => $this->parseDatetime($event->end), 
+                //                     'user_id' => auth()->user()->id,
+                //                     'calendar_id' => $event->creator->email,
+                //                     'google_id' => $event->id,
+                //                 ]
+                //             );
+                //         endif;
+                //     endforeach;
+                // endif;
             endif;
         endforeach;
-        return redirect('front-desk/calendar');
+        // return redirect('front-desk/calendar');
     }
     
     /**
