@@ -68,31 +68,21 @@ class EventController extends Controller
                 $event->where('google_id', $event->id)->delete();
             endif;
             if(!empty($event->description)):
-                $calendar = $gcal->where('calendar_id', $event->creator->email)->first();
-                if(is_null($calendar)):
-                    $attendees = collect($event->attendees);
-                    $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
-                    if(!empty($attendees) || !empty($filteredAttendees)):
-                        $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
-                    endif;
-                endif;
-                if(!empty($calendar)):
-                    $checkEvent = Event::where('google_id', $event->id)->count();
-                    if($checkEvent < 1):
-                        $calendar->event()->updateOrCreate(
-                            ['google_id' => $event->id],
-                            [
-                                'name' => $event->summary,
-                                'description' => $event->description,
-                                'allday' => $this->isAllDayEvent($event), 
-                                'started_at' => $this->parseDatetime($event->start), 
-                                'ended_at' => $this->parseDatetime($event->end), 
-                                'user_id' => auth()->user()->id,
-                                'calendar_id' => $event->creator->email,
-                                'google_id' => $event->id,
-                            ]
-                        );
-                    endif;
+                $checkEvent = Event::where('google_id', $event->id)->count();
+                if($checkEvent < 1):
+                    $calendar->event()->updateOrCreate(
+                        ['google_id' => $event->id],
+                        [
+                            'name' => $event->summary,
+                            'description' => $event->description,
+                            'allday' => $this->isAllDayEvent($event), 
+                            'started_at' => $this->parseDatetime($event->start), 
+                            'ended_at' => $this->parseDatetime($event->end), 
+                            'user_id' => auth()->user()->id,
+                            'calendar_id' => $event->creator->email,
+                            'google_id' => $event->id,
+                        ]
+                    );
                 endif;
             endif;
         endforeach;
