@@ -51,7 +51,7 @@ Route::get('front-desk/calendar', [CalendarController::class, 'index'])->middlew
 // Calendar doings
 Route::get('front-desk/sync-calendar', [GoogleCalendarController::class, 'store'])->middleware('auth')->name('sync-calendar');
 Route::get('front-desk/sync-events', [EventController::class, 'store'])->middleware('auth')->name('sync-events');
-Route::get('google/oauth', [GoogleAccountController::class, 'store'])->middleware('auth')->name('google-oauth');
+Route::get('google/oauth', [GoogleAccountController::class, 'store'])->name('google-oauth');
 Route::get('front-desk/events', [EventController::class, 'index'])->name('events');
 // Post Requests
 Route::post('front-desk/make-reservation', [ReservationController::class, 'store'])->middleware('auth')->name('make-reservation');
