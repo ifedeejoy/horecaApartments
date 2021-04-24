@@ -61,7 +61,6 @@ class EventController extends Controller
             endforeach;
         endforeach;
         $listEvents->all();
-        dd($calendars);
         // events
         $events = collect();
         foreach($listEvents as $event):
@@ -73,7 +72,9 @@ class EventController extends Controller
                 if(is_null($calendar)):
                     $attendees = collect($event->attendees);
                     $filteredAttendees = $attendees->whereIn('email', auth()->user()->email)->first();
+                    if(!empty($attendees) || !empty($filteredAttendees)):
                     $calendar = $gcal->where('calendar_id', $filteredAttendees->email)->first();
+                    endif;
                 endif;
                 if(!empty($calendar)):
                     $checkEvent = Event::where('google_id', $event->id)->count();
