@@ -54,6 +54,7 @@ class EventController extends Controller
         );
         // get events
         $listEvents = collect();
+        dd($listEvents);
         foreach ($calendars as $calendar):
             $events = $service->events->listEvents($calendar->id, $options);
             foreach ($events as $event):
