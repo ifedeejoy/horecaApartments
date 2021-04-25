@@ -22,7 +22,22 @@ $(function() {
     }
     let currentUrl = getUrl(window.location.href)
     let apiUrl = currentUrl.replace('admin', 'api')
-        // Users List datatable
+    let addNewBtn = {
+        text: 'Add New User',
+        className: 'add-new btn btn-primary mt-50',
+        attr: {
+            'data-toggle': 'modal',
+            'data-target': '#modals-slide-in'
+        },
+        init: function(api, node, config) {
+            $(node).removeClass('btn-secondary');
+        }
+    }
+    let addNew
+    if (currentUrl == '/admin/users/admin') {
+        addNew = addNewBtn
+    }
+    // Users List datatable
     if (dtUserTable.length) {
         dtUserTable.DataTable({
             ajax: apiUrl, // JSON file to add data
@@ -191,17 +206,7 @@ $(function() {
                         $(node).removeClass('btn-secondary');
                     }
                 },
-                {
-                    text: 'Add New User',
-                    className: 'add-new btn btn-primary mt-50',
-                    attr: {
-                        'data-toggle': 'modal',
-                        'data-target': '#modals-slide-in'
-                    },
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-secondary');
-                    }
-                }
+                addNew
             ],
             // For responsive popup
             responsive: {

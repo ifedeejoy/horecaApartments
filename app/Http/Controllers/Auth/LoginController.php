@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -55,7 +57,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             // Authentication passed...
             $request->session()->regenerate();
-            $user = Auth::user();
+            $user = User::find(auth()->user()->id);
             $user->status = 'online';
             $user->save();
             return redirect()->intended('dashboard');
@@ -64,5 +66,25 @@ class LoginController extends Controller
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = User::find(auth()->user()->id);
+        $user->status = 'offline';
+        $user->save();
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
     }
 }

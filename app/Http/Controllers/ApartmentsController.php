@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Models\Reservation;
 
 class ApartmentsController extends Controller
@@ -46,7 +47,7 @@ class ApartmentsController extends Controller
             $images = collect();
             if($request->hasFile('apartment-images')):
                 foreach($request->file('apartment-images') as $image):
-                    $upload = cloudinary()->uploadFile($image->path())->getSecurePath();
+                    $upload = Cloudinary::uploadFile($image->path(), array('folder' => 'horeca-apartments/apartment-pictures'))->getSecurePath();
                     $images->push($upload);
                 endforeach;
             endif;
@@ -105,7 +106,7 @@ class ApartmentsController extends Controller
         $images = collect();
         if($request->hasFile('apartment-images')):
             foreach($request->file('apartment-images') as $image):
-                $upload = cloudinary()->uploadFile($image->path())->getSecurePath();
+                $upload = Cloudinary::uploadFile($image->path(), array('folder' => 'horeca-apartments/apartment-pictures'))->getSecurePath();
                 $images->push($upload);
             endforeach;
             $apartment->images = $images->toJson();

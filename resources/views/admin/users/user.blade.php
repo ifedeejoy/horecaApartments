@@ -27,16 +27,23 @@
                             <div class="col-xl-7 col-lg-12 d-flex flex-column justify-content-between border-container-lg">
                                 <div class="user-avatar-section">
                                     <div class="d-flex justify-content-start">
-                                        <img class="img-fluid rounded" src="../../../app-assets/images/avatars/7.png" height="104" width="104" alt="User avatar" />
+                                        @if (empty($user->image))
+                                        <img class="img-fluid rounded" src="{{asset('/images/user.svg')}}" height="104" width="104" alt="User avatar" />
+                                        @else
+                                        <img class="img-fluid rounded" src="{{$user->image}}" style="height: 104px; width:104px" alt="User avatar" />
+                                        @endif
+                                        
                                         <div class="d-flex flex-column ml-1">
                                             <div class="user-info mb-1">
                                                 <h4 class="mb-0">{{$user->name}}</h4>
                                                 <span class="card-text">{{$user->email}}</span>
                                             </div>
-                                            <div class="d-flex flex-wrap">
+                                            <form class="d-flex flex-wrap" action="{{route('delete-user', $user->id)}}" method="POST">
+                                                @method('DELETE')
+                                                @csrf
                                                 <a href="/admin/edit-user/{{$user->id}}" class="btn btn-primary">Edit</a>
-                                                <button class="btn btn-outline-danger ml-1">Delete</button>
-                                            </div>
+                                                <button type="submit" title="delete user" class="btn btn-outline-danger ml-1">Delete</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

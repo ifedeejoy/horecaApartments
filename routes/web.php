@@ -88,8 +88,10 @@ Route::post('admin/edit-apartment/{id}', [ApartmentsController::class, 'update']
 Route::post('admin/edit-rate', [RateController::class, 'update'])->middleware('auth')->name('edit-rate');
 // Put requests
 Route::put('admin/update-user/{id}', [UserController::class, 'update'])->middleware('auth')->name('update-user');
+Route::put('admin/change-password/{id}', [UserController::class, 'changePassword'])->middleware('auth')->name('change-password');
 // delete requests
 Route::delete('admin/apartment/{id}', [ApartmentsController::class, 'destroy'])->middleware('auth')->name('delete-apartment');
+Route::delete('admin/user/{id}', [UserController::class, 'destroy'])->middleware('auth')->name('delete-user');
 Route::delete('admin/rates/{rate}', [RateController::class, 'destroy'])->middleware('auth')->name('delete-rate');
 
 // admin views
