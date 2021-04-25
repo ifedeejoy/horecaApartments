@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Apartments;
+use Spatie\Permission\Models\Permission;
 use App\Models\Guest;
+use App\Models\User;
 use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class CalendarController extends Controller
@@ -16,11 +19,24 @@ class CalendarController extends Controller
      */
     public function index()
     {
-        $apartments = Apartments::all();
-        $guests = Guest::all();
         $reservations = Reservation::where('status', '!=', 'checkedout')->with('apartments', 'guest')->get();
+        $connected = null;
+        if(Auth::check() == true):
+            $user = User::find(auth()->user()->id);
+            $googleAccount = $user->googleAccount;
+            if(is_null($googleAccount) && $user->hasPermissionTo('create calendars')):
+                $connect = Permission::where('name', 'connect google account')->count();
+                if($connect < 1):
+                    Permission::create(['name' => 'connect google account']);
+                endif;
+                $user->givePermissionTo('connect google account');
+                $connected = false;
+            elseif($user->hasPermissionTo('create calendars') && !empty($googleAccount)):
+                $connected = true;
+            endif;
+        endif;
         if(request()->is('front-desk/calendar')):
-            return view('front-desk.calendar')->with(['apartments' => $apartments, 'guests' => $guests, 'reservations' => $reservations]);
+            return view('front-desk.calendar')->with('connected', $connected);
         else:
             return response()->json(['reservations' => $reservations]);
         endif;

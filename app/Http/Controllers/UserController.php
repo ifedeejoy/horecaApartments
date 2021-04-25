@@ -11,7 +11,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -73,12 +73,12 @@ class UserController extends Controller
             $user->type = $request->input('type');
             $user->save();
 
-            // foreach($request->input('permissions') as $permission):
-            //     $check = Permission::where('name', $permission)->count();
-            //     if($check < 1):
-            //         Permission::create(['name' => $permission]);
-            //     endif;
-            // endforeach;
+            foreach($request->input('permissions') as $permission):
+                $check = Permission::where('name', $permission)->count();
+                if($check < 1):
+                    Permission::create(['name' => $permission]);
+                endif;
+            endforeach;
 
             if($request->input('type') == 'super-admin'):
                 $user->assignRole($request->input('type'));
@@ -127,14 +127,23 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        
         try {
             $user = User::find($request->id);
+            // process image
+            if($request->hasFile('new-picture')):
+                $image = $request->file('new-picture')->storeOnCloudinary('horeca-apartments/profile-pictures')->getSecurePath();
+            else:
+                $image = $user->image;
+            endif;
+            
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
             $user->address = $request->input('address');
             $user->country = $request->input('country');
             $user->type = $request->input('role');
+            $user->image = $image;
             $user->save();
             $user->givePermissionTo($request->input('permissions'));
             return back()->with('success', 'User updated successfully');
@@ -143,14 +152,35 @@ class UserController extends Controller
         }
     }
 
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old-password' => 'bail|required',
+            'password' => 'bail|required|min:8|confirmed',
+        ]);
+
+        $user = User::find($request->id);
+        // verify old password
+        $verifyPassword = Hash::check($request->input('old-password'), $user->password);
+        if($verifyPassword == true):
+            $user->password = $request->input('password');
+            $user->save();
+            return back()->with('success', 'Password updated successfully');
+        else:
+            return back()->with('error', 'Old password is incorrect');
+        endif;
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $users, Request $request)
     {
-        //
+        $user = $users->find($request->id);
+        $user->delete();
+        return redirect('admin/users/employees')->with('success', "User deleted succesfully");
     }
 }

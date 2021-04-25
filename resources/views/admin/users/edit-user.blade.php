@@ -24,12 +24,13 @@
                             <i data-feather="user"></i><span class="d-none d-sm-block">Account</span>
                         </a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" id="information-tab" data-toggle="tab" href="#information" aria-controls="information" role="tab" aria-selected="false">
-                            <i data-feather="info"></i><span class="d-none d-sm-block">Information</span>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" id="security-tab" data-toggle="tab" href="#security" aria-controls="security" role="tab" aria-selected="false">
+                            <i data-feather="lock"></i><span class="d-none d-sm-block">Security</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+
+                    {{-- <li class="nav-item">
                         <a class="nav-link d-flex align-items-center" id="social-tab" data-toggle="tab" href="#social" aria-controls="social" role="tab" aria-selected="false">
                             <i data-feather="share-2"></i><span class="d-none d-sm-block">Social</span>
                         </a>
@@ -38,31 +39,36 @@
                 <div class="tab-content">
                     <!-- Account Tab starts -->
                     <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                        <!-- users edit media object start -->
-                        <div class="media mb-2">
-                            <img src="../../../app-assets/images/avatars/7.png" alt="users avatar" class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer" height="90" width="90" />
-                            <div class="media-body mt-50">
-                                <h4>{{$user->name}}</h4>
-                                <div class="col-12 d-flex mt-1 px-0">
-                                    <label class="btn btn-primary mr-75 mb-0" for="change-picture">
-                                        <span class="d-none d-sm-block">Change</span>
-                                        <input class="form-control" type="file" id="change-picture" hidden accept="image/png, image/jpeg, image/jpg" />
-                                        <span class="d-block d-sm-none">
-                                            <i class="mr-0" data-feather="edit"></i>
-                                        </span>
-                                    </label>
-                                    <button class="btn btn-outline-secondary d-none d-sm-block">Remove</button>
-                                    <button class="btn btn-outline-secondary d-block d-sm-none">
-                                        <i class="mr-0" data-feather="trash-2"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- users edit media object ends -->
                         <!-- users edit account form start -->
-                        <form class="form-validate" method="POST" action="{{route('update-user', $user->id)}}">
+                        <form class="form-validate" method="POST" action="{{route('update-user', $user->id)}}" enctype="multipart/form-data">
                             @csrf 
                             @method('PUT')
+                            <!-- users edit media object start -->
+                            <div class="media mb-2">
+                                @if (empty($user->image))
+                                <img src="{{asset('/images/user.svg')}}" alt="users avatar" class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer" height="90" width="90" />
+                                @else 
+                                <img src="{{$user->image}}" alt="users avatar" class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer" height="90" width="90" />
+                                @endif
+                                
+                                <div class="media-body mt-50">
+                                    <h4>{{$user->name}}</h4>
+                                    <div class="col-12 d-flex mt-1 px-0">
+                                        <label class="btn btn-primary mr-75 mb-0" for="change-picture">
+                                            <span class="d-none d-sm-block">Change</span>
+                                            <input class="form-control" type="file" id="change-picture" name="new-picture" hidden accept="image/png, image/jpeg, image/jpg" />
+                                            <span class="d-block d-sm-none">
+                                                <i class="mr-0" data-feather="edit"></i>
+                                            </span>
+                                        </label>
+                                        <button class="btn btn-outline-secondary d-none d-sm-block">Remove</button>
+                                        <button class="btn btn-outline-secondary d-block d-sm-none">
+                                            <i class="mr-0" data-feather="trash-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- users edit media object ends -->
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -132,36 +138,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view reservations'))
-                                                            <input type="checkbox" class="custom-control-input" id="reservations-read" value="view reservations" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="reservations-read" value="view reservations" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="reservations-read" value="view reservations" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="reservations-read" value="view reservations" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="reservations-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage reservations'))
-                                                            <input type="checkbox" class="custom-control-input" id="reservations-write" value="manage reservations" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="reservations-write" value="manage reservations" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="reservations-write" value="manage reservations" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="reservations-write" value="manage reservations" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="reservations-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create reservations'))
-                                                            <input type="checkbox" class="custom-control-input" id="reservations-create" value="create reservations" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="reservations-create" value="create reservations" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="reservations-create" value="create reservations" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="reservations-create" value="create reservations" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="reservations-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete reservations'))
-                                                            <input type="checkbox" class="custom-control-input" id="reservations-delete" value="delete reservations" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="reservations-delete" value="delete reservations" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="reservations-delete" value="delete reservations" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="reservations-delete" value="delete reservations" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="reservations-delete"></label>
                                                         </div>
                                                     </td>
@@ -171,36 +177,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view calendars'))
-                                                            <input type="checkbox" class="custom-control-input" id="calendars-read" value="view calendars" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-read" value="view calendars" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="calendars-read" value="view calendars" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-read" value="view calendars" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="calendars-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage calendars'))
-                                                            <input type="checkbox" class="custom-control-input" id="calendars-write" value="manage calendars" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-write" value="manage calendars" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="calendars-write" value="manage calendars" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-write" value="manage calendars" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="calendars-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create calendars'))
-                                                            <input type="checkbox" class="custom-control-input" id="calendars-create" value="create calendars" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-create" value="create calendars" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="calendars-create" value="create calendars" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-create" value="create calendars" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="calendars-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete calendars'))
-                                                            <input type="checkbox" class="custom-control-input" id="calendars-delete" value="delete calendars" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-delete" value="delete calendars" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="calendars-delete" value="delete calendars" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="calendars-delete" value="delete calendars" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="calendars-delete"></label>
                                                         </div>
                                                     </td>
@@ -210,36 +216,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view users'))
-                                                            <input type="checkbox" class="custom-control-input" id="users-read" value="view users" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="users-read" value="view users" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="users-read" value="view users" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="users-read" value="view users" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="users-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage users'))
-                                                            <input type="checkbox" class="custom-control-input" id="users-write" value="manage users" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="users-write" value="manage users" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="users-write" value="manage users" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="users-write" value="manage users" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="users-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create users'))
-                                                            <input type="checkbox" class="custom-control-input" id="users-create" value="create users" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="users-create" value="create users" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="users-create" value="create users" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="users-create" value="create users" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="users-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete users'))
-                                                            <input type="checkbox" class="custom-control-input" id="users-delete" value="delete users" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="users-delete" value="delete users" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="users-delete" value="delete users" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="users-delete" value="delete users" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="users-delete"></label>
                                                         </div>
                                                     </td>
@@ -249,36 +255,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view expense'))
-                                                            <input type="checkbox" class="custom-control-input" id="expense-read" value="view expense" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="expense-read" value="view expense" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="expense-read" value="view expense" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="expense-read" value="view expense" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="expense-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage expense'))
-                                                            <input type="checkbox" class="custom-control-input" id="expense-write" value="manage expense" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="expense-write" value="manage expense" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="expense-write" value="manage expense" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="expense-write" value="manage expense" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="expense-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create expense'))
-                                                            <input type="checkbox" class="custom-control-input" id="expense-create" value="create expense" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="expense-create" value="create expense" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="expense-create" value="create expense" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="expense-create" value="create expense" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="expense-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete expense'))
-                                                            <input type="checkbox" class="custom-control-input" id="expense-delete" value="delete expense" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="expense-delete" value="delete expense" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="expense-delete" value="delete expense" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="expense-delete" value="delete expense" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="expense-delete"></label>
                                                         </div>
                                                     </td>
@@ -288,36 +294,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view revenue'))
-                                                            <input type="checkbox" class="custom-control-input" id="revenue-read" value="view revenue" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="revenue-read" value="view revenue" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="revenue-read" value="view revenue" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="revenue-read" value="view revenue" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="revenue-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage revenue'))
-                                                            <input type="checkbox" class="custom-control-input" id="revenue-write" value="manage revenue" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="revenue-write" value="manage revenue" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="revenue-write" value="manage revenue" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="revenue-write" value="manage revenue" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="revenue-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create revenue'))
-                                                            <input type="checkbox" class="custom-control-input" id="revenue-create" value="create revenue" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="revenue-create" value="create revenue" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="revenue-create" value="create revenue" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="revenue-create" value="create revenue" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="revenue-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete revenue'))
-                                                            <input type="checkbox" class="custom-control-input" id="revenue-delete" value="delete revenue" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="revenue-delete" value="delete revenue" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="revenue-delete" value="delete revenue" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="revenue-delete" value="delete revenue" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="revenue-delete"></label>
                                                         </div>
                                                     </td>
@@ -327,36 +333,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view rate'))
-                                                            <input type="checkbox" class="custom-control-input" id="rate-read" value="view rate" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="rate-read" value="view rate" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="rate-read" value="view rate" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="rate-read" value="view rate" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="rate-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage rate'))
-                                                            <input type="checkbox" class="custom-control-input" id="rate-write" value="manage rate" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="rate-write" value="manage rate" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="rate-write" value="manage rate" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="rate-write" value="manage rate" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="rate-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create rate'))
-                                                            <input type="checkbox" class="custom-control-input" id="rate-create" value="create rate" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="rate-create" value="create rate" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="rate-create" value="create rate" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="rate-create" value="create rate" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="rate-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete rate'))
-                                                            <input type="checkbox" class="custom-control-input" id="rate-delete" value="delete rate" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="rate-delete" value="delete rate" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="rate-delete" value="delete rate" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="rate-delete" value="delete rate" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="rate-delete"></label>
                                                         </div>
                                                     </td>
@@ -366,36 +372,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view maintenance'))
-                                                            <input type="checkbox" class="custom-control-input" id="maintenance-read" value="view maintenance" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance-read" value="view maintenance" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="maintenance-read" value="view maintenance" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance-read" value="view maintenance" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="maintenance-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage maintenance'))
-                                                            <input type="checkbox" class="custom-control-input" id="maintenance-write" value="manage maintenance" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance-write" value="manage maintenance" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="maintenance-write" value="manage maintenance" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance-write" value="manage maintenance" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="maintenance-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create maintenance'))
-                                                            <input type="checkbox" class="custom-control-input" id="maintenance-create" value="create maintenance" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance-create" value="create maintenance" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="maintenance-create" value="create maintenance" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance-create" value="create maintenance" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="maintenance-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete maintenance'))
-                                                            <input type="checkbox" class="custom-control-input" id="maintenance-delete" value="delete maintenance" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance-delete" value="delete maintenance" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="maintenance-delete" value="delete maintenance" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance-delete" value="delete maintenance" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="maintenance-delete"></label>
                                                         </div>
                                                     </td>
@@ -405,36 +411,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view payroll'))
-                                                            <input type="checkbox" class="custom-control-input" id="payroll-read" value="view payroll" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="payroll-read" value="view payroll" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="payroll-read" value="view payroll" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="payroll-read" value="view payroll" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="payroll-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage payroll'))
-                                                            <input type="checkbox" class="custom-control-input" id="payroll-write" value="manage payroll" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="payroll-write" value="manage payroll" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="payroll-write" value="manage payroll" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="payroll-write" value="manage payroll" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="payroll-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create payroll'))
-                                                            <input type="checkbox" class="custom-control-input" id="payroll-create" value="create payroll" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="payroll-create" value="create payroll" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="payroll-create" value="create payroll" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="payroll-create" value="create payroll" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="payroll-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete payroll'))
-                                                            <input type="checkbox" class="custom-control-input" id="payroll-delete" value="delete payroll" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="payroll-delete" value="delete payroll" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="payroll-delete" value="delete payroll" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="payroll-delete" value="delete payroll" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="payroll-delete"></label>
                                                         </div>
                                                     </td>
@@ -444,36 +450,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view accounting'))
-                                                            <input type="checkbox" class="custom-control-input" id="accounting-read" value="view accounting" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="accounting-read" value="view accounting" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="accounting-read" value="view accounting" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="accounting-read" value="view accounting" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="accounting-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage accounting'))
-                                                            <input type="checkbox" class="custom-control-input" id="accounting-write" value="manage accounting" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="accounting-write" value="manage accounting" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="accounting-write" value="manage accounting" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="accounting-write" value="manage accounting" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="accounting-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create accounting'))
-                                                            <input type="checkbox" class="custom-control-input" id="accounting-create" value="create accounting" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="accounting-create" value="create accounting" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="accounting-create" value="create accounting" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="accounting-create" value="create accounting" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="accounting-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete accounting'))
-                                                            <input type="checkbox" class="custom-control-input" id="accounting-delete" value="delete accounting" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="accounting-delete" value="delete accounting" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="accounting-delete" value="delete accounting" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="accounting-delete" value="delete accounting" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="accounting-delete"></label>
                                                         </div>
                                                     </td>
@@ -483,36 +489,36 @@
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('view blacklist'))
-                                                            <input type="checkbox" class="custom-control-input" id="blacklist-read" value="view blacklist" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="blacklist-read" value="view blacklist" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="blacklist-read" value="view blacklist" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="blacklist-read" value="view blacklist" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="blacklist-read"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('manage blacklist'))
-                                                            <input type="checkbox" class="custom-control-input" id="blacklist-write" value="manage blacklist" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="blacklist-write" value="manage blacklist" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="blacklist-write" value="manage blacklist" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="blacklist-write" value="manage blacklist" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="blacklist-write"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('create blacklist'))
-                                                            <input type="checkbox" class="custom-control-input" id="blacklist-create" value="create blacklist" name="permissions[]" checked>   
+                                                            <input type="checkbox" class="custom-control-input" id="blacklist-create" value="create blacklist" name="permissions[]" @cannot('manage users') disabled @endcannot checked>   
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="blacklist-create" value="create blacklist" name="permissions[]">   
+                                                            <input type="checkbox" class="custom-control-input" id="blacklist-create" value="create blacklist" name="permissions[]" @cannot('manage users') disabled @endcannot>   
                                                             <label class="custom-control-label" for="blacklist-create"></label>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="custom-control custom-checkbox">
                                                             @if($user->hasPermissionTo('delete blacklist'))
-                                                            <input type="checkbox" class="custom-control-input" id="blacklist-delete" value="delete blacklist" name="permissions[]" checked>
+                                                            <input type="checkbox" class="custom-control-input" id="blacklist-delete" value="delete blacklist" name="permissions[]" @cannot('manage users') disabled @endcannot checked>
                                                             @endif
-                                                            <input type="checkbox" class="custom-control-input" id="blacklist-delete" value="delete blacklist" name="permissions[]">
+                                                            <input type="checkbox" class="custom-control-input" id="blacklist-delete" value="delete blacklist" name="permissions[]" @cannot('manage users') disabled @endcannot>
                                                             <label class="custom-control-label" for="blacklist-delete"></label>
                                                         </div>
                                                     </td>
@@ -532,128 +538,44 @@
                     <!-- Account Tab ends -->
 
                     <!-- Information Tab starts -->
-                    {{-- <div class="tab-pane" id="information" aria-labelledby="information-tab" role="tabpanel">
+                    <div class="tab-pane" id="security" aria-labelledby="security-tab" role="tabpanel">
                         <!-- users edit Info form start -->
-                        <form class="form-validate">
+                        <form class="form-validate" method="POST" id="password-form" action="{{route('change-password', $user->id)}}">
+                            @csrf
+                            @method('PUT')
                             <div class="row mt-1">
                                 <div class="col-12">
                                     <h4 class="mb-1">
-                                        <i data-feather="user" class="font-medium-4 mr-25"></i>
-                                        <span class="align-middle">Personal Information</span>
+                                        <i data-feather="lock" class="font-medium-4 mr-25"></i>
+                                        <span class="align-middle">Security</span>
                                     </h4>
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="form-group">
-                                        <label for="birth">Birth date</label>
-                                        <input id="birth" type="text" class="form-control birthdate-picker" name="dob" placeholder="YYYY-MM-DD" />
+                                        <label for="old-password">Old Password</label>
+                                        <input id="old-password" type="password" class="form-control" name="old-password" placeholder="●●●●●●●●" />
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="form-group">
-                                        <label for="mobile">Mobile</label>
-                                        <input id="mobile" type="text" class="form-control" value="&#43;6595895857" name="phone" />
+                                        <label for="new-password">New Password</label>
+                                        <input id="new-password" type="password" class="form-control" name="password" placeholder="●●●●●●●●" />
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6">
                                     <div class="form-group">
-                                        <label for="website">Website</label>
-                                        <input id="website" type="text" class="form-control" placeholder="Website here..." value="https://rowboat.com/insititious/Angelo" name="website" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label for="languages">Languages</label>
-                                        <select id="languages" class="form-control">
-                                            <option value="English">English</option>
-                                            <option value="Spanish">Spanish</option>
-                                            <option value="French" selected>French</option>
-                                            <option value="Russian">Russian</option>
-                                            <option value="German">German</option>
-                                            <option value="Arabic">Arabic</option>
-                                            <option value="Sanskrit">Sanskrit</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label class="d-block mb-1">Gender</label>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="male" name="gender" class="custom-control-input" />
-                                            <label class="custom-control-label" for="male">Male</label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="female" name="gender" class="custom-control-input" checked />
-                                            <label class="custom-control-label" for="female">Female</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label class="d-block mb-1">Contact Options</label>
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" id="email-cb" checked />
-                                            <label class="custom-control-label" for="email-cb">Email</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" id="message" checked />
-                                            <label class="custom-control-label" for="message">Message</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" id="phone" />
-                                            <label class="custom-control-label" for="phone">Phone</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <h4 class="mb-1 mt-2">
-                                        <i data-feather="map-pin" class="font-medium-4 mr-25"></i>
-                                        <span class="align-middle">Address</span>
-                                    </h4>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label for="address-1">Address Line 1</label>
-                                        <input id="address-1" type="text" class="form-control" value="A-65, Belvedere Streets" name="address" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label for="address-2">Address Line 2</label>
-                                        <input id="address-2" type="text" class="form-control" placeholder="T-78, Groove Street" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label for="postcode">Postcode</label>
-                                        <input id="postcode" type="text" class="form-control" placeholder="597626" name="zip" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label for="city">City</label>
-                                        <input id="city" type="text" class="form-control" value="New York" name="city" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label for="state">State</label>
-                                        <input id="state" type="text" class="form-control" name="state" placeholder="Manhattan" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="form-group">
-                                        <label for="country">Country</label>
-                                        <input id="country" type="text" class="form-control" name="country" placeholder="United States" />
+                                        <label for="confirm-password">New Password</label>
+                                        <input id="confirm-password" type="password" class="form-control" name="password_confirmation" placeholder="●●●●●●●●" />
                                     </div>
                                 </div>
                                 <div class="col-12 d-flex flex-sm-row flex-column mt-2">
-                                    <button type="submit" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Save Changes</button>
+                                    <button type="submit" form="password-form" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Save Changes</button>
                                     <button type="reset" class="btn btn-outline-secondary">Reset</button>
                                 </div>
                             </div>
                         </form>
                         <!-- users edit Info form ends -->
-                    </div> --}}
+                    </div>
                     <!-- Information Tab ends -->
 
                     <!-- Social Tab starts -->

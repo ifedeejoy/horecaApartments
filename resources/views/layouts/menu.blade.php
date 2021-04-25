@@ -31,26 +31,37 @@
             <li class=" navigation-header">
                 <span data-i18n="Reservations">Reservation Management</span><i data-feather="more-horizontal"></i>
             </li>
+            @can('create reservations')
             <li class="{{ setActive(['front-desk/new-reservation']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/new-reservation"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Reservation">New Reservation</span></a>
             </li>
+            @endcan
+            @can('manage reservations')
             <li class="{{ setActive(['front-desk/reservations', 'front-desk/invoice/*', 'front-desk/reservation/*']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/reservations"><i data-feather="clipboard"></i><span class="menu-title text-truncate" data-i18n="Reservations">Reservations</span></a>
-            </li>
+            </li>  
+            @endcan
+            @can('view calendars')
             <li class="{{ setActive(['front-desk/calendar']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/calendar"><i data-feather="calendar"></i><span class="menu-title text-truncate" data-i18n="Calendar">Calendar</span></a>
-            </li>
+            </li>   
+            @endcan
+           
 
             {{-- Reservation --}}
             <li class=" navigation-header">
                 <span data-i18n="Reservations">Inhouse Guest Management</span><i data-feather="more-horizontal"></i>
             </li>
+            @can('create reservations')
             <li class="{{ setActive(['front-desk/new-checkin']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/new-checkin"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Checkin">New Checkin</span></a>
             </li>
+            @endcan
+            @can('manage reservations')
             <li class="{{ setActive(['front-desk/inhouse-guests', 'front-desk/folio/*']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/inhouse-guests"><i class="lni lni-chef-hat"></i><span class="menu-title text-truncate" data-i18n="Inhouse Guests">Inhouse Guests</span></a>
             </li>
+            @endcan
             
             {{-- Property Managament --}}
             <li class=" navigation-header">
@@ -72,6 +83,7 @@
             </li>
 
             {{-- User Managament --}}
+            @can('manage users')
             <li class=" navigation-header">
                 <span data-i18n="Users">User Management</span><i data-feather="more-horizontal"></i>
             </li>
@@ -99,6 +111,8 @@
                     </li>
                 </ul>
             </li>
+            @endcan
+            
 
             <li class=" navigation-header">
                 <span data-i18n="Finance">Finance</span><i data-feather="more-horizontal"></i>
