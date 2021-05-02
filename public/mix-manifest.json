@@ -5,6 +5,7 @@
     "/js/calendar.js": "/js/calendar.js",
     "/js/calendar-events.js": "/js/calendar-events.js",
     "/js/core.js": "/js/core.js",
+    "/js/maintenance-list.js": "/js/maintenance-list.js",
     "/js/rates-list.js": "/js/rates-list.js",
     "/js/user-edit.js": "/js/user-edit.js",
     "/js/user-view.js": "/js/user-view.js",

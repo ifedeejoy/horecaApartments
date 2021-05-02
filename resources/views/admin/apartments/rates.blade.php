@@ -6,13 +6,11 @@
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/forms/select/select2.min.css') }}">
-<link rel="stylesheet" href="{{ asset ('/app-assets/vendors/css/extensions/sweetalert2.min.css') }}">
 @endsection
 
 @section('page-css')
 @parent
 <link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/forms/form-validation.css') }}">
-<link rel="stylesheet" href="{{ asset ('/app-assets/css/plugins/extensions/ext-component-sweet-alerts.css') }}">
 <link rel="stylesheet" href="{{ asset ('/app-assets/css/pages/app-user.css') }}">
 @endsection
 
@@ -94,7 +92,6 @@
     <script src="{{ asset ('/app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}" defer></script>
     <script src="{{ asset ('/app-assets/vendors/js/forms/select/select2.full.min.js') }}" defer></script>
-    <script src="{{ asset ('/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}" defer></script>
 @endsection
 
 @section('page-js')
