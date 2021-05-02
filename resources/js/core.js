@@ -384,4 +384,16 @@ window.typeOptions = function(val) {
     }
 }
 
+window.selectVendor = function(val) {
+    if (val == 'new-vendor') {
+        $('.vendor-info').removeAttr('disabled')
+        $('.vendor-info').removeClass('d-none')
+        $('.vendor-group').removeClass('d-none')
+    } else {
+        $('.vendor-info').attr('disabled')
+        $('.vendor-info').addClass('d-none')
+        $('.vendor-group').addClass('d-none')
+    }
+}
+
 export { getUrl }
