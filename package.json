@@ -23,6 +23,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "lightbox2": "^2.11.3",
         "moment": "^2.29.1",
         "sweetalert2": "^10.13.3"
     }

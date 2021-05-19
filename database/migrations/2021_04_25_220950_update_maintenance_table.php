@@ -16,9 +16,9 @@ class UpdateMaintenanceTable extends Migration
         Schema::table('maintenances', function (Blueprint $table) {
             $table->foreignId('apartments_id');
             $table->text('issue');
-            $table->json('images');
+            $table->json('images')->nullable();
             $table->string('status');
-            $table->foreignId('vendors_id');
+            $table->foreignId('vendor_id')->nullable();
             $table->softDeletes();
         });
     }

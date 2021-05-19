@@ -56,7 +56,7 @@
                                         </div>
                                         @endif
                                         <div class="ml-1">
-                                            <h5 class="mb-0 text-capitalize">{{$apartment->status}}</h5>
+                                            <h5 class="mb-0 text-capitalize">{{str_replace('_', ' ', $apartment->status)}}</h5>
                                             <small>Availability Status</small>
                                         </div>
                                     </div>
@@ -71,7 +71,7 @@
                                         </div>
                                         @endif
                                         <div class="ml-1">
-                                            <h5 class="mb-0">
+                                            <h5 class="mb-0 text-capitalize">
                                                 @if (is_null($apartment->maintenance_status))
                                                     No Issues
                                                 @else

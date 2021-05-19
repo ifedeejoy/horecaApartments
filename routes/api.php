@@ -5,6 +5,7 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InhouseController;
+use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
@@ -44,6 +45,8 @@ Route::get('calendar', [CalendarController::class, 'index'])->name('api-calendar
 Route::get('events', [EventController::class, 'index'])->name('api-events');
 Route::get('apartments', [ApartmentsController::class, 'index'])->name('api-apartments');
 Route::get('apartment/{id}', [ApartmentsController::class, 'show'])->name('api-apartment');
+Route::get('maintenance', [MaintenanceController::class, 'index'])->name('api-maintenance');
+// 
 Route::post('web-availability', [ReservationController::class, 'webAvailability'])->name('api-web-availability');
 Route::post('availability', [ReservationController::class, 'availabilityCheck'])->name('api-availability');
 Route::post('create-guest', [GuestController::class, 'store'])->name('api-guest');

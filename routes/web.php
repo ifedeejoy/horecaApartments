@@ -86,6 +86,8 @@ Route::post('admin/creates-owner', [UserController::class, 'store'])->middleware
 Route::post('admin/creates-rate', [RateController::class, 'store'])->middleware('auth')->name('creates-rate');
 Route::post('admin/edit-apartment/{id}', [ApartmentsController::class, 'update'])->middleware('auth')->name('edit-apartment');
 Route::post('admin/edit-rate', [RateController::class, 'update'])->middleware('auth')->name('edit-rate');
+Route::post('admin/report-issue', [MaintenanceController::class, 'store'])->middleware('auth')->name('report-issue');
+Route::post('admin/assign-vendor', [MaintenanceController::class, 'assignVendor'])->middleware('auth')->name('assign-vendor');
 // Put requests
 Route::put('admin/update-user/{id}', [UserController::class, 'update'])->middleware('auth')->name('update-user');
 Route::put('admin/change-password/{id}', [UserController::class, 'changePassword'])->middleware('auth')->name('change-password');

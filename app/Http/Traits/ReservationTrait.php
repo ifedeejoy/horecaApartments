@@ -55,7 +55,7 @@ trait ReservationTrait
     {
         // parse date
         $startObject = Carbon::createFromFormat('m/d/Y', $start, 'Africa/Lagos');
-        $endObject = Carbon::createFromFormat('m/d/Y', $end, 'Africa/Lagos');
+        $endObject = Carbon::createFromFormat('m/d/Y', $end, 'Africa/Lagos'); 
         $start = strtotime($startObject->format('Y-m-d'));
         $end = strtotime($endObject->format('Y-m-d'));
        

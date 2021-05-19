@@ -38,4 +38,10 @@ class Apartments extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
 }
+

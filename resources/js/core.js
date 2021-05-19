@@ -1,3 +1,10 @@
+import lightbox from 'lightbox2'
+
+lightbox.option({
+    'alwaysShowNavOnTouchDevices': true,
+    'wrapAround': true
+})
+
 window.getElByThis = function(arg) {
     let id = arg.getAttribute('id')
     let idNo = id.match(/\d+/g)
@@ -385,7 +392,7 @@ window.typeOptions = function(val) {
 }
 
 window.selectVendor = function(val) {
-    if (val == 'new-vendor') {
+    if (val == 0) {
         $('.vendor-info').removeAttr('disabled')
         $('.vendor-info').removeClass('d-none')
         $('.vendor-group').removeClass('d-none')
