@@ -17,8 +17,8 @@ class CreateCreditsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->mediumText('service');
-            $table->decimal('initial_amount', 10, 2);
-            $table->decimal('amount', 10, 2);
+            $table->decimal('initial_amount', 10, 2)->nullable();
+            $table->decimal('amount', 10, 2)->nullable();
             $table->string('status')->default('open');
             $table->timestamp('due_date')->nullable();
             $table->integer('created_by');

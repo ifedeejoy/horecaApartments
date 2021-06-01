@@ -1,218 +1,238 @@
-$(function() {
-    'use strict';
-
-    var dtUserTable = $('.user-list-table'),
-        newUserSidebar = $('.new-user-modal'),
-        newUserForm = $('.add-new-user');
-
-    var assetPath = '../../../app-assets/',
-        rateView = '/admin/apartment/';
-    if ($('body').attr('data-framework') === 'laravel') {
-        assetPath = $('body').attr('data-asset-path');
-        rateView = '/admin/apartment/';
-    }
-
-    // Users List datatable
-    if (dtUserTable.length) {
-        dtUserTable.DataTable({
-            ajax: '/api/rates', // JSON file to add data
-            columns: [
-                // columns according to JSON
-                { data: 'id' },
-                { data: 'name' },
-                { data: 'amount' },
-                { data: 'apartments.name' },
-                { data: '' }
-            ],
-            columnDefs: [{
-                    // For Responsive
-                    className: 'control',
-                    orderable: false,
-                    responsivePriority: 2,
-                    targets: 0
-                },
-                {
-                    // Rate
-                    targets: 1,
-                    responsivePriority: 4,
-                    render: function(data, type, full, meta) {
-                        var $name = full['name'];
-                        var $apartmentType = full['apartments']['type'];
-                        // Creates full output for row
-                        var $row_output =
-                            '<div class="d-flex justify-content-left align-items-center">' +
-
-                            '<div class="d-flex flex-column">' +
-                            '<a href="#" class="user_name text-truncate"><span class="font-weight-bold">' +
-                            $name +
-                            '</span></a>' +
-                            '<small class="emp_post text-muted">@' +
-                            $apartmentType +
-                            '</small>' +
-                            '</div>' +
-                            '</div>';
-                        return $row_output;
-                    }
-                },
-                {
-                    // Price
-                    targets: 2,
-                    render: function(data, type, full, meta) {
-                        var $amount = new Intl.NumberFormat({ style: 'decimal', decimal: 2 }).format(full['amount']);
-                        return "<span class='text-truncate align-middle'>" + $amount + '</span>';
-                    }
-                },
-                {
-                    // Apartment
-                    targets: 3,
-                    render: function(data, type, full, meta) {
-                        var $apartment = full['apartments']['name'];
-                        return "<span class='text-truncate align-middle'>" + $apartment + '</span>';
-                    }
-                },
-                {
-                    // Actions
-                    targets: -1,
-                    title: 'Actions',
-                    orderable: false,
-                    render: function(data, type, full, meta) {
-                        return (
-                            '<div class="btn-group">' +
-                            '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
-                            feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
-                            '</a>' +
-                            '<div class="dropdown-menu dropdown-menu-right">' +
-                            '<a href="' +
-                            rateView + full['apartments']['id'] +
-                            '" class="dropdown-item">' +
-                            feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) +
-                            'Details</a>' +
-                            '<a href="javascript:;" onclick = deleteRate(' + full['id'] + ') class="dropdown-item delete-record">' +
-                            feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
-                            'Delete</a></div>' +
-                            '</div>' +
-                            '</div>'
-                        );
-                    }
-                }
-            ],
-            order: [
-                [2, 'desc']
-            ],
-            dom: '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
-                '<"col-lg-12 col-xl-3" l>' +
-                '<"col-lg-12 col-xl-9 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
-                '>t' +
-                '<"d-flex justify-content-between mx-2 row mb-1"' +
-                '<"col-sm-12 col-md-6"i>' +
-                '<"col-sm-12 col-md-6"p>' +
-                '>',
-            language: {
-                sLengthMenu: 'Show _MENU_',
-                search: 'Search',
-                searchPlaceholder: 'Search..'
-            },
-            // Buttons with Dropdown
-            buttons: [{
-                    extend: 'pdf',
-                    className: 'add-new btn btn-primary mt-50',
-                    messageTop: null,
-                    messageBottom: null,
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-secondary');
-                    }
-                },
-                {
-                    extend: 'excel',
-                    className: 'add-new btn btn-primary mt-50',
-                    messageTop: null,
-                    messageBottom: null,
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-secondary');
-                    }
-                },
-                {
-                    extend: 'print',
-                    className: 'add-new btn btn-primary mt-50',
-                    messageTop: null,
-                    messageBottom: null,
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-secondary');
-                    }
-                },
-                {
-                    text: 'Report Issue',
-                    className: 'add-new btn btn-primary mt-50',
-                    attr: {
-                        'data-toggle': 'modal',
-                        'data-target': '#modals-slide-in'
-                    },
-                    init: function(api, node, config) {
-                        $(node).removeClass('btn-secondary');
-                    }
-                }
-            ],
-            // For responsive popup
-            responsive: {
-                details: {
-                    display: $.fn.dataTable.Responsive.display.modal({
-                        header: function(row) {
-                            var data = row.data();
-                            return 'Details of ' + data['name'];
-                        }
-                    }),
-                    type: 'column',
-                    renderer: $.fn.dataTable.Responsive.renderer.tableAll({
-                        tableClass: 'table',
-                        columnDefs: [{
-                                targets: 1,
-                                visible: false
-                            },
-                            {
-                                targets: 3,
-                                visible: false
-                            }
-                        ]
-                    })
-                }
-            },
-            language: {
-                paginate: {
-                    // remove previous & next text from pagination
-                    previous: '&nbsp;',
-                    next: '&nbsp;'
-                }
-            },
-            initComplete: function() {
-                // Adding role filter once table initialized
-                this.api()
-                    .columns(3)
-                    .every(function() {
-                        var column = this;
-                        var select = $(
-                                '<select id="FilterApartment" class="form-control text-capitalize mb-md-0 mb-2"><option value=""> Select Apartment </option></select>'
-                            )
-                            .appendTo('.filter_apartment')
-                            .on('change', function() {
-                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                column.search(val ? '^' + val + '$' : '', true, false).draw();
-                            });
-
-                        column
-                            .data()
-                            .unique()
-                            .sort()
-                            .each(function(d, j) {
-                                select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
-                            });
-                    });
+$("#maintenance-list-table").DataTable({
+    dom: '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
+        '<"col-lg-12 col-xl-3" l>' +
+        '<"col-lg-12 col-xl-9 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
+        '>t' +
+        '<"d-flex justify-content-between mx-2 row mb-1"' +
+        '<"col-sm-12 col-md-6"i>' +
+        '<"col-sm-12 col-md-6"p>' +
+        '>',
+    order: [
+        [5, 'desc']
+    ],
+    buttons: [{
+            extend: 'pdf',
+            className: 'add-new btn btn-primary mt-50',
+            messageTop: null,
+            messageBottom: null,
+            init: function(api, node, config) {
+                $(node).removeClass('btn-secondary');
             }
-        });
-    }
+        },
+        {
+            extend: 'excel',
+            className: 'add-new btn btn-primary mt-50',
+            messageTop: null,
+            messageBottom: null,
+            init: function(api, node, config) {
+                $(node).removeClass('btn-secondary');
+            }
+        },
+        {
+            extend: 'print',
+            className: 'add-new btn btn-primary mt-50',
+            messageTop: null,
+            messageBottom: null,
+            init: function(api, node, config) {
+                $(node).removeClass('btn-secondary');
+            }
+        },
+        {
+            text: 'Report Issue',
+            className: 'add-new btn btn-primary mt-50',
+            attr: {
+                'data-toggle': 'modal',
+                'data-target': '#new-issue'
+            },
+            init: function(api, node, config) {
+                $(node).removeClass('btn-secondary');
+            }
+        }
+    ]
+})
 
-    // To initialize tooltip with body container
-    $('body').tooltip({
-        selector: '[data-toggle="tooltip"]',
-        container: 'body'
-    });
-});
+$("#apartment").select2({
+    placeholder: 'Select Apartment'
+})
+$("#edit-apartment").select2({
+    placeholder: 'Select Apartment'
+})
+$("#issue-apartment").select2({
+    placeholder: 'Select Apartment'
+})
+$("#vendor-search").select2({
+    placeholder: 'Select Vendor'
+})
+$("#issue-vendor").select2({
+    placeholder: 'Select Vendor'
+})
+$("#issue-status").select2({
+    placeholder: 'Select Status'
+})
+
+$("#assign-apartment").select2({
+    placeholder: 'Select Apartment'
+})
+$("#select-vendor").select2({
+    placeholder: 'Select Vendor'
+})
+$("#edit-vendor").select2({
+    placeholder: 'Select Vendor'
+})
+$("#payment-method").select2()
+$("#edit-payment-method").select2()
+$("#update-payment-method").select2({
+    placeholder: 'Select payment method'
+})
+
+
+let editor = new Quill('#quill-editor', {
+    placeholder: 'Description',
+    theme: 'snow'
+})
+
+let issueEditor = new Quill('#issue-editor', {
+    placeholder: 'Issue',
+    theme: 'snow'
+})
+
+let costEditor = new Quill('#cost-editor', {
+    placeholder: 'Cost Breakdown',
+    theme: 'snow'
+})
+
+let editIssueEditor = new Quill('#edit-issue-editor', {
+    placeholder: 'Issue',
+    theme: 'snow'
+})
+
+let editCostEditor = new Quill('#edit-cost-editor', {
+    placeholder: 'Cost Breakdown',
+    theme: 'snow'
+})
+
+let updateIssueEditor = new Quill('#update-issue-editor', {
+    readOnly: true,
+    theme: 'snow'
+})
+
+let updateBreakdownEditor = new Quill('#update-cost-editor', {
+    theme: 'snow'
+})
+
+// copy issue text into html only text area from quill editor
+let htmlContent = document.getElementById('issue')
+editor.on('text-change', function(params) {
+    let htmlText = editor.root.innerHTML
+    htmlContent.innerHTML = htmlText
+})
+
+// copy issue text into html only text area from quill editor
+let issueContent = document.getElementById('assign-issue')
+issueEditor.on('text-change', function(params) {
+    let htmlText = issueEditor.root.innerHTML
+    issueContent.innerHTML = htmlText
+})
+
+// copy cost text into html only text area from quill editor
+let costContent = document.getElementById('assign-cost')
+costEditor.on('text-change', function(params) {
+    let htmlText = costEditor.root.innerHTML
+    costContent.innerHTML = htmlText
+})
+
+// copy edit issue text into html only text area from quill editor
+let editIssueContent = document.getElementById('edit-issue-text')
+editIssueEditor.on('text-change', function(params) {
+    let htmlText = editIssueEditor.root.innerHTML
+    editIssueContent.innerHTML = htmlText
+})
+
+// copy edit cost text into html only text area from quill editor
+let editCostContent = document.getElementById('edit-cost-breakdown')
+editCostEditor.on('text-change', function(params) {
+    let htmlText = editCostEditor.root.innerHTML
+    editCostContent.innerHTML = htmlText
+})
+
+// copy update cost breakdown text into html only text area from quill editor
+let updateBreakdownContent = document.getElementById('update-cost-breakdown')
+updateBreakdownEditor.on('text-change', function(params) {
+    let htmlText = updateBreakdownEditor.root.innerHTML
+    updateBreakdownContent.innerHTML = htmlText
+})
+
+//modal functions
+window.assignVendor = function(apartment) {
+    $("#edit-issue-form")[0].reset()
+    let apartmentId = apartment[0]
+    let apartmentName = apartment[1]
+    let apartmentIssue = apartment[2]
+    let issue = apartment[3]
+    $("#issue_id").val(issue)
+    $("#assign-apartment").append("<option value='" + apartmentId + "' selected>" + apartmentName + "</option>")
+    let content = apartmentIssue
+    issueEditor.clipboard.dangerouslyPasteHTML(content)
+}
+
+window.editIssue = function(issue) {
+    $.ajax({
+            url: '/api/maintenance/issue/' + issue,
+            method: 'GET',
+            dataType: 'json',
+            cache: false,
+        }).fail(function(jqXHR) {
+            console.log(jqXHR.responseText)
+        })
+        .done(function(data) {
+            $("#edit-issue-form")[0].reset()
+            let issue = data.data[0]
+            let vendor = issue.vendor_id == null ? "" : "<option value='" + issue.vendor_id + "' selected>" + issue.vendor.name + "</option>"
+            let payment = issue.last_payment.length == 0 ? null : issue.last_payment[0]
+            let cost = payment == null ? "" : payment.cost
+            let paid = payment == null ? "" : payment.paid
+            let paymentMethod = payment == null ? "" : "<option value='" + payment.payment_method + "' selected>" + payment.payment_method + "</option>"
+            $("#edited_issue").val(issue.id)
+            $("#edit-apartment").append("<option value='" + issue.apartments_id + "' selected>" + issue.apartment.name + "</option>")
+            $("#edit-vendor").append(vendor)
+            $("#edited-issue").val(issue.id)
+            $("#edit-cost").val(cost)
+            $("#edit-paid").val(paid)
+            $("#edit-payment-method").append(paymentMethod)
+            let issueContent = issue.issue
+            editIssueEditor.clipboard.dangerouslyPasteHTML(issueContent)
+            let costContent = payment == null ? "" : payment.cost_breakdown
+            editCostEditor.clipboard.dangerouslyPasteHTML(costContent)
+        })
+}
+
+window.updateIssue = function(issue) {
+    $.ajax({
+            url: '/api/maintenance/issue/' + issue,
+            method: 'GET',
+            dataType: 'json',
+            cache: false,
+        }).fail(function(jqXHR) {
+            console.log(jqXHR.responseText)
+        })
+        .done(function(data) {
+            $("#update-issue-form")[0].reset()
+            let issue = data.data[0]
+            let vendor = issue.vendor_id == null ? "" : "<option value='" + issue.vendor_id + "' selected>" + issue.vendor.name + "</option>"
+            let payment = issue.last_payment.length == 0 ? null : issue.last_payment[0]
+            let cost = payment == null ? "" : payment.cost
+            let paid = payment == null ? "" : payment.paid
+            let balance = payment == null ? "" : payment.balance
+            $("#updated-issue").val(issue.id)
+            $("#issue-apartment").append("<option value='" + issue.apartments_id + "' selected>" + issue.apartment.name + "</option>")
+            $("#issue-status").append("<option value='" + issue.status + "' selected>" + issue.status + "</option>")
+            $("#issue-vendor").append(vendor)
+            $("#update-cost").val(cost)
+            $("#update-prev-paid").val(paid)
+            $("#update-balance").val(balance)
+            let issueContent = issue.issue
+            updateIssueEditor.clipboard.dangerouslyPasteHTML(issueContent)
+            let costContent = payment == null ? "" : payment.cost_breakdown
+            updateBreakdownEditor.clipboard.dangerouslyPasteHTML(costContent)
+        })
+}

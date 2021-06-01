@@ -21,5 +21,6 @@ mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/calendar.js', 'public/js')
     .js('resources/js/calendar-events.js', 'public/js')
     .js('resources/js/maintenance-list.js', 'public/js')
+    .js('resources/js/vendors-list.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sourceMaps();

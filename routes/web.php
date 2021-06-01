@@ -11,7 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GoogleAccountController;
 use App\Http\Controllers\GoogleCalendarController;
-
+use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -80,12 +80,20 @@ Route::get('admin/user/{id}', [UserController::class, 'show'])->middleware('auth
 Route::get('admin/edit-user/{user}', [UserController::class, 'edit'])->middleware('auth');
 Route::get('admin/rates', [RateController::class, 'index'])->middleware('auth')->name('rates');
 Route::get('admin/maintenance', [MaintenanceController::class, 'index'])->middleware('auth')->name('maintenance');
+Route::get('admin/vendors', [VendorController::class, 'index'])->middleware('auth')->name('vendors');
+Route::get('admin/vendors/{type}', [VendorController::class, 'index'])->middleware('auth')->name('filter-vendor');
+Route::get('admin/vendor/{vendor}', [VendorController::class, 'show'])->middleware('auth')->name('show-vendor');
 // post requests
 Route::post('admin/create-apartment', [ApartmentsController::class, 'store'])->middleware('auth')->name('create-apartment');
 Route::post('admin/creates-owner', [UserController::class, 'store'])->middleware('auth')->name('creates-owner');
 Route::post('admin/creates-rate', [RateController::class, 'store'])->middleware('auth')->name('creates-rate');
 Route::post('admin/edit-apartment/{id}', [ApartmentsController::class, 'update'])->middleware('auth')->name('edit-apartment');
 Route::post('admin/edit-rate', [RateController::class, 'update'])->middleware('auth')->name('edit-rate');
+Route::post('admin/report-issue', [MaintenanceController::class, 'store'])->middleware('auth')->name('report-issue');
+Route::post('admin/assign-vendor', [MaintenanceController::class, 'assignVendor'])->middleware('auth')->name('assign-vendor');
+Route::post('admin/edit-issue', [MaintenanceController::class, 'edit'])->middleware('auth')->name('edit-issue');
+Route::post('admin/update-issue',[MaintenanceController::class, 'update'])->middleware('auth')->name('update-issue');
+Route::post('admin/create-vendor', [VendorController::class, 'store'])->middleware('auth')->name('create-vendor');
 // Put requests
 Route::put('admin/update-user/{id}', [UserController::class, 'update'])->middleware('auth')->name('update-user');
 Route::put('admin/change-password/{id}', [UserController::class, 'changePassword'])->middleware('auth')->name('change-password');
@@ -93,6 +101,7 @@ Route::put('admin/change-password/{id}', [UserController::class, 'changePassword
 Route::delete('admin/apartment/{id}', [ApartmentsController::class, 'destroy'])->middleware('auth')->name('delete-apartment');
 Route::delete('admin/user/{id}', [UserController::class, 'destroy'])->middleware('auth')->name('delete-user');
 Route::delete('admin/rates/{rate}', [RateController::class, 'destroy'])->middleware('auth')->name('delete-rate');
+Route::delete('admin/maintenance/{maintenance}', [MaintenanceController::class, 'destroy'])->middleware('auth')->name('delete-issue');
 
 // admin views
 
