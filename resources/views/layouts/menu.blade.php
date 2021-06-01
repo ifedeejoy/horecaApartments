@@ -27,41 +27,56 @@
                 </ul>
             </li>
 
-            {{-- Reservation --}}
             <li class=" navigation-header">
-                <span data-i18n="Reservations">Reservation Management</span><i data-feather="more-horizontal"></i>
+                <span data-i18n="Front Desk">Front Desk</span><i data-feather="more-horizontal"></i>
             </li>
-            @can('create reservations')
-            <li class="{{ setActive(['front-desk/new-reservation']) }} nav-item">
-                <a class="d-flex align-items-center" href="/front-desk/new-reservation"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Reservation">New Reservation</span></a>
+            <li class=" nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="clipboard"></i>
+                    <span class="menu-title text-truncate" data-i18n="Reservation Management">Reservation Management</span>
+                </a>
+                <ul class="menu-content">
+                    @can('create reservations')
+                    <li class="{{ setActive(['front-desk/new-reservation']) }} nav-item">
+                        <a class="d-flex align-items-center" href="/front-desk/new-reservation"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Reservation">New Reservation</span></a>
+                    </li>
+                    @endcan
+                    @can('manage reservations')
+                    <li class="{{ setActive(['front-desk/reservations', 'front-desk/invoice/*', 'front-desk/reservation/*']) }} nav-item">
+                        <a class="d-flex align-items-center" href="/front-desk/reservations"><i data-feather="clipboard"></i><span class="menu-title text-truncate" data-i18n="Reservations">Reservations</span></a>
+                    </li>  
+                    @endcan
+                </ul>
             </li>
-            @endcan
-            @can('manage reservations')
-            <li class="{{ setActive(['front-desk/reservations', 'front-desk/invoice/*', 'front-desk/reservation/*']) }} nav-item">
-                <a class="d-flex align-items-center" href="/front-desk/reservations"><i data-feather="clipboard"></i><span class="menu-title text-truncate" data-i18n="Reservations">Reservations</span></a>
-            </li>  
-            @endcan
+            <li class=" nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i class="lni lni-chef-hat"></i>
+                    <span class="menu-title text-truncate" data-i18n="Inhouse Guest Management">Inhouse Guest Management</span>
+                </a>
+                <ul class="menu-content">
+                    @can('create reservations')
+                    <li class="{{ setActive(['front-desk/new-checkin']) }} nav-item">
+                        <a class="d-flex align-items-center" href="/front-desk/new-checkin"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Checkin">New Checkin</span></a>
+                    </li>
+                    @endcan
+                    @can('manage reservations')
+                    <li class="{{ setActive(['front-desk/inhouse-guests', 'front-desk/folio/*']) }} nav-item">
+                        <a class="d-flex align-items-center" href="/front-desk/inhouse-guests"><i class="lni lni-chef-hat"></i><span class="menu-title text-truncate" data-i18n="Inhouse Guests">Inhouse Guests</span></a>
+                    </li>
+                    @endcan
+                </ul>
+            </li>
             @can('view calendars')
             <li class="{{ setActive(['front-desk/calendar']) }} nav-item">
                 <a class="d-flex align-items-center" href="/front-desk/calendar"><i data-feather="calendar"></i><span class="menu-title text-truncate" data-i18n="Calendar">Calendar</span></a>
             </li>   
             @endcan
-           
-
-            {{-- Reservation --}}
-            <li class=" navigation-header">
-                <span data-i18n="Reservations">Inhouse Guest Management</span><i data-feather="more-horizontal"></i>
-            </li>
-            @can('create reservations')
-            <li class="{{ setActive(['front-desk/new-checkin']) }} nav-item">
-                <a class="d-flex align-items-center" href="/front-desk/new-checkin"><i data-feather="plus"></i><span class="menu-title text-truncate" data-i18n="New Checkin">New Checkin</span></a>
-            </li>
-            @endcan
-            @can('manage reservations')
-            <li class="{{ setActive(['front-desk/inhouse-guests', 'front-desk/folio/*']) }} nav-item">
-                <a class="d-flex align-items-center" href="/front-desk/inhouse-guests"><i class="lni lni-chef-hat"></i><span class="menu-title text-truncate" data-i18n="Inhouse Guests">Inhouse Guests</span></a>
-            </li>
-            @endcan
+            <li class="{{ setActive(['front-desk/channel-management']) }} nav-item">
+                <a class="d-flex align-items-center" href="/front-desk/calendar">
+                    <i data-feather="calendar"></i>
+                    <span class="menu-title text-truncate" data-i18n="Channel Manager">Channel Manager</span>
+                </a>
+            </li>  
             
             {{-- Property Managament --}}
             <li class=" navigation-header">
@@ -77,7 +92,52 @@
                 <ul class="menu-content">
                     <li class="{{ setActive(['admin/maintenance']) }}"><a class="d-flex align-items-center" href="/admin/maintenance"><i data-feather="circle"></i><span class="menu-item" data-i18n="List">Apartments</span></a>
                     </li>
-                    <li class="{{ setActive(['admin/vendors']) }}"><a class="d-flex align-items-center" href="/admin/vendors"><i data-feather="circle"></i><span class="menu-item" data-i18n="View">Vendors</span></a>
+                    <li class="{{ setActive(['admin/vendors/maintenance']) }}"><a class="d-flex align-items-center" href="/admin/vendors/maintenance"><i data-feather="circle"></i><span class="menu-item" data-i18n="View">Vendors</span></a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- Inventory Managament --}}
+            <li class=" navigation-header">
+                <span data-i18n="Inventory Management">Inventory Management</span><i data-feather="more-horizontal"></i>
+            </li>
+            <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="briefcase"></i><span class="menu-title text-truncate" data-i18n="Purchases">Purchases</span></a>
+                <ul class="menu-content">
+                    <li class="{{ setActive(['inventory/purchases/pending']) }}"><a class="d-flex align-items-center" href="/inventory/purchases/pending"><i data-feather="loader"></i><span class="menu-item" data-i18n="List">Pending Orders</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/purchases/approved']) }}"><a class="d-flex align-items-center" href="/inventory/purchases/approved"><i data-feather="check"></i><span class="menu-item" data-i18n="View">Approved Orders</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/purchases/active']) }}"><a class="d-flex align-items-center" href="/inventory/purchases/active"><i data-feather="activity"></i><span class="menu-item" data-i18n="View">Active Orders</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/purchases/closed']) }}"><a class="d-flex align-items-center" href="/inventory/purchases/closed"><i data-feather="stop-circle"></i><span class="menu-item" data-i18n="View">Closed Orders</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/purchases/active']) }}"><a class="d-flex align-items-center" href="/inventory/purchases/active"><i data-feather="users"></i><span class="menu-item" data-i18n="View">Vendors</span></a>
+                    </li>
+                </ul>
+            </li>
+            <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="box"></i><span class="menu-title text-truncate" data-i18n="Stock">Stock</span></a>
+                <ul class="menu-content">
+                    <li class="{{ setActive(['inventory/stock/in-stock']) }}"><a class="d-flex align-items-center" href="/inventory/stock/in-stock"><i data-feather="columns"></i><span class="menu-item" data-i18n="In Stock">In Stock</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/stock/out-of-stock']) }}"><a class="d-flex align-items-center" href="/inventory/stock/out-of-stock"><i data-feather="eye-off"></i><span class="menu-item" data-i18n="Out Of Stock">Out Of Stock</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/stock/critical']) }}"><a class="d-flex align-items-center" href="/inventory/stock/critical"><i data-feather="alert-circle"></i><span class="menu-item" data-i18n="Critical Items">Critical Items</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/stock/expiring']) }}"><a class="d-flex align-items-center" href="/inventory/stock/expiring"><i data-feather="alert-octagon"></i><span class="menu-item" data-i18n="Expiring Items">Expiring Items</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/stock/stock-count']) }}"><a class="d-flex align-items-center" href="/inventory/stock/stock-count"><i data-feather="archive"></i><span class="menu-item" data-i18n="Stock Count">Stock Count</span></a>
+                    </li>
+                </ul>
+            </li>
+            <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="external-link"></i><span class="menu-title text-truncate" data-i18n="Requisition">Requisition</span></a>
+                <ul class="menu-content">
+                    <li class="{{ setActive(['inventory/requisition/requests']) }}"><a class="d-flex align-items-center" href="/inventory/requisition/requests"><i data-feather="loader"></i><span class="menu-item" data-i18n="Pending Requests">Pending Requests</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/requisition/approved']) }}"><a class="d-flex align-items-center" href="/inventory/requisition/approved"><i data-feather="check"></i><span class="menu-item" data-i18n="Approved Requests">Approved Requests</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventory/requisition/declined']) }}"><a class="d-flex align-items-center" href="/inventory/requisition/declined"><i data-feather="stop-circle"></i><span class="menu-item" data-i18n="Declined Requests">Declined Requests</span></a>
+                    </li>
+                    <li class="{{ setActive(['inventor/requisition/manual']) }}"><a class="d-flex align-items-center" href="/inventor/requisition/manual"><i data-feather="plus"></i><span class="menu-item" data-i18n="Manual Requisition">Manual Requisition</span></a>
                     </li>
                 </ul>
             </li>

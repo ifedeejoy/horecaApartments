@@ -16,7 +16,7 @@ class Vendor extends Model
 
     public function maintenance()
     {
-        return $this->belongsToMany(Maintenance::class);
+        return $this->hasMany(Maintenance::class);
     }
 
     public function payment()
@@ -27,5 +27,10 @@ class Vendor extends Model
     public function credit()
     {
         return $this->hasMany(Credit::class);
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchases::class);
     }
 }

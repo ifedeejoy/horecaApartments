@@ -27,6 +27,11 @@ class Maintenance extends Model
         return $this->hasMany(VendorPayment::class);
     }
 
+    public function lastPayment()
+    {
+        return $this->hasMany(VendorPayment::class)->latest();
+    }
+
     public static function reorderResults($result)
     {
         $reordered = $result->mapWithKeys(function ($item) {

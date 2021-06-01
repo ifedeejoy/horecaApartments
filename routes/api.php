@@ -9,6 +9,7 @@ use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
@@ -46,6 +47,9 @@ Route::get('events', [EventController::class, 'index'])->name('api-events');
 Route::get('apartments', [ApartmentsController::class, 'index'])->name('api-apartments');
 Route::get('apartment/{id}', [ApartmentsController::class, 'show'])->name('api-apartment');
 Route::get('maintenance', [MaintenanceController::class, 'index'])->name('api-maintenance');
+Route::get('maintenance/issue/{maintenance}', [MaintenanceController::class, 'show'])->name('show-issue');
+Route::get('vendors', [VendorController::class, 'index'])->name('api-vendors');
+Route::get('vendors/{type}', [VendorController::class, 'index'])->name('api-filter-vendors');
 // 
 Route::post('web-availability', [ReservationController::class, 'webAvailability'])->name('api-web-availability');
 Route::post('availability', [ReservationController::class, 'availabilityCheck'])->name('api-availability');

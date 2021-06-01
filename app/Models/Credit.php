@@ -9,7 +9,7 @@ class Credit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'service', 'initial_amount', 'amount', 'status', 'due_date', 'created_by', 'updated_by'];
+    protected $fillable = ['user_id', 'service', 'initial_amount', 'amount', 'status', 'due_date', 'created_by', 'updated_by', 'reference'];
 
     public function agents()
     {

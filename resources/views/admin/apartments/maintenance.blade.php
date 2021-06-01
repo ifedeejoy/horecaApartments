@@ -57,7 +57,7 @@
 @endsection
 
 @section('content')
-    <sections>
+    <section>
         <div class="card p-1">
             <div class="card-datatable table-responsive pt-0">
                 <table class="maintenance-list-table text-center table" id="maintenance-list-table">
@@ -80,13 +80,15 @@
                             <td>{!! $issue->issue !!}</td>
                             <td class="text-capitalize"> 
                             @if ($issue->status == 'reported')
-                                <span class="badge badge-pill badge-light-danger" text-capitalized>{{$issue->status}}</span>
+                                <span class="badge badge-pill badge-light-warning" text-capitalized>{{$issue->status}}</span>
                             @elseif($issue->status == 'assigned')
                                 <span class="badge badge-pill badge-light-info" text-capitalized>{{$issue->status}}</span>
                             @elseif($issue->status == 'ongoing')
-                                <span class="badge badge-pill badge-light-warning" text-capitalized>{{$issue->status}}</span>
-                            @else
+                                <span class="badge badge-pill badge-light-secondary" text-capitalized>{{$issue->status}}</span>
+                            @elseif($issue->status == 'completed')
                                 <span class="badge badge-pill badge-light-success" text-capitalized>{{$issue->status}}</span>
+                            @elseif($issue->status == 'failed')
+                                <span class="badge badge-pill badge-light-danger" text-capitalized>{{$issue->status}}</span>
                             @endif
                             </td>
                             <td>
@@ -100,7 +102,7 @@
                                     @endif
                                 </div>
                             </td>
-                            <td>{{\Carbon\Carbon::parse($issue->created_at)->diffForHumans()}}</td>
+                            <td data-sort="{{strtotime($issue->created_at)}}">{{\Carbon\Carbon::parse($issue->created_at)->diffForHumans()}}</td>
                             <td>
                                 <div class="btn-group"> 
                                     <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown"> 
@@ -113,20 +115,24 @@
                                             Assign To Vendor
                                         </a> 
                                         @endif
-                                        <a href="#" class="dropdown-item"> 
+                                        <a href="#" class="dropdown-item" data-target="#edit-issue" data-toggle="modal" onclick="editIssue({{$issue->id}})"> 
                                             <i data-feather="edit-2"></i>
                                             Edit Issue
                                         </a> 
-                                        <a href="#" class="dropdown-item"> 
+                                        <a href="#" class="dropdown-item" data-target="#update-issue" data-toggle="modal" onclick="updateIssue({{$issue->id}})"> 
                                             <i data-feather="folder-plus"></i>
                                             Update Issue
                                         </a> 
-                                        <a href="javascript:;"  class="dropdown-item delete-record"> 
+                                        <a href="#" onclick="event.preventDefault(); document.getElementById('delete-issue-{{$issue->id}}').submit();"  class="dropdown-item delete-record"> 
                                             <i data-feather="trash-2"></i>
                                             Delete Issue
                                         </a>
                                     </div> 
                                 </div>
+                                <form id="delete-issue-{{$issue->id}}" action="{{ route('delete-issue', $issue) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </td>
                         </tr> 
                         @endforeach
@@ -210,7 +216,7 @@
     </div>
     <div class="modal modal-slide-in new-user-modal fade" id="assign-to-vendor">
         <div class="modal-dialog new-user-modal-dialog">
-            <form class="modal-content pt-0" method="POST" action="{{route('assign-vendor')}}">
+            <form class="modal-content pt-0" method="POST" id="assign-vendor-form" action="{{route('assign-vendor')}}">
                 @csrf
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
                 <div class="modal-header mb-1">
@@ -277,6 +283,161 @@
                     <div class="form-group">
                         <label class="form-label" for="payment-method">Payment Method</label>
                         <select class="select2 w-100" id="payment-method" name="payment-method" data-placeholder="Select Payment Method">
+                            <option label=" "></option>
+                            <option>Bank Transfer</option>
+                            <option>Cash</option>
+                            <option>Credit</option>
+                            <option>POS</option>
+                        </select>
+                    </div>
+                    <div class="mt-4 d-flex justify-content-end">
+                        <button type="reset" class="btn btn-outline-secondary mr-1" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal modal-slide-in new-user-modal fade" id="edit-issue">
+        <div class="modal-dialog new-user-modal-dialog">
+            <form class="modal-content pt-0" method="POST" id="edit-issue-form" action="{{route('edit-issue')}}">
+                @csrf
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title" id="edit-issue-modal">Edit Issue</h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <label class="form-label" for="apartment">Apartment</label>
+                        <select class="select2 w-100" id="edit-apartment" name="apartment"></select>
+                    </div>
+                    <input type="hidden" name="edited_issue" id="edited_issue">
+                    <div class="form-group d-none">
+                        <textarea class="form-control" name="issue" id="edit-issue-text" cols="3" rows="9" readonly>{!!$issue->issue!!}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-issue-editor" class="form-label">Issue</label>
+                        <div id="edit-issue-editor"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-vendor">Select Vendor</label>
+                        <select class="select2 w-100" id="edit-vendor" name="vendor" data-placeholder="Search for vendor" onchange="selectVendor(this.value)">
+                            <option label=" "></option>
+                            <option value="0">Add new vendor</option>
+                            @foreach ($vendors as $vendor)
+                            <option value="{{$vendor->id}}">{{$vendor->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group vendor-group d-none">
+                        <label class="form-label" for="vendor-name">Vendor Name</label>
+                        <input type="text" inputmode="text" class="form-control d-none vendor-info" id="vendor-name" placeholder="Mr Ochuko" disabled name="name">
+                    </div>
+                    <div class="form-group vendor-group d-none">
+                        <label class="form-label" for="vendor-phone">Vendor Phone</label>
+                        <input type="text" inputmode="text" class="form-control d-none vendor-info" id="vendor-phone" placeholder="+234902993882" disabled name="phone">
+                    </div>
+                    <div class="form-group vendor-group d-none">
+                        <label class="form-label" for="vendor-email">Vendor Email</label>
+                        <input type="email" inputmode="text" class="form-control d-none vendor-info" id="vendor-email" placeholder="ochukoandsons@gmail.com" disabled name="email">
+                    </div>
+                    <div class="form-group vendor-group d-none">
+                        <label class="form-label" for="vendor-address">Address</label>
+                        <input type="text" inputmode="text" class="form-control d-none vendor-info" id="vendor-address" placeholder="Lekki, Lagos" disabled name="address">
+                    </div>
+                    <div class="form-group vendor-group d-none">
+                        <label class="form-label" for="vendor-business-name">Business Name</label>
+                        <input type="text" inputmode="text" class="form-control d-none vendor-info" id="vendor-business-name" placeholder="Ochuko & Sons Enterpises" disabled name="business-name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cost">Cost</label>
+                        <input type="number" inputmode="numeric" class="form-control" id="edit-cost" placeholder="100000" name="cost">
+                    </div>
+                    <div class="form-group d-none">
+                        <textarea class="form-control" name="cost-breakdown" id="edit-cost-breakdown" cols="3" rows="9" readonly></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-cost-editor" class="form-label">Cost Breakdown</label>
+                        <div id="edit-cost-editor"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="paid">Amount Paid</label>
+                        <input type="number" inputmode="numeric" class="form-control" id="edit-paid" placeholder="100000" name="paid">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-payment-method">Payment Method</label>
+                        <select class="select2 w-100" id="edit-payment-method" name="payment-method" data-placeholder="Select Payment Method">
+                            <option label=" "></option>
+                            <option>Bank Transfer</option>
+                            <option>Cash</option>
+                            <option>Credit</option>
+                            <option>POS</option>
+                        </select>
+                    </div>
+                    <div class="mt-4 d-flex justify-content-end">
+                        <button type="reset" class="btn btn-outline-secondary mr-1" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal modal-slide-in new-user-modal fade" id="update-issue">
+        <div class="modal-dialog new-user-modal-dialog">
+            <form class="modal-content pt-0" method="POST" id="update-issue-form" action="{{route('update-issue')}}">
+                @csrf
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title" id="update-issue-modal">Update Issue</h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <label class="form-label" for="apartment">Apartment</label>
+                        <select class="select2 w-100" id="issue-apartment" name="apartment"></select>
+                    </div>
+                    <input type="hidden" name="updated-issue" id="updated-issue">
+                    <div class="form-group">
+                        <label for="update-issue-editor" class="form-label">Issue</label>
+                        <div id="update-issue-editor"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="issue-vendor">Select Vendor</label>
+                        <select class="select2 w-100" id="issue-vendor" name="vendor" data-placeholder="Search for vendor"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="issue-status">Status</label>
+                        <select class="select2 w-100" id="issue-status" name="status" data-placeholder="Select Status">
+                            <option value="ongoing">Ongoing</option>
+                            <option value="completed">Completed</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div class="form-group d-none">
+                        <textarea class="form-control" name="cost-breakdown" id="update-cost-breakdown" cols="3" rows="9" readonly></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-cost-editor" class="form-label">Cost Breakdown</label>
+                        <div id="update-cost-editor"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cost">Cost</label>
+                        <input type="number" inputmode="numeric" class="form-control" id="update-cost" placeholder="100000" readonly name="cost">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="paid">Paid</label>
+                        <input type="number" inputmode="numeric" class="form-control" id="update-prev-paid" placeholder="100000" readonly name="prev-paid">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="balance">Balance</label>
+                        <input type="number" inputmode="numeric" class="form-control" id="update-balance" placeholder="100000" readonly name="balance">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="paid">Additional Payment</label>
+                        <input type="number" inputmode="numeric" class="form-control" id="update-paid" placeholder="100000" name="paid">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="update-payment-method">Payment Method</label>
+                        <select class="select2 w-100" id="update-payment-method" name="payment-method" data-placeholder="Select Payment Method">
                             <option label=" "></option>
                             <option>Bank Transfer</option>
                             <option>Cash</option>

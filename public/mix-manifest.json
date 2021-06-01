@@ -9,5 +9,6 @@
     "/js/rates-list.js": "/js/rates-list.js",
     "/js/user-edit.js": "/js/user-edit.js",
     "/js/user-view.js": "/js/user-view.js",
-    "/js/users-list.js": "/js/users-list.js"
+    "/js/users-list.js": "/js/users-list.js",
+    "/js/vendors-list.js": "/js/vendors-list.js"
 }

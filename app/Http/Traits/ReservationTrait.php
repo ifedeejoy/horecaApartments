@@ -22,7 +22,7 @@ trait ReservationTrait
         $checkins = DB::table('reservations')->where('apartments_id', $apartment)->whereRaw("UNIX_TIMESTAMP(DATE(checkin)) <= $end AND UNIX_TIMESTAMP(DATE(checkin)) >= $start")->get();
         $checkouts = DB::table('reservations')->where('apartments_id', $apartment)->whereRaw("UNIX_TIMESTAMP(DATE(checkout)) <= $end AND UNIX_TIMESTAMP(DATE(checkout)) >= $start")->get();
 
-        // merger reservations that overlap the provided range
+        // merge reservations that overlap the provided range
         $reservations = $checkouts->merge($reservationsWithin, $checkins);
         $result = collect();
         

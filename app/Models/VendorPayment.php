@@ -21,4 +21,9 @@ class VendorPayment extends Model
     {
         return $this->belongsToMany(Maintenance::class);
     }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchases::class);
+    }
 }
